@@ -1,4 +1,4 @@
-package net.luoteng;
+package net.luoteng.object;
 
 
 import java.io.Serializable;

@@ -3,15 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.luoteng;
 
+package net.luoteng.utils;
 
 /**
- *
+ * 
  * @author suetming <suetming.ma at creditcloud.com>
  */
-public interface BaseEntity {
-    
-    BaseModel toModel();
-    
+public final class Base64 {
+
 }
