@@ -7,8 +7,9 @@
 package net.luoteng.model.enums;
 
 /**
+ * base enum
  * 
- * @author suetming <suetming.ma at creditcloud.com>
+ * @author suetming <suetming.ma at gmail.com>
  */
 public interface BaseEnum {
     

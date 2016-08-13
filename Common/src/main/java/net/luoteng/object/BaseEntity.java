@@ -7,8 +7,9 @@ package net.luoteng.object;
 
 
 /**
- *
- * @author suetming <suetming.ma at creditcloud.com>
+ * base entity
+ * 
+ * @author suetming <suetming.ma at gmail.com>
  */
 public interface BaseEntity {
     
