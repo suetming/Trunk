@@ -13,6 +13,7 @@ import javax.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
 import net.luoteng.AbstractObject;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * uuid entity
@@ -26,6 +27,7 @@ public abstract class AbstractUUIDEntity extends AbstractObject {
     @Setter
     @Id
     @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
     @Column(name = "id", unique = true)
     private String id;
     
