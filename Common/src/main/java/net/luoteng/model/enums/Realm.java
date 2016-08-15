@@ -22,11 +22,17 @@ public enum Realm implements BaseEnum {
     USERGROUP("用户组"),
     
     /**
-     * 业务类型
+     * 资金业务类型
      */
     FUND("资金"),
     WITHDRAW("取现"),
     REFUND_REQUEST("退款申请"),
+    
+    /**
+     * 教育业务类型
+     */
+    COURSE("课程"),
+    TEACHER("老师"),
     
     /**
      * 其他
