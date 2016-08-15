@@ -12,7 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
-import net.luoteng.object.AbstractObject;
+import net.luoteng.model.AbstractObject;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
