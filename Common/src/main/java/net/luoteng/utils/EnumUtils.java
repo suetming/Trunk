@@ -99,7 +99,7 @@ public class EnumUtils {
      * @param key
      * @return
      */
-    public static <T extends Enum<T> & BaseEnum> T getEnumByKey(Class<T> enumType, String key) {
+    public static <T extends Enum<T> & BaseEnum> T getEnumByMsg(Class<T> enumType, String key) {
         if (enumType == null || key == null) {
             return null;
         }
