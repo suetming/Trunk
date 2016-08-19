@@ -46,6 +46,11 @@ public enum Realm implements BaseEnum {
      * 订单
      */
     ORDER("订单"),
+    
+    /**
+     * 预约
+     */
+    APPOINTMENT("预约"),
     ;
     
     private final String msg;
