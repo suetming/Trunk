@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package net.luoteng.model.enums;
+package net.luoteng.enums;
 
 /**
  * base enum

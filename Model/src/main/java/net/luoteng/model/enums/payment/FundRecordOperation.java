@@ -5,7 +5,8 @@
  */
 package net.luoteng.model.enums.payment;
 
-import net.luoteng.model.enums.BaseEnum;
+import net.luoteng.enums.BaseEnum;
+
 
 /**
  *

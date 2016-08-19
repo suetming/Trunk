@@ -15,8 +15,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import net.luoteng.enums.Realm;
 import net.luoteng.model.AbstractObject;
-import net.luoteng.model.enums.Realm;
 
 /**
  * 

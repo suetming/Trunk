@@ -8,7 +8,7 @@ package net.luoteng.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.luoteng.model.enums.ResponseCode;
+import net.luoteng.enums.ResponseCode;
 
 /**
  * rest response

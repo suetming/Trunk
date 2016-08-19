@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import net.luoteng.model.enums.BaseEnum;
+import net.luoteng.enums.BaseEnum;
 
 /**
  * base enum util

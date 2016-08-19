@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package net.luoteng.model.enums;
+package net.luoteng.enums;
 
 import lombok.Getter;
 
@@ -23,8 +23,6 @@ public enum Gender implements BaseEnum{
     private Gender(String msg) {
         this.msg = msg;
     }
-
-   
         
     @Getter
     private final String msg;
