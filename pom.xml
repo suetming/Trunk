@@ -18,6 +18,7 @@
         <module>Entity</module>
         <module>Model</module>
         <module>Common</module>
+        <module>Comment</module>
     </modules>
 </project>
 

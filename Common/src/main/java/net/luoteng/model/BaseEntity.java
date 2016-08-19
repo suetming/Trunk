@@ -13,5 +13,4 @@ package net.luoteng.model;
 public interface BaseEntity {
     
     BaseModel toModel();
-    
 }

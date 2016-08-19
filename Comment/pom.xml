@@ -36,5 +36,11 @@
             <version>1.0-SNAPSHOT</version>
             <type>jar</type>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-commons-core</artifactId>
+            <version>1.4.0.RELEASE</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
 </project>

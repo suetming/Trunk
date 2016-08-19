@@ -6,6 +6,13 @@
 
 package net.luoteng.comment.service;
 
+import java.util.List;
+import net.luoteng.comment.entity.Comment;
+import net.luoteng.comment.enums.CommentStatus;
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
+
 /**
  *
  * @author suetming <suetming.ma at gmail.com>
@@ -13,4 +20,15 @@ package net.luoteng.comment.service;
  */
 public interface CommentService {
 
+    /**
+     * list current comment all children
+     * 
+     * @param commentId
+     * @param statusList
+     * @param withSelf
+     * @param pageable
+     * @return 
+     */
+    public Page<Comment> listDescendant(String commentId, List<CommentStatus> statusList, boolean withSelf, Pageable pageable);
+    
 }
