@@ -19,6 +19,8 @@
         <module>Model</module>
         <module>Common</module>
         <module>Comment</module>
+        <module>Payment</module>
+        <module>Order</module>
     </modules>
 </project>
 
