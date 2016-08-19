@@ -1,25 +1,18 @@
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.luoteng.model.alipay;
 
-import javax.xml.bind.annotation.XmlRootElement;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+package net.luoteng.payment.model.alipay;
 
 /**
+ * 
  *
- *
- * @author mamian
- * @mail mamianskyma@aliyun.com
- * @date 2016-8-5 16:50:06
- * @copyright ©2016 马面 All Rights Reserved
+ * @author suetming <suetming.ma at gmail.com>
+ * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
  */
-@Data
-@NoArgsConstructor
-@XmlRootElement
-public class NotifyResponse extends PaymentResponse {
+public class NotifyResponse extends BaseResponse {
 
     /**
      * 商户网站唯一订单号(64位，对应商户网站的订单系统中的唯一订单号,非支付宝交易号。需保证在商户网站中的唯一性。是请求时对应的参数,原样返回。)

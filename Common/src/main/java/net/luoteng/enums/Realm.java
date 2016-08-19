@@ -27,6 +27,7 @@ public enum Realm implements BaseEnum {
     FUND("资金"),
     WITHDRAW("取现"),
     REFUND_REQUEST("退款申请"),
+    COUPON("奖券"),
     
     /**
      * 教育业务类型
@@ -40,7 +41,6 @@ public enum Realm implements BaseEnum {
      */
     IMAGE("图片"),
     FILE("文件"),
-    COUPON("奖券"),
     
     /**
      * 订单
@@ -51,6 +51,7 @@ public enum Realm implements BaseEnum {
      * 预约
      */
     APPOINTMENT("预约"),
+    
     ;
     
     private final String msg;

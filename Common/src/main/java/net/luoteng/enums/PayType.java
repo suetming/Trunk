@@ -3,42 +3,51 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.luoteng.model.enums.payment;
-
-import net.luoteng.enums.BaseEnum;
+package net.luoteng.enums;
 
 
 /**
- *
+ * payment type
+ * 
  * @author suetming <suetming.ma at gmail.com>
  */
-public enum FundRecordOperation implements BaseEnum {
+public enum PayType implements BaseEnum {
 
     /**
-     * 资金转入
+     * 支付宝
      */
-    IN("资金转入"),
+    Alipay("支付宝"),
     
     /**
-     * 资金转出
+     * 微信
      */
-    OUT("资金转出"),
+    Wechat("微信支付"),
     
     /**
-     * 冻结
+     * 贝宝
      */
-    FREEZE("冻结"),
+    Paypal("贝宝"),
     
     /**
-     * 解冻
+     * 新浪
      */
-    RELEASE("解冻"),
+    Sina("新浪支付"),
+    
+    /**
+     * 仅使用红包支付
+     */
+    Coupon("红包"),
+    
+    /**
+     * 仅使用“钱包”余额支付
+     */
+    Balance("余额"),
     
     ;
-
+    
     private final String msg;
 
-    private FundRecordOperation(String msg) {
+    private PayType(String msg) {
         this.msg = msg;
     }
 
@@ -46,4 +55,5 @@ public enum FundRecordOperation implements BaseEnum {
     public String getMsg() {
         return msg;
     }
+    
 }

@@ -4,25 +4,22 @@
  * and open the template in the editor.
  */
 
-package net.luoteng.model.wechat;
+package net.luoteng.payment.model.wechat;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.luoteng.model.AbstractObject;
+import net.luoteng.payment.model.Response;
 
 /**
  * 
- *
- * @author mamian
- * @mail mamianskyma@aliyun.com
- * @date 2016-8-3 19:56:53
- * @copyright ©2016 马面 All Rights Reserved
+ * 
+ * @author suetming <suetming.ma at gmail.com>
+ * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
  */
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class PrepayResponse extends AbstractObject {
+public class PaymentResponse extends Response {
 
     /**
      * 返回状态码
@@ -95,8 +92,14 @@ public class PrepayResponse extends AbstractObject {
      */
     private String mySign;
     
+    /**
+     * 
+     */
     private String myTimestamp;
     
+    /**
+     * 
+     */
     private String myNoncestr;
     
 }

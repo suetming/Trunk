@@ -3,48 +3,49 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.luoteng.model.enums.payment;
+
+package net.luoteng.order.enums;
 
 import net.luoteng.enums.BaseEnum;
 
-
 /**
- * payment type
- * 
+ * order status
+ *
  * @author suetming <suetming.ma at gmail.com>
+ * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
  */
-public enum PayType implements BaseEnum {
+public enum OrderStatus implements BaseEnum {
 
     /**
-     * 支付宝
+     * 预支付
      */
-    Alipay("支付宝"),
+    INITIALIZED("初始化"),
     
     /**
-     * 微信
+     * 支付中
      */
-    Weixin("微信"),
+    PROCESSING("处理中"),
     
     /**
-     * 贝宝
+     * 支付成功
      */
-    Paypal("贝宝"),
+    SUCCESSED("成功"),
     
     /**
-     * 仅使用红包支付
+     * 支付失败
      */
-    Coupon("红包"),
+    FAILED("失败"),
     
     /**
-     * 仅使用“钱包”余额支付
+     * 取消支付
      */
-    Balance("余额"),
+    CANCELED("取消"),
     
     ;
     
     private final String msg;
 
-    private PayType(String msg) {
+    private OrderStatus(String msg) {
         this.msg = msg;
     }
 

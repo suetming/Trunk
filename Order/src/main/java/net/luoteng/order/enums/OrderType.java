@@ -3,23 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.luoteng.model.enums.payment;
+package net.luoteng.order.enums;
 
 import net.luoteng.enums.BaseEnum;
 
 /**
- * order type
+ *
  * @author suetming <suetming.ma at gmail.com>
  */
 public enum OrderType implements BaseEnum {
 
     /**
-     * 学费
-     */
-    COURSE("学费"),
-    
-    /**
-     * 导师将自己的收入提现到微信或支付宝
+     * 收入提现到微信或支付宝
      */
     WITHDRAW("提现"),
     

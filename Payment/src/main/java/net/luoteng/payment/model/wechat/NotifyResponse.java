@@ -3,26 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.luoteng.model.wechat;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
+package net.luoteng.payment.model.wechat;
+
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 import lombok.Getter;
-import net.luoteng.model.AbstractObject;
+import lombok.NoArgsConstructor;
+import net.luoteng.payment.model.Response;
 
 /**
- * 微信回调传回的数据
+ * 
  *
- * @author mamian
- * @mail mamianskyma@aliyun.com
- * @date 2016-8-5 15:02:06
- * @copyright ©2016 马面 All Rights Reserved
+ * @author suetming <suetming.ma at gmail.com>
+ * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
  */
-@XmlRootElement(name = "xml")
-@XmlAccessorType(XmlAccessType.FIELD)
-public class NotifyResponse extends AbstractObject {
+@NoArgsConstructor
+public class NotifyResponse extends Response {
 
     /**
      * 返回状态码
