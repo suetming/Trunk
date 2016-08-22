@@ -10,6 +10,7 @@ import java.awt.print.Pageable;
 import java.util.List;
 import javax.transaction.Transactional;
 import net.luoteng.entity.embedded.RealmEntity;
+import net.luoteng.enums.PayType;
 import net.luoteng.order.dao.OrderDAO;
 import net.luoteng.order.entity.Order;
 import net.luoteng.order.enums.OrderStatus;
@@ -34,12 +35,12 @@ public class OrderServiceImpl implements OrderService {
     
     @Override
     public Order getByUser(String userId, OrderType type, OrderStatus status, RealmEntity owner) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return orderDAO.getByUser(userId, type, status, owner);
     }
 
     @Override
     public Page<Order> listByUserTypeStatus(String userId, List<OrderType> typeList, List<OrderStatus> statusList, Pageable pageable) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return orderDAO.listByUserTypeStatus(userId, typeList, statusList, pageable);
     }
 
     @Override
@@ -48,18 +49,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order save(Order t) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Order generate(String userId, RealmEntity owner, String outOrderId, OrderType type, PayType payType) {
+        Order order = new Order(outOrderId, userId, type, OrderStatus.INITIALIZED, payType, owner);
+        return orderDAO.save(order);
     }
-
-    @Override
-    public void delete(String id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Order get(String id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
 }

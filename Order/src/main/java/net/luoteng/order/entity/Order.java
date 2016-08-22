@@ -27,6 +27,7 @@ import net.luoteng.entity.embedded.RealmEntity;
 import net.luoteng.enums.PayType;
 import net.luoteng.order.enums.OrderStatus;
 import net.luoteng.order.enums.OrderType;
+import net.luoteng.order.utils.OrderGenerator;
 
 /**
  * 订单 
@@ -35,8 +36,8 @@ import net.luoteng.order.enums.OrderType;
  * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
  */
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
+//@NoArgsConstructor
+//@AllArgsConstructor
 @Table(name = "t_order", uniqueConstraints = {
       @UniqueConstraint(columnNames = {"userId", "type", "status"})
 })
@@ -47,8 +48,6 @@ public class Order extends AbstractTimeScopeEntity {
      * 
      * @return
      */
-    @Getter
-    @Setter
     @Column(nullable = false)
     private String orderID;
     
@@ -57,8 +56,6 @@ public class Order extends AbstractTimeScopeEntity {
      * 
      * @return
      */
-    @Getter
-    @Setter
     private String outOrderId;
     
     /**
@@ -66,8 +63,6 @@ public class Order extends AbstractTimeScopeEntity {
      * 
      * @return
      */
-    @Getter
-    @Setter
     @Column(nullable = false)
     private String userId;
     
@@ -76,8 +71,6 @@ public class Order extends AbstractTimeScopeEntity {
      * 
      * @return
      */
-    @Getter
-    @Setter
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private OrderType type;
@@ -87,8 +80,6 @@ public class Order extends AbstractTimeScopeEntity {
      * 
      * @return
      */
-    @Getter
-    @Setter
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private OrderStatus status;
@@ -98,8 +89,6 @@ public class Order extends AbstractTimeScopeEntity {
      * 
      * @return
      */
-    @Getter
-    @Setter
     @Enumerated(EnumType.STRING)
     private PayType payType;
     
@@ -108,8 +97,6 @@ public class Order extends AbstractTimeScopeEntity {
      * 
      * @return
      */
-    @Getter
-    @Setter
     @AttributeOverrides({
         @AttributeOverride(name = "realm", column =
                 @Column(name = "owner_realm")),
@@ -123,8 +110,6 @@ public class Order extends AbstractTimeScopeEntity {
      * 
      * @return
      */
-    @Getter
-    @Setter
     @Column(nullable = true)
     @Temporal(TemporalType.TIMESTAMP)
     private Date timeSuccessed;
@@ -134,8 +119,6 @@ public class Order extends AbstractTimeScopeEntity {
      * 
      * @return
      */
-    @Getter
-    @Setter
     @Column(nullable = true)
     @Temporal(TemporalType.TIMESTAMP)
     private Date timeFailed;
@@ -145,8 +128,6 @@ public class Order extends AbstractTimeScopeEntity {
      * 
      * @return
      */
-    @Getter
-    @Setter
     @Column(nullable = true)
     @Temporal(TemporalType.TIMESTAMP)
     private Date timeCaneled;
@@ -156,8 +137,6 @@ public class Order extends AbstractTimeScopeEntity {
      * 
      * @return
      */
-    @Getter
-    @Setter
     private String remark;
     
     /**
@@ -165,9 +144,23 @@ public class Order extends AbstractTimeScopeEntity {
      * 
      * @return
      */
-    @Getter
-    @Setter
     @Lob
     private String priv;
+
+    public Order(
+            String outOrderId,
+            String userId, 
+            OrderType type, 
+            OrderStatus status,
+            PayType payType, 
+            RealmEntity owner) {
+        this.orderID = OrderGenerator.order();
+        this.outOrderId = outOrderId;
+        this.userId = userId;
+        this.type = type;
+        this.status = status;
+        this.payType = payType;
+        this.owner = owner;
+    }
     
 }

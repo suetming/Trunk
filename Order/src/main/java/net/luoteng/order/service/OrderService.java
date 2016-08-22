@@ -9,9 +9,11 @@ package net.luoteng.order.service;
 import java.awt.print.Pageable;
 import java.util.List;
 import net.luoteng.entity.embedded.RealmEntity;
+import net.luoteng.enums.PayType;
 import net.luoteng.order.entity.Order;
 import net.luoteng.order.enums.OrderStatus;
 import net.luoteng.order.enums.OrderType;
+import net.luoteng.service.BaseService;
 import net.luoteng.service.CrudService;
 import org.springframework.data.domain.Page;
 
@@ -20,7 +22,7 @@ import org.springframework.data.domain.Page;
  * @author suetming <suetming.ma at gmail.com>
  * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
  */
-public interface OrderService extends CrudService<Order>{
+public interface OrderService extends BaseService<Order> {
 
     /**
      * 获取订单
@@ -52,5 +54,16 @@ public interface OrderService extends CrudService<Order>{
      * @param status 
      */
     public void markStatus(String userId, RealmEntity owner, OrderStatus status);
+    
+    /**
+     * 
+     * @param userId
+     * @param owner
+     * @param outOrderId
+     * @param type
+     * @param payType
+     * @return 
+     */
+    public Order generate(String userId, RealmEntity owner, String outOrderId, OrderType type, PayType payType);
     
 }

@@ -15,12 +15,12 @@
     <name>Trunk</name>
     <!--this is a line of test of noting-->
     <modules>
+        <module>Common</module>
         <module>Entity</module>
         <module>Model</module>
-        <module>Common</module>
-        <module>Comment</module>
-        <module>Payment</module>
         <module>Order</module>
+        <module>Payment</module>
+        <module>Comment</module>
     </modules>
 </project>
 

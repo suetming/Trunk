@@ -22,11 +22,12 @@ public interface PaymentService {
     /**
      * 生成预支付订单
      * 
+     * @param userId
      * @param request
      * @return 
      * @throws java.io.UnsupportedEncodingException 
      */
-    public RestResponse preOrders(OrderRequest request) throws UnsupportedEncodingException;
+    public RestResponse preOrders(String userId, OrderRequest request) throws UnsupportedEncodingException;
  
     /**
      * 验证是否是正确的源发出的回调

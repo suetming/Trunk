@@ -6,9 +6,17 @@
 
 package net.luoteng.order.dao;
 
+import java.awt.print.Pageable;
+import java.util.List;
 import javax.transaction.Transactional;
+import net.luoteng.entity.embedded.RealmEntity;
 import net.luoteng.order.entity.Order;
+import net.luoteng.order.enums.OrderStatus;
+import net.luoteng.order.enums.OrderType;
+import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
 
 /**
  * 
@@ -21,20 +29,17 @@ public interface OrderDAO extends PagingAndSortingRepository<Order, String> {
 
     /**
      * 获取订单
-     * 
      * @param userId
      * @param type
      * @param status
-     * @param payObj
-     * @param payObjId
+     * @param entity
      * @return 
      */
-//    @Query("select o from Order o where o.userId = :userId and o.type = :type and o.status = :status and o.payObj= :payObj and o.payObjId= :payObjId")
-//    public Order getByUser(@Param("userId") String userId,
-//                           @Param("type") OrderType type,
-//                           @Param("status") OrderStatus status,
-//                           @Param("payObj") String payObj,
-//                           @Param("payObjId") String payObjId);
+    @Query("select o from Order o where o.userId = :userId and o.type = :type and o.status = :status and o.owner= :owner")
+    public Order getByUser(@Param("userId") String userId,
+                           @Param("type") OrderType type,
+                           @Param("status") OrderStatus status,
+                           @Param("owner") RealmEntity entity);
     
     /**
      * 根据用户查找订单
@@ -45,21 +50,12 @@ public interface OrderDAO extends PagingAndSortingRepository<Order, String> {
      * @param pageable
      * @return 
      */
-//    @Query("select o from Order o where o.userId = :userId and o.type in :typeList and o.status in :statusList order by o.timeCreated desc")
-//    public Page<Order> listByUserTypeStatus(@Param("userId") String userId,
-//                                            @Param("typeList") List<OrderType> typeList,
-//                                            @Param("statusList") List<OrderStatus> statusList,
-//                                            Pageable pageable);
+    @Query("select o from Order o where o.userId = :userId and o.type in :typeList and o.status in :statusList order by o.timeCreated desc")
+    public Page<Order> listByUserTypeStatus(@Param("userId") String userId,
+                                            @Param("typeList") List<OrderType> typeList,
+                                            @Param("statusList") List<OrderStatus> statusList,
+                                            Pageable pageable);
     
-    /**
-     * 根据用户查找订单
-     * 
-     * @param userId
-     * @return 
-     */
-//    @Query("select o from Order o where o.userId = :userId")
-//    public List<Order> list(@Param("userId") String userId);
-
     /**
      * 取消预支付订单
      * 
