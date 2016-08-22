@@ -6,7 +6,6 @@
 
 package net.luoteng.order.dao;
 
-import java.awt.print.Pageable;
 import java.util.List;
 import javax.transaction.Transactional;
 import net.luoteng.entity.embedded.RealmEntity;
@@ -14,6 +13,7 @@ import net.luoteng.order.entity.Order;
 import net.luoteng.order.enums.OrderStatus;
 import net.luoteng.order.enums.OrderType;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
