@@ -65,16 +65,6 @@ public class FundRecord extends AbstractTimeScopeEntity {
     @Column(nullable = false)
     private FundRecordOperation operat;
     
-    /**
-     * 资金状态
-     * 
-     * @return
-     */
-    @Getter
-    @Setter
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private FundRecordStatus status;
     
     /**
      * 本资金记录与哪个订单有关(1个订单可能有多笔资金记录)

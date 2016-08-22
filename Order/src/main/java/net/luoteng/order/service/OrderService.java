@@ -18,7 +18,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 
 /**
- *
+ * order service
+ * 
  * @author suetming <suetming.ma at gmail.com>
  * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
  */
@@ -33,7 +34,7 @@ public interface OrderService extends BaseService<Order> {
      * @param pageable
      * @return 
      */
-    public Page<Order> listByUser(
+    Page<Order> listByUser(
             @Param("userId") String userId,
             @Param("typeList") List<OrderType> typeList,
             @Param("statusList") List<OrderStatus> statusList,
@@ -48,7 +49,7 @@ public interface OrderService extends BaseService<Order> {
      * @param owner
      * @return 
      */
-    public Order getByUser(String userId, OrderType type, OrderStatus status, RealmEntity owner);
+    Order getByUser(String userId, OrderType type, OrderStatus status, RealmEntity owner);
     
     /**
      * 预生成订单
@@ -63,7 +64,7 @@ public interface OrderService extends BaseService<Order> {
      * @param balanceAmount
      * @return 
      */
-    public Order generate(
+    Order generate(
             String userId, 
             RealmEntity owner, 
             String outOrderId, 
@@ -73,5 +74,13 @@ public interface OrderService extends BaseService<Order> {
             long couponAmount,
             long balanceAmount
     );
+    
+    /**
+     * 标记支付成功
+     * 
+     * @param id
+     * @return 
+     */
+    boolean markSuccess(String id);
     
 }

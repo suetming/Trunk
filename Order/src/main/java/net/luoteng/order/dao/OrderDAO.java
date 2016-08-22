@@ -85,4 +85,14 @@ public interface OrderDAO extends PagingAndSortingRepository<Order, String> {
     @Query("update Order o set o.status = :aftStatus where o.userId = :userId and o.owner = :owner and o.status=:preStatus")
     public void markStatus(@Param("userId") String userId, @Param("owner") RealmEntity owner, @Param("preStatus") OrderStatus preStatus, @Param("aftStatus") OrderStatus aftStatus);
     
+    /**
+     * 更新订单状态
+     * 
+     * @param id
+     * @param status
+     */
+    @Modifying
+    @Query("update Order o set o.status = :status where o.id=:id and o.status=:status")
+    public void markStatus(@Param("id") String id, @Param("status") OrderStatus status);
+    
 }

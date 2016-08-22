@@ -62,5 +62,11 @@ public class OrderServiceImpl implements OrderService {
     public Page<Order> listByUser(String userId, List<OrderType> typeList, List<OrderStatus> statusList, Pageable pageable) {
         return orderDAO.listByUser(userId, typeList, statusList, pageable);
     }
+
+    @Override
+    public boolean markSuccess(String id) {// TODO
+        orderDAO.markStatus(id, OrderStatus.SUCCESSED);
+        return true;
+    }
     
 }
