@@ -31,8 +31,6 @@ import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.transaction.Transactional;
-import lombok.Value;
-import lombok.extern.slf4j.Slf4j;
 import net.luoteng.model.common.RestResponse;
 import net.luoteng.payment.model.OrderRequest;
 import net.luoteng.payment.model.Response;
@@ -49,8 +47,11 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
+import lombok.extern.slf4j.Slf4j;
+import net.luoteng.payment.properties.AlipayProperties;
+import net.luoteng.payment.properties.WechatProperties;
+import net.luoteng.payment.properties.WechatPublicProperties;
 
 /**
  *
@@ -68,7 +69,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Autowired
     WechatProperties wechatConfig;
-
+    
     @Autowired
     WechatPublicProperties wechatPublicConfig;
 
@@ -102,10 +103,12 @@ public class PaymentServiceImpl implements PaymentService {
                     new SecureRandom());
 
             weixinClient = new OkHttpClient.Builder().sslSocketFactory(sslcontext.getSocketFactory()).build();
+            
+            log.info("payment service init successed {}", alipayConfig.getAccountName());
         } catch (KeyStoreException | FileNotFoundException | NoSuchAlgorithmException | UnrecoverableKeyException | KeyManagementException ex) {
-            log.error("something is wrong when load weixin cert {}", ex);
+            log.error("payment service  something is wrong when load weixin cert {}", ex);
         } catch (IOException | java.security.cert.CertificateException ex) {
-            log.error("something is wrong when load weixin cert {}", ex);
+            log.error("payment service  is wrong when load weixin cert {}", ex);
         }
     }
 
@@ -265,271 +268,4 @@ public class PaymentServiceImpl implements PaymentService {
         log.debug("wechat public prepayResponse=[{}]", prepayResponse);
         return prepayResponse;
     }
-
-    @Value
-    @ConfigurationProperties(prefix = "net.luoteng.payment.wechat.public")
-    public static class WechatPublicProperties {
-
-        /**
-         * 公众号APPID 微信开发平台应用id
-         *
-         * @return
-         */
-        private String appId;
-
-        /**
-         * @return
-         */
-        private String appSecret;
-
-        /**
-         * @return
-         */
-        private String appPublicSecret;
-
-        /**
-         * 微信支付商户号
-         *
-         * @return
-         */
-        private String mchId;
-
-        /**
-         * 链接超时限制
-         * <p>
-         * 毫秒数
-         *
-         * @return
-         */
-        private int connectionTimeout;
-
-        /**
-         * 读取数据超时限制
-         * <p>
-         * 毫秒数
-         *
-         * @return
-         */
-        private int readTimeout;
-
-        /**
-         * 预支付交易单调用地址
-         *
-         * @return
-         */
-        private String uriPrepay;
-
-    }
-
-    @Value
-    @ConfigurationProperties(prefix = "net.luoteng.payment.wechat")
-    public static class WechatProperties {
-
-        /**
-         * 公众号APPID 微信开发平台应用id
-         *
-         * @return
-         */
-        private String appId;
-
-        /**
-         * @return
-         */
-        private String appSecret;
-
-        /**
-         * 微信支付商户号
-         *
-         * @return
-         */
-        private String mchId;
-
-        /**
-         * 预支付交易单调用地址
-         *
-         * @return
-         */
-        private String uriPrepay;
-
-        /**
-         * 通知回调
-         *
-         * @return
-         */
-        private String uriNotify;
-
-        /**
-         * 打赏支付：通知回调
-         *
-         * @return
-         */
-        private String uriNotifyReward;
-
-        /**
-         * 充值回调
-         *
-         * @return
-         */
-        private String uriNotifyDeposit;
-
-        /**
-         * 查询订单状态 地址
-         *
-         * @return
-         */
-        private String uriOrder;
-
-        /**
-         * 获取用户信息
-         *
-         * @return
-         */
-        private String uriUserInfo;
-
-        /**
-         * 消息推送
-         *
-         * @return
-         */
-        private String uriSendMessage;
-
-        /**
-         * 模板消息推送
-         *
-         * @return
-         */
-        private String uriSendTemplateMessage;
-
-        /**
-         * 关闭订单 地址
-         *
-         * @return
-         */
-        private String uriCloseOrder;
-
-        /**
-         * 企业向用户付款 地址
-         *
-         * @return
-         */
-        private String uriPayCorp2User;
-
-        /**
-         * 平台向买家退款 地址
-         *
-         * @return
-         */
-        private String uriRefund;
-
-        /**
-         * HTTPS证书的本地路径(pkcs8格式)
-         *
-         * @return
-         */
-        private String pathLocalCert;
-
-        /**
-         * HTTPS证书密码，默认密码等于商户号MCHID
-         *
-         * @return
-         */
-        private String certPassword;
-    }
-
-    @Value
-    @ConfigurationProperties(prefix = "net.luoteng.payment.alipay")
-    public static class AlipayProperties {
-
-        /**
-         * 公司（付款方）的支付宝账户名
-         *
-         * @return
-         */
-        private String accountName;
-
-        /**
-         * 销售者ID
-         *
-         * @return
-         */
-        private String sellId;
-
-        /**
-         * 合作身份者ID， 以2088开头由16位纯数字组成的字符串
-         *
-         * @return
-         */
-        private String partner;
-
-        /**
-         * 商户的公钥
-         *
-         * @return
-         */
-        private String merchantPublicKey;
-
-        /**
-         * 合作伙伴密钥:支付宝的公钥，无需修改该值
-         *
-         * @return
-         */
-        private String alipayPublicKey;
-
-        /**
-         * 商户私钥，pkcs8格式
-         *
-         * @return
-         */
-        private String pks8PrivateKey;
-
-        /**
-         * 安全校验码
-         *
-         * @return
-         */
-        private String key;
-
-        /**
-         * 打赏支付：通知回调
-         *
-         * @return
-         */
-        private String uriNotifyReward;
-
-        /**
-         * 通知回调
-         *
-         * @return
-         */
-        private String uriNotify;
-
-        /**
-         * 充值回调
-         *
-         * @return
-         */
-        private String uriNotifyDeposit;
-
-        /**
-         * 退款通知回调
-         *
-         * @return
-         */
-        private String uriNotifyRefund;
-
-        /**
-         * 转账回调
-         *
-         * @return
-         */
-        private String uriNotifyTrans;
-
-        /**
-         * 支付网关
-         *
-         * @return
-         */
-        private String uriGateway;
-    }
-
 }
