@@ -52,6 +52,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.luoteng.payment.properties.AlipayProperties;
 import net.luoteng.payment.properties.WechatProperties;
 import net.luoteng.payment.properties.WechatPublicProperties;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -127,7 +128,123 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public boolean verifyNotify(Response response) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        log.debug("verify WeixinNotify response=[{}]", response);
+        
+        if (response instanceof net.luoteng.payment.model.alipay.NotifyResponse) {
+            
+        } else if (response instanceof net.luoteng.payment.model.wechat.NotifyResponse) {
+            return verifyWechatNotify((net.luoteng.payment.model.wechat.NotifyResponse)response);
+        }
+        return false;
+    }
+    
+    private boolean verifyWechatNotify(net.luoteng.payment.model.wechat.NotifyResponse response) {
+        String verifyStr = "";
+        if(StringUtils.isNotBlank(response.getAppid())){
+            verifyStr += verifyStr.equals("") ? "": "&";
+            verifyStr += "appid="+response.getAppid();
+        }
+        if(StringUtils.isNotBlank(response.getAttach())){
+            verifyStr += verifyStr.equals("") ? "": "&";
+            verifyStr += "attach="+response.getAttach();
+        }
+        if(StringUtils.isNotBlank(response.getBank_type())){
+            verifyStr += verifyStr.equals("") ? "": "&";
+            verifyStr += "bank_type="+response.getBank_type();
+        }
+        if(null != response.getCash_fee()){
+            verifyStr += verifyStr.equals("") ? "": "&";
+            verifyStr += "cash_fee="+response.getCash_fee();
+        }
+        if(StringUtils.isNotBlank(response.getCash_fee_type())){
+            verifyStr += verifyStr.equals("") ? "": "&";
+            verifyStr += "cash_fee_type="+response.getCash_fee_type();
+        }
+        if(null != response.getCoupon_count()){
+            verifyStr += verifyStr.equals("") ? "": "&";
+            verifyStr += "coupon_count="+response.getCoupon_count();
+        }
+        if(null != response.getCoupon_fee()){
+            verifyStr += verifyStr.equals("") ? "": "&";
+            verifyStr += "coupon_fee="+response.getCoupon_fee();
+        }
+        if(StringUtils.isNotBlank(response.getCoupon_fee_0())){
+            verifyStr += verifyStr.equals("") ? "": "&";
+            verifyStr += "coupon_fee_0="+response.getCoupon_fee_0();
+        }
+        if(StringUtils.isNotBlank(response.getCoupon_id_0())){
+            verifyStr += verifyStr.equals("") ? "": "&";
+            verifyStr += "coupon_id_0="+response.getCoupon_id_0();
+        }
+        if(StringUtils.isNotBlank(response.getDevice_info())){
+            verifyStr += verifyStr.equals("") ? "": "&";
+            verifyStr += "device_info="+response.getDevice_info();
+        }
+        if(StringUtils.isNotBlank(response.getErr_code())){
+            verifyStr += verifyStr.equals("") ? "": "&";
+            verifyStr += "err_code="+response.getErr_code();
+        }
+        if(StringUtils.isNotBlank(response.getErr_code_des())){
+            verifyStr += verifyStr.equals("") ? "": "&";
+            verifyStr += "err_code_des="+response.getErr_code_des();
+        }
+        if(StringUtils.isNotBlank(response.getFee_type())){
+            verifyStr += verifyStr.equals("") ? "": "&";
+            verifyStr += "fee_type="+response.getFee_type();
+        }
+        if(StringUtils.isNotBlank(response.getIs_subscribe())){
+            verifyStr += verifyStr.equals("") ? "": "&";
+            verifyStr += "is_subscribe="+response.getIs_subscribe();
+        }
+        if(StringUtils.isNotBlank(response.getMch_id())){
+            verifyStr += verifyStr.equals("") ? "": "&";
+            verifyStr += "mch_id="+response.getMch_id();
+        }
+        if(StringUtils.isNotBlank(response.getNonce_str())){
+            verifyStr += verifyStr.equals("") ? "": "&";
+            verifyStr += "nonce_str="+response.getNonce_str();
+        }
+        if(StringUtils.isNotBlank(response.getOpenid())){
+            verifyStr += verifyStr.equals("") ? "": "&";
+            verifyStr += "openid="+response.getOpenid();
+        }
+        if(StringUtils.isNotBlank(response.getOut_trade_no())){
+            verifyStr += verifyStr.equals("") ? "": "&";
+            verifyStr += "out_trade_no="+response.getOut_trade_no();
+        }
+        if(StringUtils.isNotBlank(response.getResult_code())){
+            verifyStr += verifyStr.equals("") ? "": "&";
+            verifyStr += "result_code="+response.getResult_code();
+        }
+        if(StringUtils.isNotBlank(response.getReturn_code())){
+            verifyStr += verifyStr.equals("") ? "": "&";
+            verifyStr += "return_code="+response.getReturn_code();
+        }
+        if(StringUtils.isNotBlank(response.getReturn_msg())){
+            verifyStr += verifyStr.equals("") ? "": "&";
+            verifyStr += "return_msg="+response.getReturn_msg();
+        }
+        if(StringUtils.isNotBlank(response.getTime_end())){
+            verifyStr += verifyStr.equals("") ? "": "&";
+            verifyStr += "time_end="+response.getTime_end();
+        }
+        if(null != response.getTotal_fee()){
+            verifyStr += verifyStr.equals("") ? "": "&";
+            verifyStr += "total_fee="+response.getTotal_fee();
+        }
+        if(StringUtils.isNotBlank(response.getTrade_type())){
+            verifyStr += verifyStr.equals("") ? "": "&";
+            verifyStr += "trade_type="+response.getTrade_type();
+        }
+        if(StringUtils.isNotBlank(response.getTransaction_id())){
+            verifyStr += verifyStr.equals("") ? "": "&";
+            verifyStr += "transaction_id="+response.getTransaction_id();
+        }
+        String key = "JSAPI".equals(response.getTrade_type()) ?  wechatPublicConfig.getAppSecret(): wechatConfig.getAppSecret();
+        verifyStr += "&key="+ key;
+        String mySign = MD5Util.MD5Encode(verifyStr, "UTF-8").toUpperCase();
+        log.debug("verify WeixinNotify, mySign=[{}] sign=[{}]", mySign ,response.getSign());
+        return mySign.equals(response.getSign());
     }
 
     private PaymentResponse preWechatOrders(String userId, OrderRequest request) {
