@@ -17,10 +17,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import net.luoteng.entity.AbstractTimeScopeEntity;
-import net.luoteng.entity.embedded.RealmEntity;
 import net.luoteng.enums.PayType;
 import net.luoteng.fund.enums.FundRecordOperation;
-import net.luoteng.fund.enums.FundRecordStatus;
 
 /**
  * 资金记录
@@ -45,16 +43,6 @@ public class FundRecord extends AbstractTimeScopeEntity {
     private String userId;
     
     /**
-     * 关联对象
-     * 
-     * @return
-     */
-    @Getter
-    @Setter
-    @Column(nullable = false)
-    private RealmEntity owner;
-    
-    /**
      * 资金操作
      * 
      * @return
@@ -74,6 +62,7 @@ public class FundRecord extends AbstractTimeScopeEntity {
      */
     @Getter
     @Setter
+    @Column(nullable = false)
     private String orderId;
     
     /**
