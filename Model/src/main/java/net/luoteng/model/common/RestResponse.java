@@ -4,11 +4,12 @@
  * and open the template in the editor.
  */
 
-package net.luoteng.model;
+package net.luoteng.model.common;
 
 import lombok.Getter;
 import lombok.Setter;
 import net.luoteng.enums.ResponseCode;
+import net.luoteng.model.AbstractObject;
 
 /**
  * rest response
@@ -94,4 +95,5 @@ public class RestResponse<T> extends AbstractObject {
     public boolean isSuccess(){
         return this.code == ResponseCode.SUCCESS.getCode();
     }
+
 }

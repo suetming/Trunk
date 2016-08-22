@@ -5,6 +5,8 @@
  */
 package net.luoteng.enums;
 
+import lombok.Getter;
+
 /**
  * response code
  *
@@ -15,7 +17,7 @@ package net.luoteng.enums;
 public enum ResponseCode implements BaseEnum {
 
     SUCCESS("成功", 0000),
-    ERROR_UNKNOW("未知错误", 1000),
+    ERROR_UNKNOW("未知错误", 100),
     
     /**
      * 客户端错误
@@ -25,10 +27,11 @@ public enum ResponseCode implements BaseEnum {
     
     ERROR_USER_NO_PERMISSION("无操作权限", 4001),
     ERROR_USER_INVALID_PASSWORD("无效的用户密码", 4002),
-    ERROR_USER_NO_EXIST("用户不存在", 4003),
+    ERROR_USER_NOT_EXIST("用户不存在", 4003),
     ERROR_LOGINNAME_EXIST("用户名已存在", 4004),
     ERROR_USER_INVALID_LOGINNAME_OR_PASSWORD("无效的用户名或者密码", 4005),
     ERROR_EDUCATIONINFO_NO_EXIST("教育经历不存在", 4006),
+    ERROR_NAME_IS_EMPTY("名字不能为空", 4007),
     
     /**
      * 手机验证码相关
@@ -44,15 +47,21 @@ public enum ResponseCode implements BaseEnum {
     ERROR_MOBILE_NOT_DOMESTIC("仅限国内手机号", 4108),
     ERROR_MOBILE_CERTIFICATION_ALREADY_EXISTED("已经绑定", 4109),
     
+    /**
+     * 邮箱已经存在
+     */
+    ERROR_EMAIL_ALREADY_EXISTED("邮箱已经存在", 4200),
+    ERROR_EMAIL_IS_EMPTY("邮箱不能为空", 4201),
+    
     ERROR_ADDTEXTBOOK_EXIST("目标教材已存在", 5000),
     ERROR_ADDTEXTBOOK_NO_EXIST("教材不存在", 5001),
     ERROR_ASSGIN_NO_EXIST("指定关系不存在", 5002),
     ERROR_TEXTBOOK_NO_EXIST("教材不存在", 5003),
     ERROR_COURSEPRICEINFO_EXIST("同类型同课时的价格信息已添加", 5004),
     ERROR_COURSEPRICEINFO_NO_EXIST("价格信息不存在", 5005),
-    ERROR_COURSE_NO_EXIST("课程不存在", 5006),
+    ERROR_COURSE_NOT_EXIST("课程不存在", 5006),
     ERROR_COURSETAG_EXIST("当前添加分类已存在", 5007),
-    ERROR_COURSETAG_NO_EXIST("当前修改分类不存在", 5008),
+    ERROR_COURSE_TAG_NOT_EXIST("当前修改分类不存在", 5008),
     ERROR_TEACHERCOURSE_EXIST("目标课程已存在", 5009),
     ERROR_TEACHERCOURSE_NO_EXIST("课程不存在", 5010),
     ERROR_COURSEENROLL_EXIST("已报名该课程", 5011),
@@ -61,6 +70,9 @@ public enum ResponseCode implements BaseEnum {
     ERROR_COURSE_IS_SHOW_MAIN("该课程处于首页展示状态", 5014),
     ERROR_COURSESTATUS_NOT_PUBLISH("该课程未上架", 5015),
     ERROR_COURSE_NOT_SHOW_MAIN("该课程未在首页展示", 5016),
+    ERROR_COURSE_PATTERN_NOT_EXIST("课程套餐存在", 5017),
+    ERROR_COURSE_PATTERN_EXIST("课程套餐已存在", 5018),
+    
     /**
      * 其他情况
      */
@@ -70,21 +82,15 @@ public enum ResponseCode implements BaseEnum {
     //====================================================================================================================
     ;
 
+    @Getter
     final private String msg;
     
+    @Getter
     final private int code;
     
     ResponseCode(String msg, int code) {
         this.msg = msg;
         this.code = code;
-    }
-    
-    public String getMsg() {
-        return msg;
-    }
- 
-    public int getCode() {
-        return code;
     }
     
 }

@@ -33,7 +33,7 @@ import javax.net.ssl.SSLContext;
 import javax.transaction.Transactional;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
-import net.luoteng.model.RestResponse;
+import net.luoteng.model.common.RestResponse;
 import net.luoteng.payment.model.OrderRequest;
 import net.luoteng.payment.model.Response;
 import net.luoteng.payment.model.enums.TradeType;
@@ -110,7 +110,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public RestResponse preOrders(String userId, OrderRequest request) throws UnsupportedEncodingException {
+    public RestResponse preOrders(String userId, OrderRequest request) {
         RestResponse response = new RestResponse();
         switch (request.getPayType()) {
             case Alipay:

@@ -5,6 +5,8 @@
  */
 package net.luoteng.payment.model;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,18 +26,25 @@ public class OrderRequest extends AbstractObject {
 
     @Getter
     @Setter
+    @NotNull
     private PayType payType;
     
     @Getter
     @Setter
+    @NotNull
     private String subject;
     
     @Getter
     @Setter
+    @NotNull
     private String body;
     
+    /**
+     * 通过支付渠道支付的金额 单位 分
+     */
     @Getter
     @Setter
+    @Min(0)
     private int amount;
     
     @Getter

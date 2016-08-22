@@ -6,11 +6,9 @@
 
 package net.luoteng.payment.service;
 
-import java.io.UnsupportedEncodingException;
-import net.luoteng.model.RestResponse;
 import net.luoteng.payment.model.OrderRequest;
 import net.luoteng.payment.model.Response;
-
+import net.luoteng.model.common.RestResponse;
 /**
  * 
  *
@@ -25,9 +23,8 @@ public interface PaymentService {
      * @param userId
      * @param request
      * @return 
-     * @throws java.io.UnsupportedEncodingException 
      */
-    public RestResponse preOrders(String userId, OrderRequest request) throws UnsupportedEncodingException;
+    public RestResponse preOrders(String userId, OrderRequest request) ;
  
     /**
      * 验证是否是正确的源发出的回调

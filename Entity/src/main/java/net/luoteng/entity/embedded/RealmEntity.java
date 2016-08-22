@@ -11,6 +11,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,12 +32,14 @@ public class RealmEntity extends AbstractObject {
 
     @Getter
     @Setter
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = true)
     private Realm realm;
 
     @Getter
     @Setter
+    @NotNull
     @Column(nullable = true)
     private String entityId;
 
