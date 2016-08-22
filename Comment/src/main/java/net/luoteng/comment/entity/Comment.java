@@ -21,6 +21,7 @@ import net.luoteng.entity.AbstractRecordScopeEntity;
 import net.luoteng.entity.embedded.RealmEntity;
 
 /**
+ * comment
  * 
  * @author suetming <suetming.ma at gmail.com>
  */

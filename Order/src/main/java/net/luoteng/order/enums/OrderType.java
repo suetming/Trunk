@@ -33,6 +33,10 @@ public enum OrderType implements BaseEnum {
      */
     DEPOSIT("充值"),
     
+    /**
+     * 商品消费
+     */
+    SPEND("消费"),
     ;
     
     private final String msg;
