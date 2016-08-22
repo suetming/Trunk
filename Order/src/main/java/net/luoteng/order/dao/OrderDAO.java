@@ -14,6 +14,7 @@ import net.luoteng.order.enums.OrderStatus;
 import net.luoteng.order.enums.OrderType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
@@ -27,6 +28,22 @@ import org.springframework.data.repository.query.Param;
 @Transactional
 public interface OrderDAO extends PagingAndSortingRepository<Order, String> {
 
+    /**
+     * 根据用户查找订单
+     * 
+     * @param userId
+     * @param typeList
+     * @param statusList
+     * @param pageable
+     * @return 
+     */
+    @Query("select o from Order o where o.userId = :userId and o.type in :typeList and o.status in :statusList")
+    public Page<Order> listByUser(
+            @Param("userId") String userId,
+            @Param("typeList") List<OrderType> typeList,
+            @Param("statusList") List<OrderStatus> statusList,
+            Pageable pageable);
+    
     /**
      * 获取订单
      * @param userId
@@ -57,14 +74,15 @@ public interface OrderDAO extends PagingAndSortingRepository<Order, String> {
                                             Pageable pageable);
     
     /**
-     * 取消预支付订单
+     * 更新订单状态
      * 
      * @param userId
      * @param owner
-     * @param status
+     * @param preStatus
+     * @param aftStatus 
      */
-//    @Modifying
-//    @Query("update Order o set o.status = :status where o.userId = :userId and o.owner = :owner")
-//    public void markStatus(@Param("userId") String userId, @Param("owner") RealmEntity owner, @Param("status") OrderStatus status);
+    @Modifying
+    @Query("update Order o set o.status = :aftStatus where o.userId = :userId and o.owner = :owner and o.status=:preStatus")
+    public void markStatus(@Param("userId") String userId, @Param("owner") RealmEntity owner, @Param("preStatus") OrderStatus preStatus, @Param("aftStatus") OrderStatus aftStatus);
     
 }

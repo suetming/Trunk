@@ -15,6 +15,7 @@ import net.luoteng.order.enums.OrderType;
 import net.luoteng.service.BaseService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 
 /**
  *
@@ -23,6 +24,21 @@ import org.springframework.data.domain.Pageable;
  */
 public interface OrderService extends BaseService<Order> {
 
+    /**
+     * 获取用户订单
+     * 
+     * @param userId
+     * @param typeList
+     * @param statusList
+     * @param pageable
+     * @return 
+     */
+    public Page<Order> listByUser(
+            @Param("userId") String userId,
+            @Param("typeList") List<OrderType> typeList,
+            @Param("statusList") List<OrderStatus> statusList,
+            Pageable pageable);
+    
     /**
      * 获取订单
      * 
@@ -35,34 +51,27 @@ public interface OrderService extends BaseService<Order> {
     public Order getByUser(String userId, OrderType type, OrderStatus status, RealmEntity owner);
     
     /**
-     * 根据用户查找订单
-     * 
-     * @param userId
-     * @param typeList
-     * @param statusList
-     * @param pageable
-     * @return 
-     */
-    public Page<Order> listByUserTypeStatus(String userId, List<OrderType> typeList, List<OrderStatus> statusList, Pageable pageable);
-    
-    /**
-     * 取消预支付订单
-     * 
-     * @param userId
-     * @param owner
-     * @param status 
-     */
-    public void markStatus(String userId, RealmEntity owner, OrderStatus status);
-    
-    /**
+     * 预生成订单
      * 
      * @param userId
      * @param owner
      * @param outOrderId
      * @param type
      * @param payType
+     * @param amount
+     * @param couponAmount
+     * @param balanceAmount
      * @return 
      */
-    public Order generate(String userId, RealmEntity owner, String outOrderId, OrderType type, PayType payType);
+    public Order generate(
+            String userId, 
+            RealmEntity owner, 
+            String outOrderId, 
+            OrderType type, 
+            PayType payType,
+            long amount,
+            long couponAmount,
+            long balanceAmount
+    );
     
 }

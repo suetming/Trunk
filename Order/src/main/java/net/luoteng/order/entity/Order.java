@@ -20,7 +20,9 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import net.luoteng.entity.AbstractTimeScopeEntity;
 import net.luoteng.entity.embedded.RealmEntity;
 import net.luoteng.enums.PayType;
@@ -106,6 +108,33 @@ public class Order extends AbstractTimeScopeEntity {
     private RealmEntity owner;
 
     /**
+     * 订单总金额（三方+红包+余额）
+     * 
+     * @return
+     */
+    @Getter
+    @Setter
+    private long amount;
+    
+    /**
+     * 订单中红包支付占用金额
+     * 
+     * @return
+     */
+    @Getter
+    @Setter
+    private long couponAmount;
+    
+    /**
+     * 订单中余额支付占用金额
+     * 
+     * @return
+     */
+    @Getter
+    @Setter
+    private long balanceAmount;
+    
+    /**
      * 订单成功时间
      *
      * @return
@@ -153,7 +182,10 @@ public class Order extends AbstractTimeScopeEntity {
             OrderType type,
             OrderStatus status,
             PayType payType,
-            RealmEntity owner) {
+            RealmEntity owner,
+            long amount,
+            long couponAmount,
+            long balanceAmount) {
         
         this(
                 OrderGenerator.order(),
@@ -163,6 +195,9 @@ public class Order extends AbstractTimeScopeEntity {
                 status,
                 payType,
                 owner,
+                amount,
+                couponAmount,
+                balanceAmount,
                 null,
                 null,
                 null,

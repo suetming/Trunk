@@ -55,7 +55,7 @@ import net.luoteng.payment.properties.WechatPublicProperties;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- *
+ * payment service
  *
  * @author suetming <suetming.ma at gmail.com>
  * Copyright(c) @2016 Luoteng Company, Inc. All Rights Reserved.
@@ -83,6 +83,8 @@ public class PaymentServiceImpl implements PaymentService {
 
     @PostConstruct
     public void init() {
+        log.info("payment service init {}, {}", alipayConfig.getAccountName(), wechatConfig.getPathLocalCert());
+        
         client = new OkHttpClient();
 
         try (FileInputStream instream = new FileInputStream(new File(wechatConfig.getPathLocalCert()))) {
@@ -105,7 +107,7 @@ public class PaymentServiceImpl implements PaymentService {
 
             weixinClient = new OkHttpClient.Builder().sslSocketFactory(sslcontext.getSocketFactory()).build();
             
-            log.info("payment service init successed {}", alipayConfig.getAccountName());
+            log.info("payment service init successed");
         } catch (KeyStoreException | FileNotFoundException | NoSuchAlgorithmException | UnrecoverableKeyException | KeyManagementException ex) {
             log.error("payment service  something is wrong when load weixin cert {}", ex);
         } catch (IOException | java.security.cert.CertificateException ex) {
@@ -138,7 +140,7 @@ public class PaymentServiceImpl implements PaymentService {
         return false;
     }
     
-    private boolean verifyWechatNotify(net.luoteng.payment.model.wechat.NotifyResponse response) {
+    private boolean verifyWechatNotify(net.luoteng.payment.model.wechat.NotifyResponse response) {// TODO 待优化代码
         String verifyStr = "";
         if(StringUtils.isNotBlank(response.getAppid())){
             verifyStr += verifyStr.equals("") ? "": "&";
@@ -297,7 +299,7 @@ public class PaymentServiceImpl implements PaymentService {
         return response.body().string();
     }
 
-    private PaymentResponse prepayResponse(String strxml, boolean ios, boolean publicPlatform) throws JDOMException, IOException {
+    private PaymentResponse prepayResponse(String strxml, boolean ios, boolean publicPlatform) throws JDOMException, IOException {// TODO 待优化代码
         PaymentResponse prepayResponse = new PaymentResponse();
         strxml = strxml.replaceFirst("encoding=\".*\"", "encoding=\"UTF-8\"");
 

@@ -2,8 +2,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     
-    <groupId>net.luoteng.payment</groupId>
-    <artifactId>Payment</artifactId>
+    <groupId>net.luoteng.fund</groupId>
+    <artifactId>Order</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     
@@ -14,7 +14,7 @@
         <relativePath></relativePath>
     </parent>
     
-    <name>Payment</name>
+    <name>Fund</name>
     <url>http://maven.apache.org</url>
     
     <dependencies>
@@ -31,41 +31,28 @@
             <type>jar</type>
         </dependency>
         <dependency>
+            <groupId>net.luoteng.entity</groupId>
+            <artifactId>Entity</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
             <groupId>net.luoteng.common</groupId>
             <artifactId>Common</artifactId>
             <version>1.0-SNAPSHOT</version>
             <type>jar</type>
         </dependency>
         <dependency>
-            <groupId>net.luoteng.model</groupId>
-            <artifactId>Model</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <version>1.4.0.RELEASE</version>
             <type>jar</type>
         </dependency>
         <dependency>
-            <groupId>net.luoteng.entity</groupId>
-            <artifactId>Entity</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>org.springframework.boot</groupId>      
+            <artifactId>spring-boot-starter-data-rest</artifactId>
+            <version>1.4.0.RELEASE</version>
             <type>jar</type>
-        </dependency>
-        
-        <dependency>
-             <groupId>org.springframework.boot</groupId>
-             <artifactId>spring-boot-starter</artifactId>
-             <version>1.4.0.RELEASE</version>
-             <type>jar</type>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.jdom</groupId>
-            <artifactId>jdom</artifactId>
-            <version>1.1</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>okhttp</artifactId>
-            <version>3.4.1</version>
         </dependency>
     </dependencies>
 </project>

@@ -21,6 +21,7 @@
         <module>Order</module>
         <module>Payment</module>
         <module>Comment</module>
+        <module>Fund</module>
     </modules>
 </project>
 
