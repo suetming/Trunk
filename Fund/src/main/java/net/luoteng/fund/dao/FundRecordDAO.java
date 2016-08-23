@@ -30,7 +30,7 @@ public interface FundRecordDAO extends PagingAndSortingRepository<FundRecord, St
     Page<FundRecord> listByUser(@Param("userId") String userId, @Param("operationList") List<FundRecordOperation> operationList, Pageable pageable);
     
     
-    @Query("select fr from FundRecord fr where fr.userId=:userId and fr.orderId=:orderId and fr.operat=:operat and fr.payType=payType")
+    @Query("select fr from FundRecord fr where fr.userId=:userId and fr.orderId=:orderId and fr.operat=:operat and fr.payType=:payType")
     FundRecord get(@Param("userId") String userId, @Param("orderId") String orderId, @Param("operat") FundRecordOperation operation, @Param("payType") PayType payType);
     
 }
