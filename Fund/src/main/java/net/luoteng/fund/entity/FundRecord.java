@@ -12,10 +12,11 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Lob;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import net.luoteng.entity.AbstractTimeScopeEntity;
 import net.luoteng.enums.PayType;
 import net.luoteng.fund.enums.FundRecordOperation;
@@ -28,8 +29,11 @@ import net.luoteng.fund.enums.FundRecordOperation;
  */
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 @Entity
-@Table(name = "t_fund_record")
+@Table(name = "t_fund_record", uniqueConstraints = {
+      @UniqueConstraint(columnNames = {"userId", "operat", "orderId", "payType"})
+})
 public class FundRecord extends AbstractTimeScopeEntity {
 
     /**
@@ -37,8 +41,6 @@ public class FundRecord extends AbstractTimeScopeEntity {
      * 
      * @return
      */
-    @Getter
-    @Setter
     @Column(nullable = false)
     private String userId;
     
@@ -47,8 +49,7 @@ public class FundRecord extends AbstractTimeScopeEntity {
      * 
      * @return
      */
-    @Getter
-    @Setter
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private FundRecordOperation operat;
@@ -60,8 +61,7 @@ public class FundRecord extends AbstractTimeScopeEntity {
      * 
      * @return
      */
-    @Getter
-    @Setter
+    @NotNull
     @Column(nullable = false)
     private String orderId;
     
@@ -70,8 +70,7 @@ public class FundRecord extends AbstractTimeScopeEntity {
      * 
      * @return
      */
-    @Getter
-    @Setter
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PayType payType;
@@ -82,17 +81,23 @@ public class FundRecord extends AbstractTimeScopeEntity {
      * 
      * @return
      */
-    @Getter
-    @Setter
     private long amount;
     
     /**
      * 特定资金记录特定字段
+     * 
+     * @return
      */
-    @Getter
-    @Setter
     @Lob
     @Column(nullable = true)
     private String priv;
+
+    public FundRecord(String userId, FundRecordOperation operat, String orderId, PayType payType, long amount) {
+        this.userId = userId;
+        this.operat = operat;
+        this.orderId = orderId;
+        this.payType = payType;
+        this.amount = amount;
+    }
     
 }
