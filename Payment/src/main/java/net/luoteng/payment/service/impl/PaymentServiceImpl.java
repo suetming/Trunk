@@ -86,7 +86,6 @@ public class PaymentServiceImpl implements PaymentService {
         log.info("payment service init {}, {}", alipayConfig.getAccountName(), wechatConfig.getPathLocalCert());
         
         client = new OkHttpClient();
-
         try (FileInputStream instream = new FileInputStream(new File(wechatConfig.getPathLocalCert()))) {
             KeyStore keyStore = KeyStore.getInstance("PKCS12");
 
