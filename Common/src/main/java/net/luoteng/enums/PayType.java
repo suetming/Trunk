@@ -16,32 +16,32 @@ public enum PayType implements BaseEnum {
     /**
      * 支付宝
      */
-    Alipay("支付宝"),
+    alipay("支付宝"),
     
     /**
      * 微信
      */
-    Wechat("微信支付"),
+    wechat("微信支付"),
     
     /**
      * 贝宝
      */
-    Paypal("贝宝"),
+    paypal("贝宝"),
     
     /**
      * 新浪
      */
-    Sina("新浪支付"),
+    sina("新浪支付"),
     
     /**
      * 仅使用红包支付
      */
-    Coupon("红包"),
+    coupon("红包"),
     
     /**
      * 仅使用“钱包”余额支付
      */
-    Balance("余额"),
+    balance("余额"),
     
     ;
     

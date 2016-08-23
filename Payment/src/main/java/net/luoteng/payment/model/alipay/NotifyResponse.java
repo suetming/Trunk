@@ -6,12 +6,17 @@
 
 package net.luoteng.payment.model.alipay;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  * 
  *
  * @author suetming <suetming.ma at gmail.com>
  * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
  */
+@Data
+@NoArgsConstructor
 public class NotifyResponse extends BaseResponse {
 
     /**

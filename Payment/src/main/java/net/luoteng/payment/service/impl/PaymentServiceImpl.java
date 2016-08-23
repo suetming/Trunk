@@ -119,9 +119,9 @@ public class PaymentServiceImpl implements PaymentService {
     public RestResponse preOrders(String userId, OrderRequest request) {
         RestResponse response = new RestResponse();
         switch (request.getPayType()) {
-            case Alipay:
+            case alipay:
                 return null;
-            case Wechat:
+            case wechat:
                 return response.success(preWechatOrders(userId, request));
             default:
                 throw new UnsupportedOperationException("Not supported yet.");
