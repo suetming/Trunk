@@ -26,7 +26,7 @@ import org.springframework.data.repository.query.Param;
 @Transactional
 public interface FundRecordDAO extends PagingAndSortingRepository<FundRecord, String> {
 
-    @Query("select fr from FundRecord fr where fr.userId=:userId and fr.operation in :operationList")
+    @Query("select fr from FundRecord fr where fr.userId=:userId and fr.operat in :operationList")
     Page<FundRecord> listByUser(@Param("userId") String userId, @Param("operationList") List<FundRecordOperation> operationList, Pageable pageable);
     
     
