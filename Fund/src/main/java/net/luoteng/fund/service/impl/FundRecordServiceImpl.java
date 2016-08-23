@@ -35,7 +35,7 @@ public class FundRecordServiceImpl implements FundRecordService {
 
     @Override
     public FundRecord save(FundRecord model) {
-        model.getId();
+        FundRecord entity = recordDAO.findOne(model.getId());
         return recordDAO.save(model);
     }
 
