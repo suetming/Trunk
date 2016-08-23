@@ -6,12 +6,12 @@
 
 package net.luoteng.fund.service;
 
-import java.awt.print.Pageable;
 import java.util.List;
 import net.luoteng.fund.entity.FundRecord;
 import net.luoteng.fund.enums.FundRecordOperation;
 import net.luoteng.service.CrudService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * fund record service
