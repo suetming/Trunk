@@ -35,7 +35,8 @@ public class FundRecordServiceImpl implements FundRecordService {
 
     @Override
     public FundRecord save(FundRecord model) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        return recordDAO.save(model);
     }
 
     @Override
@@ -44,7 +45,7 @@ public class FundRecordServiceImpl implements FundRecordService {
     }
 
     @Override
-    public FundRecord get(String id) {
+    public FundRecord get(String recordId) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
