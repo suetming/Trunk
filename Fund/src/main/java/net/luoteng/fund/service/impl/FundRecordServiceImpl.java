@@ -8,9 +8,11 @@ package net.luoteng.fund.service.impl;
 
 import java.awt.print.Pageable;
 import java.util.List;
+import net.luoteng.fund.dao.FundRecordDAO;
 import net.luoteng.fund.entity.FundRecord;
 import net.luoteng.fund.enums.FundRecordOperation;
 import net.luoteng.fund.service.FundRecordService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
@@ -23,13 +25,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class FundRecordServiceImpl implements FundRecordService {
 
+    @Autowired
+    FundRecordDAO recordDAO;
+    
     @Override
     public Page<FundRecord> listByUser(String userId, List<FundRecordOperation> operations, Pageable pageable) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return recordDAO.listByUser(userId, operations, pageable);
     }
 
     @Override
-    public FundRecord save(FundRecord t) {
+    public FundRecord save(FundRecord model) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
