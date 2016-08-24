@@ -8,6 +8,7 @@ package net.luoteng.redis.service.impl;
 
 import java.io.UnsupportedEncodingException;
 import java.util.concurrent.TimeUnit;
+import javax.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import net.luoteng.constant.GlobalConstant;
 import static net.luoteng.constant.GlobalConstant.GLOBAL_NAMESPACE;
@@ -17,6 +18,7 @@ import net.luoteng.model.common.RestResponse;
 import net.luoteng.redis.service.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.cache.RedisCache;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 

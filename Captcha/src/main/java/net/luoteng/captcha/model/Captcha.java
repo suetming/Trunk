@@ -8,6 +8,7 @@ package net.luoteng.captcha.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import net.luoteng.model.AbstractObject;
 
 /**
@@ -17,22 +18,23 @@ import net.luoteng.model.AbstractObject;
  * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
  */
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 public class Captcha extends AbstractObject {
 
     /**
      * token
      */
-    String uuid;
+    private String uuid;
 
     /**
      * captcha的字面答案
      */
-    String answer;
+    private String answer;
 
     /**
      * png图片
      */
-    byte[] content;
+    private String content;
 
 }
