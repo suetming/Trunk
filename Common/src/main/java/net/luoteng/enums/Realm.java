@@ -13,6 +13,9 @@ package net.luoteng.enums;
  * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
  */
 public enum Realm implements BaseEnum {
+    
+    /******************************实体类******************************/
+    
     /**
      * 基本类型
      */
@@ -52,6 +55,25 @@ public enum Realm implements BaseEnum {
      * 预约
      */
     APPOINTMENT("预约"),
+    
+    /******************************字段类******************************/
+    
+    /**
+     * 常用字段
+     */
+    MOBILE("手机号"),
+    EMAIL("邮箱"),
+    
+    /**
+     * 验证码
+     */
+    CAPTCHA("验证码"),
+    GRAPHCAPTCHA("图形验证码"),
+    
+    /**
+     * 行为
+     */
+    LIKE("点赞数"),
     
     ;
     

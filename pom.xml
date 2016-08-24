@@ -22,6 +22,8 @@
         <module>Payment</module>
         <module>Comment</module>
         <module>Fund</module>
+        <module>Redis</module>
+        <module>Captcha</module>
     </modules>
 </project>
 

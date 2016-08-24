@@ -9,3 +9,5 @@
 /Payment/target/
 /Order/target/
 /Fund/target/
+/Redis/target/
+/Captcha/target/
