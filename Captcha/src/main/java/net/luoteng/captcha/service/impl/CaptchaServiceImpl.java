@@ -109,16 +109,16 @@ public class CaptchaServiceImpl implements CaptchaService, GlobalConstant, Captc
 
     @Override
     public net.luoteng.captcha.model.Captcha random() {
-//        try {
-//            int idx = seed.nextInt(cacheSize);
-//
-//            String data = redisTemplate.opsForValue().get(String.valueOf(idx));
-//            net.luoteng.captcha.model.Captcha model = (net.luoteng.captcha.model.Captcha) SerializationUtils.deserialize(data.getBytes(GLOBAL_ENCODING));
-//            log.info("!!!!!!!!!!!!!!!!!!!!!!!!!captcha service get {}, {}", idx, model);
-//            return model;
-//        } catch (UnsupportedEncodingException ex) {
-//            log.error("random captcha {}", ex);
-//        }
+        try {
+            int idx = seed.nextInt(cacheSize);
+
+            String data = redisTemplate.opsForValue().get(String.valueOf(idx));
+            net.luoteng.captcha.model.Captcha model = (net.luoteng.captcha.model.Captcha) SerializationUtils.deserialize(data.getBytes(GLOBAL_ENCODING));
+            log.info("!!!!!!!!!!!!!!!!!!!!!!!!!captcha service get {}, {}", idx, model);
+            return model;
+        } catch (UnsupportedEncodingException ex) {
+            log.error("random captcha {}", ex);
+        }
         return null;
     }
 }
