@@ -68,7 +68,7 @@ public enum ResponseCode implements BaseEnum {
     ERROR_COURSE_IS_SHOW_MAIN("该课程处于首页展示状态", 5014),
     ERROR_COURSESTATUS_NOT_PUBLISH("该课程未上架", 5015),
     ERROR_COURSE_NOT_SHOW_MAIN("该课程未在首页展示", 5016),
-    ERROR_COURSE_PATTERN_NOT_EXIST("课程套餐存在", 5017),
+    ERROR_COURSE_PATTERN_NOT_EXIST("课程套餐不存在", 5017),
     ERROR_COURSE_PATTERN_EXIST("课程套餐已存在", 5018),
     
     /**

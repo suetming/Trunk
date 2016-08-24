@@ -35,6 +35,7 @@ public enum Realm implements BaseEnum {
     COURSE("课程"),
     COURSE_TAG("课程类别"),
     TEACHER("老师"),
+    COURSE_ENROLL("课程报名"),
     
     /**
      * 其他
