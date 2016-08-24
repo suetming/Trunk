@@ -5,8 +5,6 @@
  */
 package net.luoteng.enums;
 
-import lombok.Getter;
-
 /**
  * response code
  *
@@ -82,15 +80,22 @@ public enum ResponseCode implements BaseEnum {
     //====================================================================================================================
     ;
 
-    @Getter
     final private String msg;
     
-    @Getter
     final private int code;
     
     ResponseCode(String msg, int code) {
         this.msg = msg;
         this.code = code;
+    }
+
+    @Override
+    public String getMsg() {
+        return msg;
+    }
+
+    public int getCode() {
+        return code;
     }
     
 }

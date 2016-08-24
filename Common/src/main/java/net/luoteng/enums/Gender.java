@@ -6,8 +6,6 @@
 
 package net.luoteng.enums;
 
-import lombok.Getter;
-
 /**
  * gender
  *
@@ -20,11 +18,15 @@ public enum Gender implements BaseEnum{
     FEMALE("女"),
     SECRET("保密");
 
+    private final String msg;
+    
     private Gender(String msg) {
         this.msg = msg;
     }
-        
-    @Getter
-    private final String msg;
+
+    @Override
+    public String getMsg() {
+        return msg;
+    }
     
 }
