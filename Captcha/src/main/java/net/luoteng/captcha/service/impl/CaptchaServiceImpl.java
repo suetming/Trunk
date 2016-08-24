@@ -6,22 +6,13 @@
 
 package net.luoteng.captcha.service.impl;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.Random;
 import javax.annotation.PostConstruct;
-import javax.imageio.ImageIO;
 import lombok.extern.slf4j.Slf4j;
 import net.luoteng.captcha.constant.CaptchaConstant;
 import net.luoteng.captcha.service.CaptchaService;
-import net.luoteng.captcha.utils.CaptchaUtils;
-import nl.captcha.Captcha;
-import org.springframework.beans.factory.annotation.Autowired;
+import net.luoteng.enums.Realm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
@@ -34,29 +25,50 @@ import org.springframework.stereotype.Component;
 @Component
 public class CaptchaServiceImpl implements CaptchaService, CaptchaConstant {
 
+    @Value("${net.luoteng.captcha.cache.size}")
+    int cacheSize;
+    
+    Random seed;
+    
 //    @Autowired
 //    RedisService redisService;
+    
+//    @Autowired
+//    StringRedisTemplate redisTemplate;
+    
+//    RedisCache cache;
     
     @PostConstruct
     void init () {
         log.info("captcha service init");
-        
-        long startTime = System.currentTimeMillis();
-        //prepare captcha cache
+//        cache = new RedisCache(CACHE_NAME, CACHE_NAME.getBytes(), template, EXPIRE_TIME);
+//        
+//        if (cacheSize <= 0) {
+//            cacheSize = CAPTCHA_CACHE_SIZE;
+//        }
+//        
+//        seed  = new Random();
+//        
+//        long startTime = System.currentTimeMillis();
+//        //prepare captcha cache
 //        final ExecutorService managedExecutorService = Executors.newFixedThreadPool(25);
 //        List<Future> futures = new ArrayList<>();
-//        for (int i = 0; i < CAPTCHA_CACHE_SIZE; i++) {
+//        for (int i = 0; i < cacheSize; i++) {
+//            final int idx = i;
 //            futures.add(managedExecutorService.submit(new Runnable() {
 //                @Override
 //                public void run() {
 //                    Captcha captcha = CaptchaUtils.getCaptcha();
 //                    try (ByteArrayOutputStream bo = new ByteArrayOutputStream(2048);) {
 //                        ImageIO.write(captcha.getImage(), "png", bo);
-//                        captchaCache.put(captcha.getAnswer(), bo.toByteArray());
 //                        
-//                        redisService.put(CAPTCHA_IMAGE_TYPE, value);
+//                        redisService.set(Realm.GRAPHCAPTCHA, String.valueOf(idx), 
+//                                new net.luoteng.captcha.model.Captcha(
+//                                        UUID.randomUUID().toString(), 
+//                                        captcha.getAnswer(), 
+//                                        bo.toByteArray()));
 //                    } catch (IOException ex) {
-//                        log.error("", ex);
+//                        log.error("captcha service init {}", ex);
 //                    }
 //                }
 //            }));
@@ -66,12 +78,17 @@ public class CaptchaServiceImpl implements CaptchaService, CaptchaConstant {
 //                future.get();
 //            }
 //        } catch (InterruptedException | ExecutionException ex) {
-//            log.error("", ex);
+//            log.error("captcha service init {}", ex);
 //        } finally {
 //            managedExecutorService.shutdown();
 //        }
-//        keys = captchaCache.keySet().toArray(new String[captchaCache.size()]);
-
-        log.info("Worker started in {}ms", System.currentTimeMillis() - startTime);
+//
+//        log.info("captcha init finished in {}ms", System.currentTimeMillis() - startTime);
+    }
+    
+    @Override
+    public net.luoteng.captcha.model.Captcha random() {
+        return null;
+//        return (net.luoteng.captcha.model.Captcha)redisService.get(Realm.GRAPHCAPTCHA, String.valueOf(seed.nextInt(cacheSize))).getParam();
     }
 }

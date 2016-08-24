@@ -42,18 +42,11 @@
             <version>1.0-SNAPSHOT</version>
             <type>jar</type>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>      
-            <artifactId>spring-boot-starter-data-rest</artifactId>
-            <version>1.4.0.RELEASE</version>
-            <type>jar</type>
-        </dependency>
         <dependency>  
             <groupId>org.springframework.boot</groupId>  
             <artifactId>spring-boot-starter-redis</artifactId>  
             <version>1.4.0.RELEASE</version>
             <type>jar</type>
         </dependency>
-        
     </dependencies>
 </project>

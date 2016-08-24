@@ -6,6 +6,8 @@
 
 package net.luoteng.captcha.service;
 
+import net.luoteng.captcha.model.Captcha;
+
 /**
  * 
  *
@@ -14,4 +16,6 @@ package net.luoteng.captcha.service;
  */
 public interface CaptchaService {
 
+    Captcha random();
+    
 }

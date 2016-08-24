@@ -15,7 +15,6 @@ import net.luoteng.enums.Realm;
 import net.luoteng.enums.ResponseCode;
 import net.luoteng.model.common.RestResponse;
 import net.luoteng.redis.service.RedisService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -39,7 +38,7 @@ public class RedisServiceImpl implements RedisService, GlobalConstant {
     
     @Override
     public RestResponse get(Realm realm, String key) {
-        String result = null;
+        Object result = null;
         String redisKey = key(realm, key);
         switch (realm) {
             case CAPTCHA:
@@ -48,7 +47,7 @@ public class RedisServiceImpl implements RedisService, GlobalConstant {
                 break;
         }
         
-        if (StringUtils.isBlank(result))
+        if (result == null)
             return new RestResponse().error(ResponseCode.ERROR_MOBILE_CAPTCHA_EXPIRED);
         else
             return new RestResponse(result);
@@ -57,22 +56,13 @@ public class RedisServiceImpl implements RedisService, GlobalConstant {
     @Override
     public void set(Realm realm, String key, String value, int expire) {
         String redisKey = key(realm, key);
-        
-        switch (realm) {
-            case CAPTCHA:
-                redis.opsForValue().set(redisKey, value, expire, TimeUnit.SECONDS);
-                break;
-        }
+        redis.opsForValue().set(redisKey, value, expire, TimeUnit.SECONDS);
     }
     
     @Override
     public void set(Realm realm, String key, String value) {
         String redisKey = key(realm, key);
-        switch (realm) {
-            case CAPTCHA:
-                redis.opsForValue().set(redisKey, value);
-                break;
-        }
+        redis.opsForValue().set(redisKey, value);
     }
     
     @Override

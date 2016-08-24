@@ -43,27 +43,15 @@
             <type>jar</type>
         </dependency>
         <dependency>
+            <groupId>net.luoteng.redis</groupId>
+            <artifactId>Redis</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
             <groupId>nl.captcha</groupId>
             <artifactId>SimpleCaptcha</artifactId>
             <version>1.3.0</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-            <version>1.4.0.RELEASE</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>      
-            <artifactId>spring-boot-starter-data-rest</artifactId>
-            <version>1.4.0.RELEASE</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>com.creditcloud.redis</groupId>
-            <artifactId>Redis</artifactId>
-            <version>1.0-SNAPSHOT</version>
             <type>jar</type>
         </dependency>
     </dependencies>
