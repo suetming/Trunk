@@ -7,15 +7,8 @@ package net.luoteng.captcha.service.impl;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 import java.util.UUID;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import javax.annotation.PostConstruct;
 import javax.imageio.ImageIO;
 import lombok.extern.slf4j.Slf4j;
@@ -23,10 +16,16 @@ import net.luoteng.captcha.constant.CaptchaConstant;
 import net.luoteng.captcha.service.CaptchaService;
 import net.luoteng.captcha.utils.CaptchaUtils;
 import net.luoteng.constant.GlobalConstant;
-import static net.luoteng.constant.GlobalConstant.GLOBAL_ENCODING;
+import static net.luoteng.constant.GlobalConstant.GLOBAL_NAMESPACE;
+import net.luoteng.enums.Realm;
+import net.luoteng.model.AbstractObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.core.RedisCallback;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.SerializationUtils;
 
@@ -40,6 +39,9 @@ import org.springframework.util.SerializationUtils;
 @Component
 public class CaptchaServiceImpl implements CaptchaService, GlobalConstant, CaptchaConstant {
 
+    @Value("${net.luoteng.client}")
+    String client;
+    
     @Value("${net.luoteng.captcha.cache.size}")
     int cacheSize;
 
@@ -55,7 +57,8 @@ public class CaptchaServiceImpl implements CaptchaService, GlobalConstant, Captc
      * TODO not elegant
      */
     @Autowired
-    StringRedisTemplate redisTemplate;
+    @Qualifier("abstractObjectRedisTemplate")
+    RedisTemplate<String, AbstractObject> redisTemplate;
 
     @PostConstruct
     void init() {
@@ -63,62 +66,50 @@ public class CaptchaServiceImpl implements CaptchaService, GlobalConstant, Captc
         if (cacheSize <= 0) {
             cacheSize = CAPTCHA_CACHE_SIZE;
         }
-        
-        cacheSize = 0;
 
         seed = new Random();
 
         long startTime = System.currentTimeMillis();
-        //prepare captcha cache
-        final ExecutorService managedExecutorService = Executors.newFixedThreadPool(25);
-        List<Future> futures = new ArrayList<>();
-        for (int i = 0; i < cacheSize; i++) {
-            final int idx = i;
-            futures.add(managedExecutorService.submit(new Runnable() {
-                @Override
-                public void run() {
+
+        redisTemplate.execute(new RedisCallback<Boolean>() {
+            @Override
+            public Boolean doInRedis(RedisConnection rc) throws DataAccessException {
+                
+                int tick = 0;
+                for (int i = 0; i < cacheSize; i++) {
                     nl.captcha.Captcha captcha = CaptchaUtils.getCaptcha();
                     try (ByteArrayOutputStream bo = new ByteArrayOutputStream(2048);) {
                         ImageIO.write(captcha.getImage(), "png", bo);
-                        byte[] data = SerializationUtils.serialize(new net.luoteng.captcha.model.Captcha(
+                        net.luoteng.captcha.model.Captcha model = new net.luoteng.captcha.model.Captcha(
                                 UUID.randomUUID().toString(),
                                 captcha.getAnswer(),
-                                bo.toString(GLOBAL_ENCODING)));
-                        String result = new String(data, GLOBAL_ENCODING);
-                        redisTemplate.opsForValue().set(String.valueOf(idx), result);
-                        log.info("captcha service init {}", idx);
+                                bo.toByteArray());
+
+                        byte[] value = SerializationUtils.serialize(model);
+                        byte[] key = SerializationUtils.serialize(key(Realm.GRAPHCAPTCHA, i));
+                        rc.set(key, value);
+                        tick ++;
                     } catch (IOException ex) {
                         log.error("captcha service init {}", ex);
                     }
                 }
-            }));
-        }
-        try {
-            for (Future future : futures) {
-                future.get();
-            }
-        } catch (InterruptedException | ExecutionException ex) {
-            log.error("captcha service init {}", ex);
-        } finally {
-            managedExecutorService.shutdown();
-        }
+                
+                cacheSize = tick;
 
-//        log.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! captcha {}", random());
-        log.info("captcha init finished in {}ms", System.currentTimeMillis() - startTime);
+                return true;
+            }
+        }, false, true);
+
+        log.info("captcha init finished in {}ms, generate cache total {}", System.currentTimeMillis() - startTime, cacheSize);
     }
 
     @Override
     public net.luoteng.captcha.model.Captcha random() {
-        try {
-            int idx = seed.nextInt(cacheSize);
-
-            String data = redisTemplate.opsForValue().get(String.valueOf(idx));
-            net.luoteng.captcha.model.Captcha model = (net.luoteng.captcha.model.Captcha) SerializationUtils.deserialize(data.getBytes(GLOBAL_ENCODING));
-            log.info("!!!!!!!!!!!!!!!!!!!!!!!!!captcha service get {}, {}", idx, model);
-            return model;
-        } catch (UnsupportedEncodingException ex) {
-            log.error("random captcha {}", ex);
-        }
-        return null;
+        net.luoteng.captcha.model.Captcha captcha = (net.luoteng.captcha.model.Captcha) redisTemplate.opsForValue().get(key(Realm.GRAPHCAPTCHA, seed.nextInt(cacheSize)));
+        return captcha;
+    }
+    
+    private String key(Realm realm, int key) {
+        return String.format("1$s:%2$s:%3$s%4$s", GLOBAL_NAMESPACE, client, realm.name(), String.valueOf(key));
     }
 }

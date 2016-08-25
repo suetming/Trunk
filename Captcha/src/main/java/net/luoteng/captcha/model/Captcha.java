@@ -35,6 +35,6 @@ public class Captcha extends AbstractObject {
     /**
      * png图片
      */
-    private String content;
+    private byte[] content;
 
 }
