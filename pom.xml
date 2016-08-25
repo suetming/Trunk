@@ -24,6 +24,7 @@
         <module>Fund</module>
         <module>Redis</module>
         <module>Captcha</module>
+        <module>Message</module>
     </modules>
 </project>
 

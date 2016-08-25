@@ -1,0 +1,58 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <groupId>net.luoteng.message</groupId>
+    <artifactId>Message</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    
+    <parent>
+        <groupId>net.luoteng</groupId>
+        <artifactId>Parent</artifactId>
+        <version>1.0.0</version>
+        <relativePath></relativePath>
+    </parent>
+    
+    <name>Message</name>
+    <url>http://maven.apache.org</url>
+    
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.4</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>18.0</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>net.luoteng.entity</groupId>
+            <artifactId>Entity</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>net.luoteng.common</groupId>
+            <artifactId>Common</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <version>1.4.0.RELEASE</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>      
+            <artifactId>spring-boot-starter-data-rest</artifactId>
+            <version>1.4.0.RELEASE</version>
+            <type>jar</type>
+        </dependency>
+    </dependencies>
+</project>

@@ -1,0 +1,3 @@
+/**
+ */
+package net.luoteng.message;
