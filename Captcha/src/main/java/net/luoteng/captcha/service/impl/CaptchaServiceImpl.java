@@ -13,6 +13,7 @@ import javax.annotation.PostConstruct;
 import javax.imageio.ImageIO;
 import lombok.extern.slf4j.Slf4j;
 import net.luoteng.captcha.constant.CaptchaConstant;
+import net.luoteng.captcha.model.Captcha;
 import net.luoteng.captcha.service.CaptchaService;
 import net.luoteng.captcha.utils.CaptchaUtils;
 import net.luoteng.constant.GlobalConstant;
@@ -112,4 +113,5 @@ public class CaptchaServiceImpl implements CaptchaService, GlobalConstant, Captc
     private String key(Realm realm, int key) {
         return String.format("1$s:%2$s:%3$s%4$s", GLOBAL_NAMESPACE, client, realm.name(), String.valueOf(key));
     }
+    
 }
