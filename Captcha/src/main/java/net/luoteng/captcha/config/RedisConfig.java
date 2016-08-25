@@ -6,7 +6,6 @@
 
 package net.luoteng.captcha.config;
 
-import java.io.Serializable;
 import net.luoteng.model.AbstractObject;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,10 +23,10 @@ public class RedisConfig {
 
     @Bean(name = "abstractObjectRedisTemplate")
     public RedisTemplate<String, AbstractObject> serializableTemplate(RedisConnectionFactory redisConnectionFactory) {
-        RedisTemplate<String, AbstractObject> byteTemplate = new RedisTemplate<>();
-        byteTemplate.setConnectionFactory(redisConnectionFactory);
-        byteTemplate.afterPropertiesSet();
-        return byteTemplate;
+        RedisTemplate<String, AbstractObject> template = new RedisTemplate<>();
+        template.setConnectionFactory(redisConnectionFactory);
+        template.afterPropertiesSet();
+        return template;
     }
     
 }
