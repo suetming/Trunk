@@ -5,13 +5,15 @@
  */
 package net.luoteng.order.enums;
 
+import java.util.Arrays;
+import java.util.List;
 import net.luoteng.enums.BaseEnum;
 
 /**
  *
  * @author suetming <suetming.ma at gmail.com>
  */
-public enum OrderType implements BaseEnum {
+public enum OrderType implements BaseEnum<OrderType> {
 
     /**
      * 收入提现到微信或支付宝
@@ -48,6 +50,11 @@ public enum OrderType implements BaseEnum {
     @Override
     public String getMsg() {
         return msg;
+    }
+
+    @Override
+    public List<OrderType> toList() {
+        return Arrays.asList(values());
     }
     
 }

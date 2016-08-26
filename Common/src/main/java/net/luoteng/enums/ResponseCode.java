@@ -5,6 +5,9 @@
  */
 package net.luoteng.enums;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * response code
  *
@@ -98,6 +101,11 @@ public enum ResponseCode implements BaseEnum {
 
     public int getCode() {
         return code;
+    }
+
+    @Override
+    public List toList() {
+        return Arrays.asList(values());
     }
     
 }

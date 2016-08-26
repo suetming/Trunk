@@ -5,7 +5,8 @@
  */
 package net.luoteng.fund.enums;
 
-import lombok.Getter;
+import java.util.Arrays;
+import java.util.List;
 import net.luoteng.enums.BaseEnum;
 
 /**
@@ -27,11 +28,20 @@ public enum FundRecordStatus implements BaseEnum {
     FAILED("失败"),
     CANCELED("取消");
 
-    @Getter
     private final String msg;
        
     FundRecordStatus(String msg) {
         this.msg = msg;
+    }
+
+    @Override
+    public String getMsg() {
+        return msg;
+    }
+
+    @Override
+    public List toList() {
+        return Arrays.asList(values());
     }
     
 }

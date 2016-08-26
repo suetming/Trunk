@@ -5,13 +5,16 @@
  */
 package net.luoteng.enums;
 
+import java.util.Arrays;
+import java.util.List;
+
 
 /**
  * payment type
  * 
  * @author suetming <suetming.ma at gmail.com>
  */
-public enum PayType implements BaseEnum {
+public enum PayType implements BaseEnum<PayType> {
 
     /**
      * 支付宝
@@ -54,6 +57,11 @@ public enum PayType implements BaseEnum {
     @Override
     public String getMsg() {
         return msg;
+    }
+
+    @Override
+    public List<PayType> toList() {
+        return Arrays.asList(values());
     }
     
 }

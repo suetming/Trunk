@@ -6,6 +6,9 @@
 
 package net.luoteng.enums;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * realm
  *
@@ -87,4 +90,11 @@ public enum Realm implements BaseEnum {
     public String getMsg() {
         return msg;
     }
+
+    @Override
+    public List toList() {
+        return Arrays.asList(values());
+    }
+    
+    
 }

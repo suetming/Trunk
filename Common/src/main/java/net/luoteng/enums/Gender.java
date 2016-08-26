@@ -6,13 +6,16 @@
 
 package net.luoteng.enums;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * gender
  *
  * @author suetming <suetming.ma at gmail.com>
  * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
  */
-public enum Gender implements BaseEnum{
+public enum Gender implements BaseEnum {
 
     MALE("男"),
     FEMALE("女"),
@@ -27,6 +30,11 @@ public enum Gender implements BaseEnum{
     @Override
     public String getMsg() {
         return msg;
+    }
+    
+    @Override
+    public List toList() {
+        return Arrays.asList(values());
     }
     
 }

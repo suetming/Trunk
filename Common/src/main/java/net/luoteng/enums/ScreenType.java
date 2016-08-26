@@ -5,6 +5,9 @@
  */
 package net.luoteng.enums;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  *
  * @author suetming <suetming.ma at gmail.com>
@@ -24,5 +27,10 @@ public enum ScreenType implements BaseEnum {
     @Override
     public String getMsg() {
         return msg;
+    }
+
+    @Override
+    public List toList() {
+        return Arrays.asList(values());
     }
 }

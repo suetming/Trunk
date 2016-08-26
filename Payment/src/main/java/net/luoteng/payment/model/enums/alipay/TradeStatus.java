@@ -5,7 +5,10 @@
  */
 package net.luoteng.payment.model.enums.alipay;
 
+import java.util.Arrays;
+import java.util.List;
 import net.luoteng.enums.BaseEnum;
+import static net.luoteng.enums.Gender.values;
 
 /**
  * alipay trade status
@@ -35,5 +38,10 @@ public enum TradeStatus implements BaseEnum {
     @Override
     public String getMsg() {
         return msg;
+    }
+
+    @Override
+    public List toList() {
+        return Arrays.asList(values());
     }
 }
