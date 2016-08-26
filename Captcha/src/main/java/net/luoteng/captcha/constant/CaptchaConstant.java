@@ -38,4 +38,7 @@ public interface CaptchaConstant {
     
     String CAPTCHA_COOKIE_NAME = "captcha";
     
+    
+    String CAPTCHA_KEY_CACHE_SIZE = "size";
+    
 }

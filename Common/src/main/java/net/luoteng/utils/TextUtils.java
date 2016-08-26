@@ -17,6 +17,15 @@ import org.stringtemplate.v4.ST;
  */
 public class TextUtils {
 
+    /**
+     * <p>文本渲染
+     * 
+     * https://github.com/antlr/stringtemplate4/blob/master/doc/introduction.md
+     * 
+     * @param template
+     * @param objects
+     * @return 
+     */
     public static String render(String template, Object...objects) {
         ST st = new ST(template);
         for (Object object : objects) {

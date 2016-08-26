@@ -19,10 +19,9 @@ public interface CaptchaService {
     /**
      * <p>获取一个验证码
      * 
-     * @param expire (秒)
      * @return 
      */
-    Captcha random(int expire);
+    Captcha random();
     
     /**
      * 获取验证码的答案

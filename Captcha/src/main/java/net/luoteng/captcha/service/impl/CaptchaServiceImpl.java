@@ -51,6 +51,9 @@ public class CaptchaServiceImpl implements CaptchaService, GlobalConstant, Captc
      */
     @Value("${net.luoteng.captcha.cache.expire}")
     int expireTime;
+    
+    @Value("${net.luoteng.captcha.cache.init}")
+    boolean enableInitialized;
 
     Random seed;
 
@@ -70,6 +73,11 @@ public class CaptchaServiceImpl implements CaptchaService, GlobalConstant, Captc
 
         seed = new Random();
 
+        if (!enableInitialized) {
+            cacheSize = Integer.valueOf((String) redisTemplate.opsForValue().get(key(Realm.GRAPHCAPTCHA, CAPTCHA_KEY_CACHE_SIZE)));
+            return;
+        }
+        
         long startTime = System.currentTimeMillis();
 
         redisTemplate.execute(new RedisCallback<Boolean>() {
@@ -96,7 +104,11 @@ public class CaptchaServiceImpl implements CaptchaService, GlobalConstant, Captc
                 }
                 
                 cacheSize = tick;
-
+                
+                byte[] value = SerializationUtils.serialize(String.valueOf(cacheSize));
+                byte[] key = SerializationUtils.serialize(key(Realm.GRAPHCAPTCHA, CAPTCHA_KEY_CACHE_SIZE));
+                rc.set(key, value);
+                
                 return true;
             }
         }, false, true);
@@ -105,14 +117,14 @@ public class CaptchaServiceImpl implements CaptchaService, GlobalConstant, Captc
     }
 
     @Override
-    public net.luoteng.captcha.model.Captcha random(int expire) {
+    public net.luoteng.captcha.model.Captcha random() {
         net.luoteng.captcha.model.Captcha captcha = (net.luoteng.captcha.model.Captcha) redisTemplate.opsForValue().get(key(Realm.GRAPHCAPTCHA, seed.nextInt(cacheSize)));
         //将验证码以<key,value>形式缓存到redis  
-        if (expire < 1) {
-            expire = CAPTCHA_EXPIRES;
+        if (expireTime < 1) {
+            expireTime = CAPTCHA_EXPIRES;
         }
         
-        redisTemplate.opsForValue().set(key(Realm.GRAPHCAPTCHA, captcha.getUuid()), captcha.getAnswer(), expire, TimeUnit.SECONDS);  
+        redisTemplate.opsForValue().set(key(Realm.GRAPHCAPTCHA, captcha.getUuid()), captcha.getAnswer(), expireTime, TimeUnit.SECONDS);  
         
         return captcha;
     }
