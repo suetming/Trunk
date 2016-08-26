@@ -48,9 +48,18 @@ public interface MessageService {
     void read(List<String> messageIds);
     
     /**
+     * 归档消息
+     * 
+     * @param messageIds 
+     */
+    void archive(List<String> messageIds);
+    
+    /**
      * 创建消息
      * 
      * @param message 
+     * @return 
      */
-    void create(Message message);
+    Message create(Message message);
+    
 }

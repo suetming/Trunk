@@ -8,7 +8,7 @@ package net.luoteng.payment.model.wechat;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import net.luoteng.payment.model.Response;
-import net.luoteng.utils.MD5Util;
+import net.luoteng.utils.MD5Utils;
 
 /**
  *
@@ -213,7 +213,7 @@ public class WechatOrder extends Response {
     private String sign(String appKey, boolean withOpenId) throws UnsupportedEncodingException {
         String temp = this.orderInfo(withOpenId);
         temp += "&key=" + appKey;
-        String result = MD5Util.MD5Encode(temp, "UTF-8").toUpperCase();
+        String result = MD5Utils.MD5Encode(temp, "UTF-8").toUpperCase();
         return result;
     }
 

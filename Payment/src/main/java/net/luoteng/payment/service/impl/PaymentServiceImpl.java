@@ -38,7 +38,7 @@ import net.luoteng.payment.model.enums.TradeType;
 import net.luoteng.payment.model.wechat.PaymentResponse;
 import net.luoteng.payment.model.wechat.WechatOrder;
 import net.luoteng.payment.service.PaymentService;
-import net.luoteng.utils.MD5Util;
+import net.luoteng.utils.MD5Utils;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -243,7 +243,7 @@ public class PaymentServiceImpl implements PaymentService {
         }
         String key = "JSAPI".equals(response.getTrade_type()) ?  wechatPublicConfig.getAppSecret(): wechatConfig.getAppSecret();
         verifyStr += "&key="+ key;
-        String mySign = MD5Util.MD5Encode(verifyStr, "UTF-8").toUpperCase();
+        String mySign = MD5Utils.MD5Encode(verifyStr, "UTF-8").toUpperCase();
         log.debug("verify WeixinNotify, mySign=[{}] sign=[{}]", mySign ,response.getSign());
         return mySign.equals(response.getSign());
     }
@@ -374,7 +374,7 @@ public class PaymentServiceImpl implements PaymentService {
                 + (publicPlatform ? "&signType=MD5" : "")
                 + (publicPlatform ? "&timeStamp=" + myTimestamp : "&timestamp=" + myTimestamp)
                 + "&key=" + (publicPlatform ? wechatPublicConfig.getAppSecret() : wechatPublicConfig.getAppSecret());
-        String mySign = MD5Util.MD5Encode(toSign, "UTF-8").toUpperCase();
+        String mySign = MD5Utils.MD5Encode(toSign, "UTF-8").toUpperCase();
         prepayResponse.setMySign(mySign);
         prepayResponse.setMyTimestamp(myTimestamp);
         prepayResponse.setMyNoncestr(myNoncestr);

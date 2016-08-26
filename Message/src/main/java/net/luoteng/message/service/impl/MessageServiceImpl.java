@@ -45,8 +45,14 @@ public class MessageServiceImpl implements MessageService {
     }
     
     @Override
-    public void create(Message message) {
-        
+    public void archive(List<String> messageIds) {
+        msgDAO.markStatus(messageIds, MessageStatus.ARCHIVED);
+    }
+    
+    @Override
+    public Message create(Message message) {
+        message.setStatus(MessageStatus.UNREAD);
+        return msgDAO.save(message);
     }
 
 }

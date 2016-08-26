@@ -12,7 +12,7 @@ import java.security.MessageDigest;
  * 
  * @author suetming <suetming.ma at gmail.com>
  */
-public class MD5Util {
+public class MD5Utils {
     
 
     private static String byteArrayToHexString(byte b[]) {
