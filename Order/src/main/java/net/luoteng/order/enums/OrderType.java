@@ -13,7 +13,7 @@ import net.luoteng.enums.BaseEnum;
  *
  * @author suetming <suetming.ma at gmail.com>
  */
-public enum OrderType implements BaseEnum<OrderType> {
+public enum OrderType implements BaseEnum {
 
     /**
      * 收入提现到微信或支付宝
@@ -52,9 +52,5 @@ public enum OrderType implements BaseEnum<OrderType> {
         return msg;
     }
 
-    @Override
-    public List<OrderType> toList() {
-        return Arrays.asList(values());
-    }
     
 }

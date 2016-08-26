@@ -103,9 +103,4 @@ public enum ResponseCode implements BaseEnum {
         return code;
     }
 
-    @Override
-    public List toList() {
-        return Arrays.asList(values());
-    }
-    
 }

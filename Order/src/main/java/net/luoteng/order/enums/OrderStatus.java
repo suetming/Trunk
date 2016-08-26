@@ -6,8 +6,6 @@
 
 package net.luoteng.order.enums;
 
-import java.util.Arrays;
-import java.util.List;
 import net.luoteng.enums.BaseEnum;
 
 /**
@@ -56,9 +54,4 @@ public enum OrderStatus implements BaseEnum {
         return msg;
     }
 
-    @Override
-    public List toList() {
-        return Arrays.asList(values());
-    }
-    
 }

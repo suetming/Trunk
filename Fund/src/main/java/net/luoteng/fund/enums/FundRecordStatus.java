@@ -39,9 +39,4 @@ public enum FundRecordStatus implements BaseEnum {
         return msg;
     }
 
-    @Override
-    public List toList() {
-        return Arrays.asList(values());
-    }
-    
 }

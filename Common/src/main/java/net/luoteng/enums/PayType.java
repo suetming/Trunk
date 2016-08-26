@@ -14,7 +14,7 @@ import java.util.List;
  * 
  * @author suetming <suetming.ma at gmail.com>
  */
-public enum PayType implements BaseEnum<PayType> {
+public enum PayType implements BaseEnum {
 
     /**
      * 支付宝
@@ -59,9 +59,5 @@ public enum PayType implements BaseEnum<PayType> {
         return msg;
     }
 
-    @Override
-    public List<PayType> toList() {
-        return Arrays.asList(values());
-    }
     
 }

@@ -6,15 +6,12 @@
 
 package net.luoteng.enums;
 
-import java.util.List;
-
 /**
  * base enum
  * 
  * @author suetming <suetming.ma at gmail.com>
- * @param <T> 
  */
-public interface BaseEnum<T> {
+public interface BaseEnum {
     
     /**
      * msg along with enum
@@ -23,9 +20,4 @@ public interface BaseEnum<T> {
      */
     String getMsg();
     
-    /**
-     * 
-     * @return 
-     */
-    List<T> toList();
 }

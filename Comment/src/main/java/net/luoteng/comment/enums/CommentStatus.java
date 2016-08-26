@@ -8,7 +8,6 @@ package net.luoteng.comment.enums;
 import java.util.Arrays;
 import java.util.List;
 import net.luoteng.enums.BaseEnum;
-import static net.luoteng.enums.Gender.values;
 
 /**
  *
@@ -59,8 +58,4 @@ public enum CommentStatus implements BaseEnum {
         return msg;
     }
 
-    @Override
-    public List toList() {
-        return Arrays.asList(values());
-    }
 }

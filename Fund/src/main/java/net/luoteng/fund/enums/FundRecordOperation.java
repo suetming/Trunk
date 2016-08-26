@@ -8,7 +8,6 @@ package net.luoteng.fund.enums;
 import java.util.Arrays;
 import java.util.List;
 import net.luoteng.enums.BaseEnum;
-import static net.luoteng.enums.Gender.values;
 
 /**
  * 资金操作
@@ -50,8 +49,4 @@ public enum FundRecordOperation implements BaseEnum {
         return msg;
     }
 
-    @Override
-    public List toList() {
-        return Arrays.asList(values());
-    }
 }
