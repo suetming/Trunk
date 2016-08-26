@@ -107,7 +107,6 @@ public class CaptchaServiceImpl implements CaptchaService, GlobalConstant, Captc
     @Override
     public net.luoteng.captcha.model.Captcha random(int expire) {
         net.luoteng.captcha.model.Captcha captcha = (net.luoteng.captcha.model.Captcha) redisTemplate.opsForValue().get(key(Realm.GRAPHCAPTCHA, seed.nextInt(cacheSize)));
-        
         //将验证码以<key,value>形式缓存到redis  
         if (expire < 1) {
             expire = CAPTCHA_EXPIRES;
