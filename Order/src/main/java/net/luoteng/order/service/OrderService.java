@@ -15,7 +15,6 @@ import net.luoteng.order.enums.OrderType;
 import net.luoteng.service.BaseService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.query.Param;
 
 /**
  * order service
@@ -26,6 +25,16 @@ import org.springframework.data.repository.query.Param;
 public interface OrderService extends BaseService<Order> {
 
     /**
+     * 获取所有订单
+     * 
+     * @param typeList
+     * @param statusList
+     * @param pageable
+     * @return 
+     */
+    Page<Order> list(List<OrderType> typeList, List<OrderStatus> statusList, Pageable pageable);
+    
+    /**
      * 获取用户订单
      * 
      * @param userId
@@ -34,11 +43,7 @@ public interface OrderService extends BaseService<Order> {
      * @param pageable
      * @return 
      */
-    Page<Order> listByUser(
-            @Param("userId") String userId,
-            @Param("typeList") List<OrderType> typeList,
-            @Param("statusList") List<OrderStatus> statusList,
-            Pageable pageable);
+    Page<Order> listByUser(String userId, List<OrderType> typeList, List<OrderStatus> statusList, Pageable pageable);
     
     /**
      * 获取订单
