@@ -7,19 +7,19 @@ package net.luoteng.captcha.service.impl;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import javax.annotation.PostConstruct;
 import javax.imageio.ImageIO;
 import lombok.extern.slf4j.Slf4j;
 import net.luoteng.captcha.constant.CaptchaConstant;
-import net.luoteng.captcha.model.Captcha;
 import net.luoteng.captcha.service.CaptchaService;
 import net.luoteng.captcha.utils.CaptchaUtils;
 import net.luoteng.constant.GlobalConstant;
 import static net.luoteng.constant.GlobalConstant.GLOBAL_NAMESPACE;
 import net.luoteng.enums.Realm;
-import net.luoteng.model.AbstractObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -58,13 +58,13 @@ public class CaptchaServiceImpl implements CaptchaService, GlobalConstant, Captc
      * TODO not elegant
      */
     @Autowired
-    @Qualifier("abstractObjectRedisTemplate")
-    RedisTemplate<String, AbstractObject> redisTemplate;
+    @Qualifier("serializableRedisTemplate")
+    RedisTemplate<Serializable, Serializable> redisTemplate;
 
     @PostConstruct
     void init() {
         log.info("captcha service init");
-        if (cacheSize <= 0) {
+        if (cacheSize < 1) {
             cacheSize = CAPTCHA_CACHE_SIZE;
         }
 
@@ -105,12 +105,25 @@ public class CaptchaServiceImpl implements CaptchaService, GlobalConstant, Captc
     }
 
     @Override
-    public net.luoteng.captcha.model.Captcha random() {
+    public net.luoteng.captcha.model.Captcha random(int expire) {
         net.luoteng.captcha.model.Captcha captcha = (net.luoteng.captcha.model.Captcha) redisTemplate.opsForValue().get(key(Realm.GRAPHCAPTCHA, seed.nextInt(cacheSize)));
+        
+        //将验证码以<key,value>形式缓存到redis  
+        if (expire < 1) {
+            expire = CAPTCHA_EXPIRES;
+        }
+        
+        redisTemplate.opsForValue().set(key(Realm.GRAPHCAPTCHA, captcha.getUuid()), captcha.getAnswer(), expire, TimeUnit.SECONDS);  
+        
         return captcha;
     }
     
-    private String key(Realm realm, int key) {
+    @Override
+    public String getAnswerById(String captchaId) {
+        return (String) redisTemplate.opsForValue().get(key(Realm.GRAPHCAPTCHA, captchaId));
+    }
+    
+    private String key(Realm realm, Object key) {
         return String.format("1$s:%2$s:%3$s%4$s", GLOBAL_NAMESPACE, client, realm.name(), String.valueOf(key));
     }
     

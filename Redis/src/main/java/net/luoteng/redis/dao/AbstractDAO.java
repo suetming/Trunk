@@ -6,9 +6,7 @@
 
 package net.luoteng.redis.dao;
 
-import javax.annotation.Resource;
 import net.luoteng.model.AbstractObject;
-import org.springframework.data.redis.core.StringRedisTemplate;
 
 /**
  * 
@@ -20,8 +18,6 @@ import org.springframework.data.redis.core.StringRedisTemplate;
  */
 public abstract class AbstractDAO<T extends AbstractObject, ID extends AbstractObject> implements CrudDAO<T, ID> {
 
-    @Resource(name = "")
-    protected StringRedisTemplate redisTemplate;
     
     
 }

@@ -77,6 +77,8 @@ public enum ResponseCode implements BaseEnum {
     ERROR_CACHE_DATA_NOT_EXIST("缓存数据不存在", 6001),
     ERROR_CAPTCHA_EMPTY("验证码为空", 6002),
     ERROR_GRAPH_CAPTCHA_INVALID("验证码错误", 6003),
+    ERROR_GRAPH_CAPTCHA_NOT_EXIST_OR_EXPIRED("验证码不存在或者已过期", 6004),
+    
     //====================================================================================================================
     ;
 

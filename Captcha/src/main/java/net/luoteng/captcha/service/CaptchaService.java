@@ -16,6 +16,20 @@ import net.luoteng.captcha.model.Captcha;
  */
 public interface CaptchaService {
 
-    Captcha random();
+    /**
+     * <p>获取一个验证码
+     * 
+     * @param expire (秒)
+     * @return 
+     */
+    Captcha random(int expire);
+    
+    /**
+     * 获取验证码的答案
+     * 
+     * @param captchaId
+     * @return 
+     */
+    String getAnswerById(String captchaId);
     
 }
