@@ -21,7 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 /**
- * 
+ * order service
  *
  * @author suetming <suetming.ma at gmail.com>
  * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
@@ -59,6 +59,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public Page<Order> list(List<OrderType> typeList, List<OrderStatus> statusList, Pageable pageable) {
+        return orderDAO.list(typeList, statusList, pageable);
+    }
+    
+    @Override
     public Page<Order> listByUser(String userId, List<OrderType> typeList, List<OrderStatus> statusList, Pageable pageable) {
         return orderDAO.listByUser(userId, typeList, statusList, pageable);
     }
@@ -68,5 +73,5 @@ public class OrderServiceImpl implements OrderService {
         orderDAO.markStatus(id, OrderStatus.SUCCESSED);
         return true;
     }
-    
+
 }
