@@ -27,14 +27,14 @@ import org.springframework.data.repository.query.Param;
 @Transactional
 public interface MessageDAO extends PagingAndSortingRepository<Message, String> {
 
-    @Query("select m from Message m where m.userId=:userId and m.status in :statuses")
-    Page<Message> listByUser(@Param("userId") String userId, @Param("types") List<MessageType> types, @Param("statuses") List<MessageStatus> statuses, Pageable pageable);
+    @Query("select m from Message m where m.userId=:userId and m.type in :typeList and m.status in :statusList")
+    Page<Message> listByUser(@Param("userId") String userId, @Param("typeList") List<MessageType> types, @Param("statusList") List<MessageStatus> statuses, Pageable pageable);
 
-    @Query("select m from Message m where m.type in :types and m.status in :statuses")
-    Page<Message> list(@Param("types") List<MessageType> types, @Param("statuses") List<MessageStatus> statuses, Pageable pageable);
+    @Query("select m from Message m where m.type in :typeList and m.status in :statusList")
+    Page<Message> list(@Param("typeList") List<MessageType> typeList, @Param("statusList") List<MessageStatus> statuses, Pageable pageable);
 
     @Modifying
-    @Query("update Message m set m.status = :status where id in :ids")
-    void markStatus(@Param("ids") List<String> messageIds, @Param("status") MessageStatus status);
+    @Query("update Message m set m.status = :status where m.id in :idList")
+    void markStatus(@Param("idList") List<String> messageIds, @Param("status") MessageStatus status);
 
 }
