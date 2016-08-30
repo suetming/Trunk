@@ -50,7 +50,7 @@ public class RedisServiceImpl implements RedisService, GlobalConstant {
         }
         
         if (result == null)
-            return new RestResponse().error(ResponseCode.ERROR_MOBILE_CAPTCHA_EXPIRED);
+            return new RestResponse().error(ResponseCode.ERROR_MOBILE_CAPTCHA_INVALID);
         else
             return new RestResponse(result);
     }
