@@ -19,8 +19,15 @@
 package net.luoteng.user.entity;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import net.luoteng.entity.AbstractTimeScopeEntity;
 import net.luoteng.user.enums.SocialType;
 
@@ -30,40 +37,57 @@ import net.luoteng.user.enums.SocialType;
  * @author suetming <suetming.ma at gmail.com>
  * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
  */
+@Data
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "t_social_user", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"userId", "type"})
+})
 public class SocialUser extends AbstractTimeScopeEntity {
 
     /**
      * 用户ID
      */
+    @NotNull
     @Column(nullable = false)
     private String userId;
     
     /**
      * 社交ID（应用）
      */
+    @NotNull
     @Column(nullable = false)
-    private String clientSocialId;
+    private String clientId;
 
     /**
      * 社交ID（平台）
      */
-    private String unionSocialId;
+    private String unionId;
     
     /**
      * 社交类型
      */
+    @NotNull
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private SocialType type;
 
     /**
-     * 社交账号
+     * 社交账号昵称
      */
-    private String account;
+    @NotNull
+    @Column(nullable = false)
+    private String nickname;
     
     /**
-     * 第三方的实名（可能与userName不一致）
+     * 第三方的实名
      */
-    private String realName;
+    private String name;
+    
+    /**
+     * 头像
+     */
+    private String avatar;
     
 }

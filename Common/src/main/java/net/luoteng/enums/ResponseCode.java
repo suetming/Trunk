@@ -33,6 +33,8 @@ public enum ResponseCode implements BaseEnum {
     ERROR_USER_INVALID_LOGINNAME_OR_PASSWORD("无效的用户名或者密码", 4005),
     ERROR_EDUCATIONINFO_NO_EXIST("教育经历不存在", 4006),
     ERROR_NAME_IS_EMPTY("名字不能为空", 4007),
+    ERROR_USER_NOT_ENABLE("用户未激活", 4008),
+    
     
     /**
      * 手机验证码相关

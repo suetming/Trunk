@@ -41,6 +41,11 @@ public interface GlobalConstant {
     String GLOBAL_SIGN_TYPE = "RSA";
     
     /**
+     * 默认密码
+     */
+    String GLOBAL_PASSWORD = "Luoteng2016";
+    
+    /**
      * 过期时间
      */
     long GLOBAL_TIME_EXPIRED = 1000 * 60 * 60 * 72;
