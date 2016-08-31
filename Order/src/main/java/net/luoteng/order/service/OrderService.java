@@ -46,6 +46,13 @@ public interface OrderService extends BaseService<Order> {
     Page<Order> listByUser(String userId, List<OrderType> typeList, List<OrderStatus> statusList, Pageable pageable);
     
     /**
+     * 
+     * @param orderId
+     * @return 
+     */
+    Order get(String orderId);
+    
+    /**
      * 获取订单
      * 
      * @param userId
@@ -86,6 +93,13 @@ public interface OrderService extends BaseService<Order> {
      * @param id
      * @return 
      */
-    boolean markSuccess(String id);
+    boolean toSuccess(String id);
     
+    /**
+     * 标记取消支付
+     * 
+     * @param id
+     * @return 
+     */
+    boolean toCancle(String id);
 }

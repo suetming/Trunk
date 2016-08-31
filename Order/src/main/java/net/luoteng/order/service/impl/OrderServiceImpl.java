@@ -6,6 +6,7 @@
 
 package net.luoteng.order.service.impl;
 
+import java.util.Date;
 import java.util.List;
 import javax.transaction.Transactional;
 import net.luoteng.entity.embedded.RealmEntity;
@@ -69,9 +70,26 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public boolean markSuccess(String id) {// TODO
-        orderDAO.markStatus(id, OrderStatus.SUCCESSED);
+    public boolean toSuccess(String id) {// TODO
+        Order order = orderDAO.findOne(id);
+        order.setStatus(OrderStatus.SUCCESSED);
+        order.setTimeSuccessed(new Date());
+        orderDAO.save(order);
         return true;
+    }
+
+    @Override
+    public boolean toCancle(String id) {
+        Order order = orderDAO.findOne(id);
+        order.setStatus(OrderStatus.CANCELED);
+        order.setTimeCaneled(new Date());
+        orderDAO.save(order);
+        return true;
+    }
+
+    @Override
+    public Order get(String orderId) {
+        return orderDAO.findOne(orderId);
     }
 
 }
