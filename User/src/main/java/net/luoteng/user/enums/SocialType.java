@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.luoteng.enums.user;
+package net.luoteng.user.enums;
 
 import net.luoteng.enums.BaseEnum;
 

@@ -25,6 +25,7 @@
         <module>Redis</module>
         <module>Captcha</module>
         <module>Message</module>
+        <module>User</module>
     </modules>
 </project>
 
