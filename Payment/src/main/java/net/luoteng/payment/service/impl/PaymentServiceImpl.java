@@ -12,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -26,6 +27,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
@@ -49,9 +52,13 @@ import org.jdom.input.SAXBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import lombok.extern.slf4j.Slf4j;
+import net.luoteng.constant.GlobalConstant;
+import net.luoteng.enums.SignType;
+import net.luoteng.payment.model.alipay.AlipayOrder;
 import net.luoteng.payment.properties.AlipayProperties;
 import net.luoteng.payment.properties.WechatProperties;
 import net.luoteng.payment.properties.WechatPublicProperties;
+import net.luoteng.payment.utils.SignUtils;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -63,7 +70,7 @@ import org.apache.commons.lang3.StringUtils;
 @Slf4j
 @Component
 @Transactional
-public class PaymentServiceImpl implements PaymentService {
+public class PaymentServiceImpl implements PaymentService , GlobalConstant {
 
     @Autowired
     AlipayProperties alipayConfig;
@@ -119,7 +126,7 @@ public class PaymentServiceImpl implements PaymentService {
         RestResponse response = new RestResponse();
         switch (request.getPayType()) {
             case alipay:
-                return null;
+                return response.success(preAlipayOrders(userId, request));
             case wechat:
                 return response.success(preWechatOrders(userId, request));
             default:
@@ -246,6 +253,28 @@ public class PaymentServiceImpl implements PaymentService {
         String mySign = MD5Utils.MD5Encode(verifyStr, "UTF-8").toUpperCase();
         log.debug("verify WeixinNotify, mySign=[{}] sign=[{}]", mySign ,response.getSign());
         return mySign.equals(response.getSign());
+    }
+    
+    private String preAlipayOrders(String userId, OrderRequest request) {
+        // 订单
+        String orderInfo = getAlipayOrderInfo(buildAlipayOrder(userId,
+                                                               request.getSubject(),
+                                                               null != request.getBody() && request.getBody().length()>150 ? request.getBody().substring(0, 150) : request.getBody(),
+                                                               String.format("%.2f", request.getAmount() / 100.0),
+                                                               request.getOutTradeNo(),
+                                                               null));
+
+        // 对订单做RSA 签名
+        String sign = SignUtils.sign(orderInfo, alipayConfig.getPks8PrivateKey(), SignType.RSA);
+        try {
+            sign = URLEncoder.encode(sign, "UTF-8");
+        } catch (UnsupportedEncodingException ex) {
+            log.error("pre alipay order error {}", ex);
+        }
+
+        // 完整的符合支付宝参数规范的订单信息
+        String payInfo = orderInfo + "&sign=\"" + sign + "\"&sign_type=\"RSA\"";
+        return payInfo;
     }
 
     private PaymentResponse preWechatOrders(String userId, OrderRequest request) {
@@ -386,4 +415,69 @@ public class PaymentServiceImpl implements PaymentService {
         log.debug("wechat public prepayResponse=[{}]", prepayResponse);
         return prepayResponse;
     }
+    
+    private AlipayOrder buildAlipayOrder(String userId, String subject, String body, String price, String outTradeNo, String notifyUrl) {
+        AlipayOrder order = new AlipayOrder(
+                alipayConfig.getPartner(), 
+                alipayConfig.getSellId(), 
+                outTradeNo, 
+                subject, 
+                body,
+                price, 
+                null == notifyUrl ? alipayConfig.getUriNotify() : notifyUrl,
+                "mobile.securitypay.pay", 
+                "1", 
+                GLOBAL_ENCODING, 
+                "30m");
+        return order;
+    }
+    
+    /**
+     * 创建支付宝订单信息
+     *
+     * @param order
+     * @return
+     */
+    private String getAlipayOrderInfo(AlipayOrder order) {
+
+        // 参数编码， 固定值
+        String orderInfo = "_input_charset=\"" + order.get_input_charset() + "\"";
+
+        // 商品详情
+        orderInfo += "&body=" + "\"" + order.getBody() + "\"";
+
+        // 设置未付款交易的超时时间
+        // 默认30分钟，一旦超时，该笔交易就会自动被关闭。
+        // 取值范围：1m～15d。
+        // m-分钟，h-小时，d-天，1c-当天（无论交易何时创建，都在0点关闭）。
+        // 该参数数值不接受小数点，如1.5h，可转换为90m。
+        orderInfo += "&it_b_pay=\"" + order.getIt_b_pay() + "\"";
+
+        // 服务器异步通知页面路径
+        orderInfo += "&notify_url=" + "\"" + order.getNotify_url() + "\"";
+
+        // 商户网站唯一订单号
+        orderInfo += "&out_trade_no=" + "\"" + order.getOut_trade_no() + "\"";
+
+        // 签约合作者身份ID
+        orderInfo += "&partner=" + "\"" + order.getPartner() + "\"";
+
+        // 支付类型， 固定值
+        orderInfo += "&payment_type=\"" + order.getPayment_type() + "\"";
+
+        // 签约卖家支付宝账号
+        orderInfo += "&seller_id=" + "\"" + order.getSeller_id() + "\"";
+
+        // 服务接口名称， 固定值
+        orderInfo += "&service=\"" + order.getService() + "\"";
+
+        // 商品名称
+        orderInfo += "&subject=" + "\"" + order.getSubject() + "\"";
+
+        // 商品金额
+        orderInfo += "&total_fee=" + "\"" + order.getTotal_fee() + "\"";
+
+        return orderInfo;
+    }
+    
 }

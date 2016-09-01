@@ -5,6 +5,7 @@
  */
 package net.luoteng.payment.model.alipay;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,6 +17,7 @@ import net.luoteng.payment.model.Response;
  * @author suetming <suetming.ma at gmail.com>
  * Copyright(c) @2016 Luoteng Company, Inc. All Rights Reserved.
  */
+@AllArgsConstructor
 @NoArgsConstructor
 public class AlipayOrder extends Response {
 
