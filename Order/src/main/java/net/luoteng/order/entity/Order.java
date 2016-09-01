@@ -40,7 +40,7 @@ import net.luoteng.order.utils.OrderGenerator;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "t_order", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"userId", "type", "status"})
+    @UniqueConstraint(columnNames = {"orderID", "type", "status"})
 })
 public class Order extends AbstractTimeScopeEntity {
 
