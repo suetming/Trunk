@@ -36,7 +36,7 @@ public interface OrderDAO extends PagingAndSortingRepository<Order, String> {
      * @return 
      */
     @Query("select o from Order o where o.type in :typeList and o.status in :statusList")
-    Page<Order> list(List<OrderType> typeList, List<OrderStatus> statusList, Pageable pageable);
+    Page<Order> list(@Param("typeList") List<OrderType> typeList, @Param("statusList") List<OrderStatus> statusList, Pageable pageable);
     
     /**
      * 根据用户查找订单
