@@ -17,7 +17,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -160,6 +159,15 @@ public class Order extends AbstractTimeScopeEntity {
     @Column(nullable = true)
     @Temporal(TemporalType.TIMESTAMP)
     private Date timeCaneled;
+    
+    /**
+     * 订单过期时间
+     * 
+     * @return
+     */
+    @Column(nullable = true)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date timeExpired;
 
     /**
      * 备注
@@ -198,6 +206,7 @@ public class Order extends AbstractTimeScopeEntity {
                 amount,
                 couponAmount,
                 balanceAmount,
+                null,
                 null,
                 null,
                 null,

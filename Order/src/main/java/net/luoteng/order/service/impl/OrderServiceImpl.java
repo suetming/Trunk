@@ -86,6 +86,15 @@ public class OrderServiceImpl implements OrderService {
         orderDAO.save(order);
         return true;
     }
+    
+    @Override
+    public boolean toExpire(String id) {
+        Order order = orderDAO.findOne(id);
+        order.setStatus(OrderStatus.EXPIRED);
+        order.setTimeExpired(new Date());
+        orderDAO.save(order);
+        return true;
+    }
 
     @Override
     public Order get(String orderId) {

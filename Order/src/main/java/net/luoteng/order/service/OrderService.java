@@ -102,4 +102,12 @@ public interface OrderService extends BaseService<Order> {
      * @return 
      */
     boolean toCancle(String id);
+    
+    /**
+     * 标记已过期
+     * 
+     * @param id
+     * @return 
+     */
+    boolean toExpire(String id);
 }

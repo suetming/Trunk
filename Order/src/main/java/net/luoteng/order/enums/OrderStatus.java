@@ -37,6 +37,11 @@ public enum OrderStatus implements BaseEnum {
     FAILED("失败"),
     
     /**
+     * 已过期
+     */
+    EXPIRED("已过期"),
+    
+    /**
      * 取消支付
      */
     CANCELED("取消"),
