@@ -26,7 +26,7 @@ import lombok.Data;
 import net.luoteng.entity.AbstractTimeScopeEntity;
 
 /**
- * 
+ * authenticatable
  *
  * @author suetming <suetming.ma at gmail.com>
  * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
@@ -35,7 +35,7 @@ import net.luoteng.entity.AbstractTimeScopeEntity;
 public abstract class Authenticatable extends AbstractTimeScopeEntity {
 
     /**
-     * passphrase value
+     * account passphrase
      * 
      * @return
      */
@@ -59,7 +59,7 @@ public abstract class Authenticatable extends AbstractTimeScopeEntity {
     protected Date lastLoginDate;
 
     /**
-     * indicate whether the entity need to change its password on login
+     * indicate whether the entity need to change its password on signin
      * 
      * @return
      */
@@ -67,7 +67,7 @@ public abstract class Authenticatable extends AbstractTimeScopeEntity {
     protected boolean needChangePassword;
     
     /**
-     * active user account or not.
+     * active account or not.
      * 
      * @return
      */

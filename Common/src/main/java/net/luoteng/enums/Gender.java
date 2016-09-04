@@ -6,9 +6,6 @@
 
 package net.luoteng.enums;
 
-import java.util.Arrays;
-import java.util.List;
-
 /**
  * gender
  *
