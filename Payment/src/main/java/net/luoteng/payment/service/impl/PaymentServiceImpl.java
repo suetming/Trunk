@@ -27,8 +27,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
@@ -37,7 +35,6 @@ import javax.transaction.Transactional;
 import net.luoteng.model.common.RestResponse;
 import net.luoteng.payment.model.OrderRequest;
 import net.luoteng.payment.model.Response;
-import net.luoteng.payment.model.enums.TradeType;
 import net.luoteng.payment.model.wechat.PaymentResponse;
 import net.luoteng.payment.model.wechat.WechatOrder;
 import net.luoteng.payment.service.PaymentService;
@@ -55,10 +52,13 @@ import lombok.extern.slf4j.Slf4j;
 import net.luoteng.constant.GlobalConstant;
 import net.luoteng.enums.SignType;
 import net.luoteng.payment.model.alipay.AlipayOrder;
+import net.luoteng.payment.model.enums.TradeType;
 import net.luoteng.payment.properties.AlipayProperties;
+import net.luoteng.payment.properties.WechatNativeProperties;
 import net.luoteng.payment.properties.WechatProperties;
 import net.luoteng.payment.properties.WechatPublicProperties;
 import net.luoteng.payment.utils.SignUtils;
+import net.luoteng.utils.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -81,6 +81,9 @@ public class PaymentServiceImpl implements PaymentService , GlobalConstant {
     @Autowired
     WechatPublicProperties wechatPublicConfig;
 
+    @Autowired
+    WechatNativeProperties wechatNativeConfig;
+    
     OkHttpClient client;
 
     /**
@@ -248,8 +251,23 @@ public class PaymentServiceImpl implements PaymentService , GlobalConstant {
             verifyStr += verifyStr.equals("") ? "": "&";
             verifyStr += "transaction_id="+response.getTransaction_id();
         }
-        String key = "JSAPI".equals(response.getTrade_type()) ?  wechatPublicConfig.getAppSecret(): wechatConfig.getAppSecret();
-        verifyStr += "&key="+ key;
+        
+        String key;
+        
+        switch(response.getTrade_type()) {
+            case "JSAPI":
+                key = wechatPublicConfig.getAppSecret();
+                break;
+            case "NATIVE":
+                key = wechatNativeConfig.getAppSecret();
+                break;
+            case "APP":
+            default:
+                key = wechatConfig.getAppSecret();
+                break;
+        }
+        
+        verifyStr += "&key="+ wechatAppSecret(EnumUtils.getEnumByNameOrNull(TradeType.class, key));
         String mySign = MD5Utils.MD5Encode(verifyStr, "UTF-8").toUpperCase();
         log.debug("verify WeixinNotify, mySign=[{}] sign=[{}]", mySign ,response.getSign());
         return mySign.equals(response.getSign());
@@ -290,7 +308,7 @@ public class PaymentServiceImpl implements PaymentService , GlobalConstant {
                 wechatConfig.getUriNotify());
 
         try {
-            String orderInfo = order.orderInfoXML(wechatConfig.getAppSecret(), false);
+            String orderInfo = order.orderInfoXML(wechatAppSecret(request.getTradeType()), false);
             return getResponse(orderInfo, true);
         } catch (UnsupportedEncodingException ex) {
             log.error("unsupported encoding exception userId:{}, request:{}", userId, request);
@@ -480,4 +498,16 @@ public class PaymentServiceImpl implements PaymentService , GlobalConstant {
         return orderInfo;
     }
     
+    
+    private String wechatAppSecret(TradeType type) {
+        switch(type) {
+            case JSAPI:
+                return wechatPublicConfig.getAppSecret();
+            case NATIVE:
+                return wechatNativeConfig.getAppSecret();
+            case APP:
+            default:
+                return wechatConfig.getAppSecret();
+        }
+    }
 }

@@ -5,11 +5,13 @@
  */
 package net.luoteng.payment.model.enums;
 
+import net.luoteng.enums.BaseEnum;
+
 /**
  *
  * @author suetming <suetming.ma at gmail.com>
  */
-public enum TradeType {
+public enum TradeType implements BaseEnum {
     
     /**
      * APP支付
@@ -24,6 +26,14 @@ public enum TradeType {
     /**
      * 公众号支付
      */
-    JSAPI
+    JSAPI;
+
+    TradeType() {
+    }
+    
+    @Override
+    public String getMsg() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }
