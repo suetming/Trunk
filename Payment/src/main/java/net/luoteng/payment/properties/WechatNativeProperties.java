@@ -41,31 +41,6 @@ public class WechatNativeProperties {
      */
     private String appSecret;
 
-    /**
-     * 链接超时限制
-     * <p>
-     * 毫秒数
-     *
-     * @return
-     */
-    private int connectionTimeout;
-
-    /**
-     * 读取数据超时限制
-     * <p>
-     * 毫秒数
-     *
-     * @return
-     */
-    private int readTimeout;
-
-    /**
-     * 预支付交易单调用地址
-     *
-     * @return
-     */
-    private String uriPrepay;
-
     public String getAppId() {
         return appId;
     }
@@ -82,28 +57,4 @@ public class WechatNativeProperties {
         this.appSecret = appSecret;
     }
 
-    public int getConnectionTimeout() {
-        return connectionTimeout;
-    }
-
-    public void setConnectionTimeout(int connectionTimeout) {
-        this.connectionTimeout = connectionTimeout;
-    }
-
-    public int getReadTimeout() {
-        return readTimeout;
-    }
-
-    public void setReadTimeout(int readTimeout) {
-        this.readTimeout = readTimeout;
-    }
-
-    public String getUriPrepay() {
-        return uriPrepay;
-    }
-
-    public void setUriPrepay(String uriPrepay) {
-        this.uriPrepay = uriPrepay;
-    }
-    
 }

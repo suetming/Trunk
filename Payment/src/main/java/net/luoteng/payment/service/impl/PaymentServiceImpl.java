@@ -252,22 +252,7 @@ public class PaymentServiceImpl implements PaymentService , GlobalConstant {
             verifyStr += "transaction_id="+response.getTransaction_id();
         }
         
-        String key;
-        
-        switch(response.getTrade_type()) {
-            case "JSAPI":
-                key = wechatPublicConfig.getAppSecret();
-                break;
-            case "NATIVE":
-                key = wechatNativeConfig.getAppSecret();
-                break;
-            case "APP":
-            default:
-                key = wechatConfig.getAppSecret();
-                break;
-        }
-        
-        verifyStr += "&key="+ wechatAppSecret(EnumUtils.getEnumByNameOrNull(TradeType.class, key));
+        verifyStr += "&key="+ wechatAppSecret(EnumUtils.getEnumByNameOrNull(TradeType.class, response.getTrade_type()));
         String mySign = MD5Utils.MD5Encode(verifyStr, "UTF-8").toUpperCase();
         log.debug("verify WeixinNotify, mySign=[{}] sign=[{}]", mySign ,response.getSign());
         return mySign.equals(response.getSign());
