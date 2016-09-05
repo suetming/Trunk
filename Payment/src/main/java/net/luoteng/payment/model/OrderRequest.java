@@ -7,10 +7,13 @@ package net.luoteng.payment.model;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import net.luoteng.enums.PayType;
 import net.luoteng.model.AbstractObject;
+import net.luoteng.payment.model.enums.TradeType;
 
 /**
  *
@@ -18,14 +21,19 @@ import net.luoteng.model.AbstractObject;
  * @author suetming <suetming.ma at gmail.com>
  * Copyright(c) @2016 Luoteng Company, Inc. All Rights Reserved.
  */
-//@NoArgsConstructor
-//@AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class OrderRequest extends AbstractObject {
 
     @Getter
     @Setter
     @NotNull
     private PayType payType;
+    
+    @Getter
+    @Setter
+    @NotNull
+    private TradeType tradeType;
     
     @Getter
     @Setter

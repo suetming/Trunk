@@ -279,7 +279,7 @@ public class PaymentServiceImpl implements PaymentService , GlobalConstant {
 
     private PaymentResponse preWechatOrders(String userId, OrderRequest request) {
         WechatOrder order = new WechatOrder(userId,
-                TradeType.APP.name(),
+                request.getTradeType().name(),
                 wechatConfig.getAppId(),
                 wechatConfig.getMchId(),
                 request.getSubject(),
