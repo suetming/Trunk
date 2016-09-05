@@ -20,7 +20,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.UnrecoverableKeyException;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -129,7 +128,7 @@ public class PaymentServiceImpl implements PaymentService , GlobalConstant {
         RestResponse response = new RestResponse();
         switch (request.getPayType()) {
             case alipay:
-                return response.success(preAlipayOrders(userId, request));
+                return response.success(preAlipayOrders(request));
             case wechat:
                 return response.success(preWechatOrders(userId, request));
             default:
@@ -258,10 +257,9 @@ public class PaymentServiceImpl implements PaymentService , GlobalConstant {
         return mySign.equals(response.getSign());
     }
     
-    private String preAlipayOrders(String userId, OrderRequest request) {
+    private String preAlipayOrders(OrderRequest request) {
         // 订单
-        String orderInfo = getAlipayOrderInfo(buildAlipayOrder(userId,
-                                                               request.getSubject(),
+        String orderInfo = getAlipayOrderInfo(buildAlipayOrder(request.getSubject(),
                                                                null != request.getBody() && request.getBody().length()>150 ? request.getBody().substring(0, 150) : request.getBody(),
                                                                String.format("%.2f", request.getAmount() / 100.0),
                                                                request.getOutTradeNo(),
@@ -283,17 +281,24 @@ public class PaymentServiceImpl implements PaymentService , GlobalConstant {
     private PaymentResponse preWechatOrders(String userId, OrderRequest request) {
         WechatOrder order = new WechatOrder(userId,
                 request.getTradeType().name(),
-                wechatConfig.getAppId(),
-                wechatConfig.getMchId(),
-                request.getSubject(),
-                null != request.getBody() && request.getBody().length() > 40 ? request.getBody().substring(0, 40) : request.getBody(),
+                wechatAppId(request.getTradeType()),
+                wechatMchId(request.getTradeType()),
+                null != request.getSubject() && request.getSubject().length() > 40 ? request.getSubject().substring(0, 40) : request.getSubject(),
+                null,
                 request.getOutTradeNo(),
                 request.getAmount(),
                 request.getIp(),
                 wechatConfig.getUriNotify());
 
+        if (request.getTradeType() == TradeType.NATIVE) {
+            order.setSpbill_create_ip(wechatNativeConfig.getIpaddress());
+        }
+        
+        order.setProduct_id(request.getProductId());
+        
+        log.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!! {}", order);
         try {
-            String orderInfo = order.orderInfoXML(wechatAppSecret(request.getTradeType()), false);
+            String orderInfo = order.orderInfoXML(wechatAppSecret(request.getTradeType()));
             return getResponse(orderInfo, true);
         } catch (UnsupportedEncodingException ex) {
             log.error("unsupported encoding exception userId:{}, request:{}", userId, request);
@@ -310,10 +315,10 @@ public class PaymentServiceImpl implements PaymentService , GlobalConstant {
      * @return
      */
     private PaymentResponse getResponse(String orderInfoXML, boolean ios) {
-        log.debug("get weixin prepayid.orderInfoXML=[{}].", orderInfoXML);
+        log.info("get wechat prepayid.orderInfoXML=[{}].", orderInfoXML);
         try {
             String response = post(wechatConfig.getUriPrepay(), orderInfoXML);
-            return prepayResponse(response, ios, false);
+            return prepayResponse(response, ios);
         } catch (JDOMException | IOException ex) {
             log.error("weixin prepayid return bad response.", ex);
             return null;
@@ -330,7 +335,7 @@ public class PaymentServiceImpl implements PaymentService , GlobalConstant {
         return response.body().string();
     }
 
-    private PaymentResponse prepayResponse(String strxml, boolean ios, boolean publicPlatform) throws JDOMException, IOException {// TODO 待优化代码
+    private PaymentResponse prepayResponse(String strxml, boolean ios) throws JDOMException, IOException {// TODO 待优化代码
         PaymentResponse prepayResponse = new PaymentResponse();
         strxml = strxml.replaceFirst("encoding=\".*\"", "encoding=\"UTF-8\"");
 
@@ -394,23 +399,8 @@ public class PaymentServiceImpl implements PaymentService , GlobalConstant {
             }
         }
 
-        String pack = ios ? "&package=Sign=WXPay" : "&package=prepay_id=" + prepayResponse.getPrepay_id();
-
-        String myNoncestr = new Date().getTime() + "";
-        String myTimestamp = new Date().getTime() / 1000 + "";
-        String toSign = (publicPlatform ? "appId=" + prepayResponse.getAppid() : "appid=" + prepayResponse.getAppid())
-                + (publicPlatform ? "&nonceStr=" + myNoncestr : "&noncestr=" + myNoncestr)
-                + pack
-                + (publicPlatform ? "" : "&partnerid=" + prepayResponse.getMch_id())
-                + (publicPlatform ? "" : "&prepayid=" + prepayResponse.getPrepay_id())
-                + (publicPlatform ? "&signType=MD5" : "")
-                + (publicPlatform ? "&timeStamp=" + myTimestamp : "&timestamp=" + myTimestamp)
-                + "&key=" + (publicPlatform ? wechatPublicConfig.getAppSecret() : wechatPublicConfig.getAppSecret());
-        String mySign = MD5Utils.MD5Encode(toSign, "UTF-8").toUpperCase();
-        prepayResponse.setMySign(mySign);
-        prepayResponse.setMyTimestamp(myTimestamp);
-        prepayResponse.setMyNoncestr(myNoncestr);
-
+        adjust(prepayResponse, ios);
+        
         /**
          * 关闭流
          */
@@ -419,7 +409,7 @@ public class PaymentServiceImpl implements PaymentService , GlobalConstant {
         return prepayResponse;
     }
     
-    private AlipayOrder buildAlipayOrder(String userId, String subject, String body, String price, String outTradeNo, String notifyUrl) {
+    private AlipayOrder buildAlipayOrder(String subject, String body, String price, String outTradeNo, String notifyUrl) {
         AlipayOrder order = new AlipayOrder(
                 alipayConfig.getPartner(), 
                 alipayConfig.getSellId(), 
@@ -494,5 +484,53 @@ public class PaymentServiceImpl implements PaymentService , GlobalConstant {
             default:
                 return wechatConfig.getAppSecret();
         }
+    }
+    
+    private String wechatAppId(TradeType type) {
+        switch(type) {
+            case JSAPI:
+                return wechatPublicConfig.getAppId();
+            case NATIVE:
+                return wechatNativeConfig.getAppId();
+            case APP:
+            default:
+                return wechatConfig.getAppId();
+        }
+    }
+    
+    private String wechatMchId(TradeType type) {
+        switch(type) {
+            case JSAPI:
+                return wechatPublicConfig.getMchId();
+            case NATIVE:
+                return wechatNativeConfig.getMchId();
+            case APP:
+            default:
+                return wechatConfig.getMchId();
+        }
+    }
+    
+    private void adjust(PaymentResponse response, boolean ios) {
+        if (!response.isSuccess()) {
+            return;
+        }
+        
+        String pack = ios ? "&package=Sign=WXPay" : "&package=prepay_id=" + response.getPrepay_id();
+        boolean platform = response.getTrade_type().contentEquals("JSAPI");
+        
+        String nonce = String.valueOf(System.currentTimeMillis());
+        String timestamp = String.valueOf(System.currentTimeMillis() /  1000);
+        String toSign = "appId=" + response.getAppid()
+                + "&nonceStr=" + nonce
+                + pack
+                + (platform ? "" : "&partnerid=" + response.getMch_id())
+                + (platform ? "" : "&prepayid=" + response.getPrepay_id())
+                + (platform ? "&signType=MD5" : "")
+                + "&timeStamp=" + timestamp
+                + "&key=" + wechatAppSecret(EnumUtils.getEnumByNameOrNull(TradeType.class, response.getTrade_type()));
+        String mySign = MD5Utils.MD5Encode(toSign, "UTF-8").toUpperCase();
+        response.setMySign(mySign);
+        response.setMyTimestamp(String.valueOf(System.currentTimeMillis() /  1000));
+        response.setMyNoncestr(nonce);
     }
 }

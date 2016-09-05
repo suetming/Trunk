@@ -27,6 +27,10 @@ public class OrderRequest extends AbstractObject {
 
     @Getter
     @Setter
+    private String productId;
+    
+    @Getter
+    @Setter
     @NotNull
     private PayType payType;
     

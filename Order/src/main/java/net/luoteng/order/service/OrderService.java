@@ -68,7 +68,6 @@ public interface OrderService extends BaseService<Order> {
      * 
      * @param userId
      * @param owner
-     * @param outOrderId
      * @param type
      * @param payType
      * @param amount
@@ -79,7 +78,6 @@ public interface OrderService extends BaseService<Order> {
     Order generate(
             String userId, 
             RealmEntity owner, 
-            String outOrderId, 
             OrderType type, 
             PayType payType,
             long amount,

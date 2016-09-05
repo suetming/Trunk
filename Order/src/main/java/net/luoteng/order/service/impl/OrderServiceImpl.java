@@ -16,6 +16,7 @@ import net.luoteng.order.entity.Order;
 import net.luoteng.order.enums.OrderStatus;
 import net.luoteng.order.enums.OrderType;
 import net.luoteng.order.service.OrderService;
+import net.luoteng.order.utils.OrderGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,11 +41,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order generate(String userId, RealmEntity owner, String outOrderId, OrderType type, PayType payType, long amount, long couponAmount, long balanceAmount) {
+    public Order generate(String userId, RealmEntity owner, OrderType type, PayType payType, long amount, long couponAmount, long balanceAmount) {
         //撤销以前创建的所有预支付订单
         cancelPreOrders(userId, owner);
         
-        Order order = new Order(outOrderId, userId, type, OrderStatus.INITIALIZED, payType, owner, amount, couponAmount, balanceAmount);
+        Order order = new Order(OrderGenerator.order(), userId, type, OrderStatus.INITIALIZED, payType, owner, amount, couponAmount, balanceAmount);
         return orderDAO.save(order);
     }
     

@@ -7,8 +7,11 @@ package net.luoteng.payment.model.wechat;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import net.luoteng.payment.model.Response;
 import net.luoteng.utils.MD5Utils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -16,6 +19,8 @@ import net.luoteng.utils.MD5Utils;
  * @author suetming <suetming.ma at gmail.com>
  * Copyright(c) @2016 Luoteng Company, Inc. All Rights Reserved.
  */
+@Slf4j
+@Data
 public class WechatOrder extends Response {
 
     /**
@@ -117,7 +122,7 @@ public class WechatOrder extends Response {
     private String limit_pay;
 
     /**
-     * 用户在商户appid下的唯一标识 非必填
+     * 用户在商户appid下的唯一标识 非必填, trade_type=JSAPI，此参数必传
      */
     private String openid;
 
@@ -141,7 +146,6 @@ public class WechatOrder extends Response {
         this.spbill_create_ip = spbill_create_ip;
         this.notify_url = String.format(notifyUrl, userId);
         this.trade_type = trade_Type;
-        this.openid = userId;
     }
 
     public WechatOrder(String userId,
@@ -168,52 +172,54 @@ public class WechatOrder extends Response {
         this.openid = openId;
     }
 
-    /**
-     * 创建微信订单信息
-     *
-     * @param order
-     * @return
-     */
     private String orderInfo() {
-        String result = String.format("appid=%1$s&body=%2s&mch_id=%3$s&nonce_str=%4$s&notify_url=%5$s&out_trade_no=%6$s&spbill_create_ip=%7$s&total_fee=%8$s&trade_type=%9$s",
-                appid, // 参数编码， 固定值
-                body, // 签约合作者身份ID
-                mch_id, // 商品详情
-                nonce_str,
-                notify_url, // 服务器异步通知页面路径
-                out_trade_no, // 商户网站唯一订单号
-                spbill_create_ip,// 支付类型， 固定值
-                total_fee, // 商品金额
-                trade_type // 签约卖家支付宝账号
-        );
-
-        return result;
+        switch (trade_type) {
+            case "JSAPI":
+                return String.format("appid=%1$s&body=%2s&mch_id=%3$s&nonce_str=%4$s&notify_url=%5$s&openid=%6$s&out_trade_no=%7$s&spbill_create_ip=%8$s&total_fee=%9$s&trade_type=%10$s",
+                        appid, // 参数编码， 固定值
+                        body, // 签约合作者身份ID
+                        mch_id, // 商品详情
+                        nonce_str,
+                        notify_url, // 服务器异步通知页面路径
+                        openid,
+                        out_trade_no, // 商户网站唯一订单号
+                        spbill_create_ip,// 支付类型， 固定值
+                        total_fee, // 商品金额
+                        trade_type // 签约卖家支付宝账号
+                );
+            case "NATIVE":
+                return String.format("appid=%1$s&body=%2$s&mch_id=%3$s&nonce_str=%4$s&notify_url=%5$s&out_trade_no=%6$s&product_id=%7$s&spbill_create_ip=%8$s&total_fee=%9$s&trade_type=%10$s",
+                        appid, // 参数编码， 固定值
+                        body, // 签约合作者身份ID
+                        mch_id, // 商品详情
+                        nonce_str,
+                        notify_url, // 服务器异步通知页面路径
+                        out_trade_no, // 商户网站唯一订单号
+                        product_id,
+                        spbill_create_ip,// 支付类型， 固定值
+                        total_fee, // 商品金额
+                        trade_type // 签约卖家支付宝账号
+                );
+            case "APP":
+            default:
+                return String.format("appid=%1$s&body=%2s&mch_id=%3$s&nonce_str=%4$s&notify_url=%5$s&out_trade_no=%6$s&spbill_create_ip=%7$s&total_fee=%8$s&trade_type=%9$s",
+                        appid, // 参数编码， 固定值
+                        body, // 签约合作者身份ID
+                        mch_id, // 商品详情
+                        nonce_str,
+                        notify_url, // 服务器异步通知页面路径
+                        out_trade_no, // 商户网站唯一订单号
+                        spbill_create_ip,// 支付类型， 固定值
+                        total_fee, // 商品金额
+                        trade_type // 签约卖家支付宝账号
+                );
+        }
     }
 
-    private String orderInfoWithOpenId() {
-        String result = String.format("appid=%1$s&body=%2s&mch_id=%3$s&nonce_str=%4$s&notify_url=%5$s&openid=%6$s&out_trade_no=%7$s&spbill_create_ip=%8$s&total_fee=%9$s&trade_type=%10$s",
-                appid, // 参数编码， 固定值
-                body, // 签约合作者身份ID
-                mch_id, // 商品详情
-                nonce_str,
-                notify_url, // 服务器异步通知页面路径
-                openid,
-                out_trade_no, // 商户网站唯一订单号
-                spbill_create_ip,// 支付类型， 固定值
-                total_fee, // 商品金额
-                trade_type // 签约卖家支付宝账号
-        );
-        return result;
-    }
-
-    private String orderInfo(boolean withOpenId) {
-        return withOpenId ? orderInfoWithOpenId() : orderInfo();
-    }
-
-    private String sign(String appKey, boolean withOpenId) throws UnsupportedEncodingException {
-        String temp = this.orderInfo(withOpenId);
-        temp += "&key=" + appKey;
-        String result = MD5Utils.MD5Encode(temp, "UTF-8").toUpperCase();
+    private String sign(String appKey) throws UnsupportedEncodingException {
+        String plain = orderInfo() + "&key=" + appKey;
+        log.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! {}", plain);
+        String result = MD5Utils.MD5Encode(plain, "UTF-8").toUpperCase();
         return result;
     }
 
@@ -221,25 +227,30 @@ public class WechatOrder extends Response {
      * 创建微信订单信息
      *
      * @param appKey
-     * @param withOpenId
      * @return
      * @throws UnsupportedEncodingException
      */
-    public String orderInfoXML(String appKey, boolean withOpenId) throws UnsupportedEncodingException {
+    public String orderInfoXML(String appKey) throws UnsupportedEncodingException {
         StringBuffer sb = new StringBuffer("<xml>\r\n");
         sb.append("<appid>").append(appid).append("</appid>\r\n");
         sb.append("<body>").append(body).append("</body>\r\n");
         sb.append("<mch_id>").append(mch_id).append("</mch_id>\r\n");
         sb.append("<nonce_str>").append(nonce_str).append("</nonce_str>\r\n");
         sb.append("<notify_url>").append(notify_url).append("</notify_url>\r\n");
-        if (withOpenId) {
+        
+        if (trade_type.contentEquals("JSAPI")) {
             sb.append("<openid>").append(openid).append("</openid>\r\n");
         }
+        
         sb.append("<out_trade_no>").append(out_trade_no).append("</out_trade_no>\r\n");
+        
+        if (StringUtils.isNoneBlank(product_id))
+            sb.append("<product_id>").append(product_id).append("</product_id>\r\n");
+        
         sb.append("<spbill_create_ip>").append(spbill_create_ip).append("</spbill_create_ip>\r\n");
         sb.append("<total_fee>").append(total_fee).append("</total_fee>\r\n");
         sb.append("<trade_type>").append(trade_type).append("</trade_type>\r\n");
-        sb.append("<sign>").append(sign(appKey, withOpenId)).append("</sign>\r\n");
+        sb.append("<sign>").append(sign(appKey)).append("</sign>\r\n");
         sb.append("</xml>");
         return sb.toString();
     }

@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.luoteng.model.AbstractObject;
 import net.luoteng.payment.model.Response;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * 
@@ -101,5 +102,10 @@ public class PaymentResponse extends Response {
      * 
      */
     private String myNoncestr;
+    
+    
+    public boolean isSuccess() {
+        return StringUtils.isNoneBlank(return_code) && return_code.contentEquals("SUCCESS");
+    }
     
 }
