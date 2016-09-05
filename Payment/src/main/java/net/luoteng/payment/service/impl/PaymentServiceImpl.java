@@ -93,7 +93,7 @@ public class PaymentServiceImpl implements PaymentService , GlobalConstant {
 
     @PostConstruct
     public void init() {
-        log.info("payment service init {}, {}", alipayConfig.getAccountName(), wechatConfig.getPathLocalCert());
+        log.info("payment service init {}", wechatNativeConfig);
         
         client = new OkHttpClient();
         try (FileInputStream instream = new FileInputStream(new File(wechatConfig.getPathLocalCert()))) {

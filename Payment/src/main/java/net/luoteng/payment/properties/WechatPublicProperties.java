@@ -6,6 +6,7 @@
 
 package net.luoteng.payment.properties;
 
+import net.luoteng.model.AbstractObject;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
@@ -15,7 +16,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
  */
 @ConfigurationProperties(prefix = "net.luoteng.payment.wechat.public")
-public class WechatPublicProperties {
+public class WechatPublicProperties extends AbstractObject {
 
     /**
      * 公众号APPID 微信开发平台应用id
