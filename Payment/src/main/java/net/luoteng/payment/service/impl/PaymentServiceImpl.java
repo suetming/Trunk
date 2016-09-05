@@ -69,20 +69,20 @@ import org.apache.commons.lang3.StringUtils;
 @Slf4j
 @Component
 @Transactional
-public class PaymentServiceImpl implements PaymentService , GlobalConstant {
+public class PaymentServiceImpl implements PaymentService, GlobalConstant {
 
     @Autowired
     AlipayProperties alipayConfig;
 
     @Autowired
     WechatProperties wechatConfig;
-    
+
     @Autowired
     WechatPublicProperties wechatPublicConfig;
 
     @Autowired
     WechatNativeProperties wechatNativeConfig;
-    
+
     OkHttpClient client;
 
     /**
@@ -93,7 +93,7 @@ public class PaymentServiceImpl implements PaymentService , GlobalConstant {
     @PostConstruct
     public void init() {
         log.info("payment service init {}", wechatNativeConfig);
-        
+
         client = new OkHttpClient();
         try (FileInputStream instream = new FileInputStream(new File(wechatConfig.getPathLocalCert()))) {
             KeyStore keyStore = KeyStore.getInstance("PKCS12");
@@ -114,7 +114,7 @@ public class PaymentServiceImpl implements PaymentService , GlobalConstant {
                     new SecureRandom());
 
             weixinClient = new OkHttpClient.Builder().sslSocketFactory(sslcontext.getSocketFactory()).build();
-            
+
             log.info("payment service init successed");
         } catch (KeyStoreException | FileNotFoundException | NoSuchAlgorithmException | UnrecoverableKeyException | KeyManagementException ex) {
             log.error("payment service  something is wrong when load weixin cert {}", ex);
@@ -139,131 +139,131 @@ public class PaymentServiceImpl implements PaymentService , GlobalConstant {
     @Override
     public boolean verifyNotify(Response response) {
         log.debug("verify WeixinNotify response=[{}]", response);
-        
+
         if (response instanceof net.luoteng.payment.model.alipay.NotifyResponse) {
-            
+
         } else if (response instanceof net.luoteng.payment.model.wechat.NotifyResponse) {
-            return verifyWechatNotify((net.luoteng.payment.model.wechat.NotifyResponse)response);
+            return verifyWechatNotify((net.luoteng.payment.model.wechat.NotifyResponse) response);
         }
         return false;
     }
-    
+
     private boolean verifyWechatNotify(net.luoteng.payment.model.wechat.NotifyResponse response) {// TODO 待优化代码
         String verifyStr = "";
-        if(StringUtils.isNotBlank(response.getAppid())){
-            verifyStr += verifyStr.equals("") ? "": "&";
-            verifyStr += "appid="+response.getAppid();
+        if (StringUtils.isNotBlank(response.getAppid())) {
+            verifyStr += verifyStr.equals("") ? "" : "&";
+            verifyStr += "appid=" + response.getAppid();
         }
-        if(StringUtils.isNotBlank(response.getAttach())){
-            verifyStr += verifyStr.equals("") ? "": "&";
-            verifyStr += "attach="+response.getAttach();
+        if (StringUtils.isNotBlank(response.getAttach())) {
+            verifyStr += verifyStr.equals("") ? "" : "&";
+            verifyStr += "attach=" + response.getAttach();
         }
-        if(StringUtils.isNotBlank(response.getBank_type())){
-            verifyStr += verifyStr.equals("") ? "": "&";
-            verifyStr += "bank_type="+response.getBank_type();
+        if (StringUtils.isNotBlank(response.getBank_type())) {
+            verifyStr += verifyStr.equals("") ? "" : "&";
+            verifyStr += "bank_type=" + response.getBank_type();
         }
-        if(null != response.getCash_fee()){
-            verifyStr += verifyStr.equals("") ? "": "&";
-            verifyStr += "cash_fee="+response.getCash_fee();
+        if (null != response.getCash_fee()) {
+            verifyStr += verifyStr.equals("") ? "" : "&";
+            verifyStr += "cash_fee=" + response.getCash_fee();
         }
-        if(StringUtils.isNotBlank(response.getCash_fee_type())){
-            verifyStr += verifyStr.equals("") ? "": "&";
-            verifyStr += "cash_fee_type="+response.getCash_fee_type();
+        if (StringUtils.isNotBlank(response.getCash_fee_type())) {
+            verifyStr += verifyStr.equals("") ? "" : "&";
+            verifyStr += "cash_fee_type=" + response.getCash_fee_type();
         }
-        if(null != response.getCoupon_count()){
-            verifyStr += verifyStr.equals("") ? "": "&";
-            verifyStr += "coupon_count="+response.getCoupon_count();
+        if (null != response.getCoupon_count()) {
+            verifyStr += verifyStr.equals("") ? "" : "&";
+            verifyStr += "coupon_count=" + response.getCoupon_count();
         }
-        if(null != response.getCoupon_fee()){
-            verifyStr += verifyStr.equals("") ? "": "&";
-            verifyStr += "coupon_fee="+response.getCoupon_fee();
+        if (null != response.getCoupon_fee()) {
+            verifyStr += verifyStr.equals("") ? "" : "&";
+            verifyStr += "coupon_fee=" + response.getCoupon_fee();
         }
-        if(StringUtils.isNotBlank(response.getCoupon_fee_0())){
-            verifyStr += verifyStr.equals("") ? "": "&";
-            verifyStr += "coupon_fee_0="+response.getCoupon_fee_0();
+        if (StringUtils.isNotBlank(response.getCoupon_fee_0())) {
+            verifyStr += verifyStr.equals("") ? "" : "&";
+            verifyStr += "coupon_fee_0=" + response.getCoupon_fee_0();
         }
-        if(StringUtils.isNotBlank(response.getCoupon_id_0())){
-            verifyStr += verifyStr.equals("") ? "": "&";
-            verifyStr += "coupon_id_0="+response.getCoupon_id_0();
+        if (StringUtils.isNotBlank(response.getCoupon_id_0())) {
+            verifyStr += verifyStr.equals("") ? "" : "&";
+            verifyStr += "coupon_id_0=" + response.getCoupon_id_0();
         }
-        if(StringUtils.isNotBlank(response.getDevice_info())){
-            verifyStr += verifyStr.equals("") ? "": "&";
-            verifyStr += "device_info="+response.getDevice_info();
+        if (StringUtils.isNotBlank(response.getDevice_info())) {
+            verifyStr += verifyStr.equals("") ? "" : "&";
+            verifyStr += "device_info=" + response.getDevice_info();
         }
-        if(StringUtils.isNotBlank(response.getErr_code())){
-            verifyStr += verifyStr.equals("") ? "": "&";
-            verifyStr += "err_code="+response.getErr_code();
+        if (StringUtils.isNotBlank(response.getErr_code())) {
+            verifyStr += verifyStr.equals("") ? "" : "&";
+            verifyStr += "err_code=" + response.getErr_code();
         }
-        if(StringUtils.isNotBlank(response.getErr_code_des())){
-            verifyStr += verifyStr.equals("") ? "": "&";
-            verifyStr += "err_code_des="+response.getErr_code_des();
+        if (StringUtils.isNotBlank(response.getErr_code_des())) {
+            verifyStr += verifyStr.equals("") ? "" : "&";
+            verifyStr += "err_code_des=" + response.getErr_code_des();
         }
-        if(StringUtils.isNotBlank(response.getFee_type())){
-            verifyStr += verifyStr.equals("") ? "": "&";
-            verifyStr += "fee_type="+response.getFee_type();
+        if (StringUtils.isNotBlank(response.getFee_type())) {
+            verifyStr += verifyStr.equals("") ? "" : "&";
+            verifyStr += "fee_type=" + response.getFee_type();
         }
-        if(StringUtils.isNotBlank(response.getIs_subscribe())){
-            verifyStr += verifyStr.equals("") ? "": "&";
-            verifyStr += "is_subscribe="+response.getIs_subscribe();
+        if (StringUtils.isNotBlank(response.getIs_subscribe())) {
+            verifyStr += verifyStr.equals("") ? "" : "&";
+            verifyStr += "is_subscribe=" + response.getIs_subscribe();
         }
-        if(StringUtils.isNotBlank(response.getMch_id())){
-            verifyStr += verifyStr.equals("") ? "": "&";
-            verifyStr += "mch_id="+response.getMch_id();
+        if (StringUtils.isNotBlank(response.getMch_id())) {
+            verifyStr += verifyStr.equals("") ? "" : "&";
+            verifyStr += "mch_id=" + response.getMch_id();
         }
-        if(StringUtils.isNotBlank(response.getNonce_str())){
-            verifyStr += verifyStr.equals("") ? "": "&";
-            verifyStr += "nonce_str="+response.getNonce_str();
+        if (StringUtils.isNotBlank(response.getNonce_str())) {
+            verifyStr += verifyStr.equals("") ? "" : "&";
+            verifyStr += "nonce_str=" + response.getNonce_str();
         }
-        if(StringUtils.isNotBlank(response.getOpenid())){
-            verifyStr += verifyStr.equals("") ? "": "&";
-            verifyStr += "openid="+response.getOpenid();
+        if (StringUtils.isNotBlank(response.getOpenid())) {
+            verifyStr += verifyStr.equals("") ? "" : "&";
+            verifyStr += "openid=" + response.getOpenid();
         }
-        if(StringUtils.isNotBlank(response.getOut_trade_no())){
-            verifyStr += verifyStr.equals("") ? "": "&";
-            verifyStr += "out_trade_no="+response.getOut_trade_no();
+        if (StringUtils.isNotBlank(response.getOut_trade_no())) {
+            verifyStr += verifyStr.equals("") ? "" : "&";
+            verifyStr += "out_trade_no=" + response.getOut_trade_no();
         }
-        if(StringUtils.isNotBlank(response.getResult_code())){
-            verifyStr += verifyStr.equals("") ? "": "&";
-            verifyStr += "result_code="+response.getResult_code();
+        if (StringUtils.isNotBlank(response.getResult_code())) {
+            verifyStr += verifyStr.equals("") ? "" : "&";
+            verifyStr += "result_code=" + response.getResult_code();
         }
-        if(StringUtils.isNotBlank(response.getReturn_code())){
-            verifyStr += verifyStr.equals("") ? "": "&";
-            verifyStr += "return_code="+response.getReturn_code();
+        if (StringUtils.isNotBlank(response.getReturn_code())) {
+            verifyStr += verifyStr.equals("") ? "" : "&";
+            verifyStr += "return_code=" + response.getReturn_code();
         }
-        if(StringUtils.isNotBlank(response.getReturn_msg())){
-            verifyStr += verifyStr.equals("") ? "": "&";
-            verifyStr += "return_msg="+response.getReturn_msg();
+        if (StringUtils.isNotBlank(response.getReturn_msg())) {
+            verifyStr += verifyStr.equals("") ? "" : "&";
+            verifyStr += "return_msg=" + response.getReturn_msg();
         }
-        if(StringUtils.isNotBlank(response.getTime_end())){
-            verifyStr += verifyStr.equals("") ? "": "&";
-            verifyStr += "time_end="+response.getTime_end();
+        if (StringUtils.isNotBlank(response.getTime_end())) {
+            verifyStr += verifyStr.equals("") ? "" : "&";
+            verifyStr += "time_end=" + response.getTime_end();
         }
-        if(null != response.getTotal_fee()){
-            verifyStr += verifyStr.equals("") ? "": "&";
-            verifyStr += "total_fee="+response.getTotal_fee();
+        if (null != response.getTotal_fee()) {
+            verifyStr += verifyStr.equals("") ? "" : "&";
+            verifyStr += "total_fee=" + response.getTotal_fee();
         }
-        if(StringUtils.isNotBlank(response.getTrade_type())){
-            verifyStr += verifyStr.equals("") ? "": "&";
-            verifyStr += "trade_type="+response.getTrade_type();
+        if (StringUtils.isNotBlank(response.getTrade_type())) {
+            verifyStr += verifyStr.equals("") ? "" : "&";
+            verifyStr += "trade_type=" + response.getTrade_type();
         }
-        if(StringUtils.isNotBlank(response.getTransaction_id())){
-            verifyStr += verifyStr.equals("") ? "": "&";
-            verifyStr += "transaction_id="+response.getTransaction_id();
+        if (StringUtils.isNotBlank(response.getTransaction_id())) {
+            verifyStr += verifyStr.equals("") ? "" : "&";
+            verifyStr += "transaction_id=" + response.getTransaction_id();
         }
-        
-        verifyStr += "&key="+ wechatAppSecret(EnumUtils.getEnumByNameOrNull(TradeType.class, response.getTrade_type()));
+
+        verifyStr += "&key=" + wechatAppSecret(EnumUtils.getEnumByNameOrNull(TradeType.class, response.getTrade_type()));
         String mySign = MD5Utils.MD5Encode(verifyStr, "UTF-8").toUpperCase();
-        log.debug("verify WeixinNotify, mySign=[{}] sign=[{}]", mySign ,response.getSign());
+        log.debug("verify WeixinNotify, mySign=[{}] sign=[{}]", mySign, response.getSign());
         return mySign.equals(response.getSign());
     }
-    
+
     private String preAlipayOrders(OrderRequest request) {
         // 订单
         String orderInfo = getAlipayOrderInfo(buildAlipayOrder(request.getSubject(),
-                                                               null != request.getBody() && request.getBody().length()>150 ? request.getBody().substring(0, 150) : request.getBody(),
-                                                               String.format("%.2f", request.getAmount() / 100.0),
-                                                               request.getOutTradeNo(),
-                                                               null));
+                null != request.getBody() && request.getBody().length() > 150 ? request.getBody().substring(0, 150) : request.getBody(),
+                String.format("%.2f", request.getAmount() / 100.0),
+                request.getOutTradeNo(),
+                null));
 
         // 对订单做RSA 签名
         String sign = SignUtils.sign(orderInfo, alipayConfig.getPks8PrivateKey(), SignType.RSA);
@@ -291,12 +291,12 @@ public class PaymentServiceImpl implements PaymentService , GlobalConstant {
                 wechatConfig.getUriNotify());
 
         if (request.getTradeType() == TradeType.NATIVE) {
+            order.setDevice_info("WEB");
             order.setSpbill_create_ip(wechatNativeConfig.getIpaddress());
         }
-        
+
         order.setProduct_id(request.getProductId());
-        
-        log.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!! {}", order);
+
         try {
             String orderInfo = order.orderInfoXML(wechatAppSecret(request.getTradeType()));
             return getResponse(orderInfo, true);
@@ -345,86 +345,81 @@ public class PaymentServiceImpl implements PaymentService , GlobalConstant {
 
         Map m = new HashMap();
 
-        InputStream in = new ByteArrayInputStream(strxml.getBytes("UTF-8"));
-        SAXBuilder builder = new SAXBuilder();
-        org.jdom.Document doc = builder.build(in);
-        List list = doc.getRootElement().getChildren();
-        Iterator it = list.iterator();
-        while (it.hasNext()) {
-            Element e = (Element) it.next();
-            String k = e.getName();
-            String v = e.getTextNormalize();
-            m.put(k, v);
+        try (InputStream in = new ByteArrayInputStream(strxml.getBytes("UTF-8"))) {
+            SAXBuilder builder = new SAXBuilder();
+            org.jdom.Document doc = builder.build(in);
+            List list = doc.getRootElement().getChildren();
+            Iterator it = list.iterator();
+            while (it.hasNext()) {
+                Element e = (Element) it.next();
+                String k = e.getName();
+                String v = e.getTextNormalize();
+                m.put(k, v);
 
-            switch (k) {
-                case "return_code":
-                    prepayResponse.setReturn_code(e.getTextNormalize());
-                    break;
-                case "return_msg":
-                    prepayResponse.setReturn_msg(e.getTextNormalize());
-                    break;
-                case "appid":
-                    prepayResponse.setAppid(e.getTextNormalize());
-                    break;
-                case "mch_id":
-                    prepayResponse.setMch_id(e.getTextNormalize());
-                    break;
-                case "device_info":
-                    prepayResponse.setDevice_info(e.getTextNormalize());
-                    break;
-                case "nonce_str":
-                    prepayResponse.setNonce_str(e.getTextNormalize());
-                    break;
-                case "sign":
-                    prepayResponse.setSign(e.getTextNormalize());
-                    break;
-                case "result_code":
-                    prepayResponse.setResult_code(e.getTextNormalize());
-                    break;
-                case "err_code":
-                    prepayResponse.setErr_code(e.getTextNormalize());
-                    break;
-                case "err_code_des":
-                    prepayResponse.setErr_code_des(e.getTextNormalize());
-                    break;
-                case "trade_type":
-                    prepayResponse.setTrade_type(e.getTextNormalize());
-                    break;
-                case "prepay_id":
-                    prepayResponse.setPrepay_id(e.getTextNormalize());
-                    break;
-                case "code_url":
-                    prepayResponse.setCode_url(e.getTextNormalize());
-                    break;
+                switch (k) {
+                    case "return_code":
+                        prepayResponse.setReturn_code(e.getTextNormalize());
+                        break;
+                    case "return_msg":
+                        prepayResponse.setReturn_msg(e.getTextNormalize());
+                        break;
+                    case "appid":
+                        prepayResponse.setAppid(e.getTextNormalize());
+                        break;
+                    case "mch_id":
+                        prepayResponse.setMch_id(e.getTextNormalize());
+                        break;
+                    case "device_info":
+                        prepayResponse.setDevice_info(e.getTextNormalize());
+                        break;
+                    case "nonce_str":
+                        prepayResponse.setNonce_str(e.getTextNormalize());
+                        break;
+                    case "sign":
+                        prepayResponse.setSign(e.getTextNormalize());
+                        break;
+                    case "result_code":
+                        prepayResponse.setResult_code(e.getTextNormalize());
+                        break;
+                    case "err_code":
+                        prepayResponse.setErr_code(e.getTextNormalize());
+                        break;
+                    case "err_code_des":
+                        prepayResponse.setErr_code_des(e.getTextNormalize());
+                        break;
+                    case "trade_type":
+                        prepayResponse.setTrade_type(e.getTextNormalize());
+                        break;
+                    case "prepay_id":
+                        prepayResponse.setPrepay_id(e.getTextNormalize());
+                        break;
+                    case "code_url":
+                        prepayResponse.setCode_url(e.getTextNormalize());
+                        break;
+                }
             }
+            adjust(prepayResponse, ios);
         }
-
-        adjust(prepayResponse, ios);
-        
-        /**
-         * 关闭流
-         */
-        in.close();
         log.debug("wechat public prepayResponse=[{}]", prepayResponse);
         return prepayResponse;
     }
-    
+
     private AlipayOrder buildAlipayOrder(String subject, String body, String price, String outTradeNo, String notifyUrl) {
         AlipayOrder order = new AlipayOrder(
-                alipayConfig.getPartner(), 
-                alipayConfig.getSellId(), 
-                outTradeNo, 
-                subject, 
+                alipayConfig.getPartner(),
+                alipayConfig.getSellId(),
+                outTradeNo,
+                subject,
                 body,
-                price, 
+                price,
                 null == notifyUrl ? alipayConfig.getUriNotify() : notifyUrl,
-                "mobile.securitypay.pay", 
-                "1", 
-                GLOBAL_ENCODING, 
+                "mobile.securitypay.pay",
+                "1",
+                GLOBAL_ENCODING,
                 "30m");
         return order;
     }
-    
+
     /**
      * 创建支付宝订单信息
      *
@@ -472,22 +467,21 @@ public class PaymentServiceImpl implements PaymentService , GlobalConstant {
 
         return orderInfo;
     }
-    
-    
+
     private String wechatAppSecret(TradeType type) {
-        switch(type) {
+        switch (type) {
             case JSAPI:
-                return wechatPublicConfig.getAppSecret();
+                return wechatConfig.getMchSecret();
             case NATIVE:
-                return wechatNativeConfig.getAppSecret();
+                return wechatConfig.getMchSecret();
             case APP:
             default:
                 return wechatConfig.getAppSecret();
         }
     }
-    
+
     private String wechatAppId(TradeType type) {
-        switch(type) {
+        switch (type) {
             case JSAPI:
                 return wechatPublicConfig.getAppId();
             case NATIVE:
@@ -497,29 +491,29 @@ public class PaymentServiceImpl implements PaymentService , GlobalConstant {
                 return wechatConfig.getAppId();
         }
     }
-    
+
     private String wechatMchId(TradeType type) {
-        switch(type) {
+        switch (type) {
             case JSAPI:
                 return wechatPublicConfig.getMchId();
             case NATIVE:
-                return wechatNativeConfig.getMchId();
+                return wechatPublicConfig.getMchId();
             case APP:
             default:
                 return wechatConfig.getMchId();
         }
     }
-    
+
     private void adjust(PaymentResponse response, boolean ios) {
         if (!response.isSuccess()) {
             return;
         }
-        
+
         String pack = ios ? "&package=Sign=WXPay" : "&package=prepay_id=" + response.getPrepay_id();
         boolean platform = response.getTrade_type().contentEquals("JSAPI");
-        
+
         String nonce = String.valueOf(System.currentTimeMillis());
-        String timestamp = String.valueOf(System.currentTimeMillis() /  1000);
+        String timestamp = String.valueOf(System.currentTimeMillis() / 1000);
         String toSign = "appId=" + response.getAppid()
                 + "&nonceStr=" + nonce
                 + pack
@@ -530,7 +524,7 @@ public class PaymentServiceImpl implements PaymentService , GlobalConstant {
                 + "&key=" + wechatAppSecret(EnumUtils.getEnumByNameOrNull(TradeType.class, response.getTrade_type()));
         String mySign = MD5Utils.MD5Encode(toSign, "UTF-8").toUpperCase();
         response.setMySign(mySign);
-        response.setMyTimestamp(String.valueOf(System.currentTimeMillis() /  1000));
+        response.setMyTimestamp(String.valueOf(System.currentTimeMillis() / 1000));
         response.setMyNoncestr(nonce);
     }
 }

@@ -26,14 +26,10 @@ public class WechatPublicProperties extends AbstractObject {
     private String appId;
 
     /**
+     * 
      * @return
      */
     private String appSecret;
-
-    /**
-     * @return
-     */
-    private String appPublicSecret;
 
     /**
      * 微信支付商户号
@@ -81,14 +77,6 @@ public class WechatPublicProperties extends AbstractObject {
 
     public void setAppSecret(String appSecret) {
         this.appSecret = appSecret;
-    }
-
-    public String getAppPublicSecret() {
-        return appPublicSecret;
-    }
-
-    public void setAppPublicSecret(String appPublicSecret) {
-        this.appPublicSecret = appPublicSecret;
     }
 
     public String getMchId() {

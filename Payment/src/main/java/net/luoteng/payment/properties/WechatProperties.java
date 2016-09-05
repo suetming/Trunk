@@ -37,6 +37,13 @@ public class WechatProperties extends AbstractObject {
     private String mchId;
 
     /**
+     * 商户密钥
+     * 
+     * @return
+     */
+    private String mchSecret;
+    
+    /**
      * 预支付交易单调用地址
      *
      * @return
@@ -253,6 +260,14 @@ public class WechatProperties extends AbstractObject {
 
     public void setCertPassword(String certPassword) {
         this.certPassword = certPassword;
+    }
+
+    public String getMchSecret() {
+        return mchSecret;
+    }
+
+    public void setMchSecret(String mchSecret) {
+        this.mchSecret = mchSecret;
     }
     
 }

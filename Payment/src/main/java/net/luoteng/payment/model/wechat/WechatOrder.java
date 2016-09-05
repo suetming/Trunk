@@ -188,9 +188,10 @@ public class WechatOrder extends Response {
                         trade_type // 签约卖家支付宝账号
                 );
             case "NATIVE":
-                return String.format("appid=%1$s&body=%2$s&mch_id=%3$s&nonce_str=%4$s&notify_url=%5$s&out_trade_no=%6$s&product_id=%7$s&spbill_create_ip=%8$s&total_fee=%9$s&trade_type=%10$s",
+                return String.format("appid=%1$s&body=%2$s&device_info=%3$s&mch_id=%4$s&nonce_str=%5$s&notify_url=%6$s&out_trade_no=%7$s&product_id=%8$s&spbill_create_ip=%9$s&total_fee=%10$s&trade_type=%11$s",
                         appid, // 参数编码， 固定值
                         body, // 签约合作者身份ID
+                        device_info,
                         mch_id, // 商品详情
                         nonce_str,
                         notify_url, // 服务器异步通知页面路径
@@ -234,6 +235,10 @@ public class WechatOrder extends Response {
         StringBuffer sb = new StringBuffer("<xml>\r\n");
         sb.append("<appid>").append(appid).append("</appid>\r\n");
         sb.append("<body>").append(body).append("</body>\r\n");
+        
+        if (StringUtils.isNotBlank(device_info))
+            sb.append("<device_info>").append(device_info).append("</device_info>\r\n");
+        
         sb.append("<mch_id>").append(mch_id).append("</mch_id>\r\n");
         sb.append("<nonce_str>").append(nonce_str).append("</nonce_str>\r\n");
         sb.append("<notify_url>").append(notify_url).append("</notify_url>\r\n");
@@ -250,9 +255,10 @@ public class WechatOrder extends Response {
         sb.append("<spbill_create_ip>").append(spbill_create_ip).append("</spbill_create_ip>\r\n");
         sb.append("<total_fee>").append(total_fee).append("</total_fee>\r\n");
         sb.append("<trade_type>").append(trade_type).append("</trade_type>\r\n");
-        sb.append("<sign>").append(sign(appKey)).append("</sign>\r\n");
+        sb.append("<sign><![CDATA[").append(sign(appKey)).append("]]></sign>\r\n");
         sb.append("</xml>");
-        return sb.toString();
+        
+        return new String(sb.toString().getBytes(), "ISO8859-1");
     }
 
 }

@@ -43,13 +43,6 @@ public class WechatNativeProperties extends AbstractObject {
     private String appSecret;
     
     /**
-     * 微信支付商户号
-     *
-     * @return
-     */
-    private String mchId;
-    
-    /**
      * ip 地址
      */
     private String ipaddress;
@@ -68,14 +61,6 @@ public class WechatNativeProperties extends AbstractObject {
 
     public void setAppSecret(String appSecret) {
         this.appSecret = appSecret;
-    }
-
-    public String getMchId() {
-        return mchId;
-    }
-
-    public void setMchId(String mchId) {
-        this.mchId = mchId;
     }
 
     public String getIpaddress() {
