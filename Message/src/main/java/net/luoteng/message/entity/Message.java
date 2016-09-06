@@ -34,6 +34,18 @@ import net.luoteng.message.enums.MessageType;
 public class Message extends AbstractTimeScopeEntity {
 
     /**
+     * 发送方
+     */
+    @Column(nullable = true)
+    private String sender;
+
+    /**
+     * 接收方
+     */
+    @Column(nullable = false)
+    private String receiver;
+    
+    /**
      * 标题
      */
     private String title;

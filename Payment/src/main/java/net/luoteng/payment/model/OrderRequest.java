@@ -90,6 +90,13 @@ public class OrderRequest extends AbstractObject {
     private String outTradeNo;
     
     /**
+     * 有效期
+     */
+    @Getter
+    @Setter
+    private long expire;
+    
+    /**
      * 
      */
     @Getter

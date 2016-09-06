@@ -30,8 +30,8 @@ public class MessageServiceImpl implements MessageService {
     MessageDAO msgDAO;
     
     @Override
-    public Page<Message> listByUser(String userId, List<MessageType> types, List<MessageStatus> statuses, Pageable pageable) {
-        return msgDAO.listByUser(userId, types, statuses, pageable);
+    public Page<Message> listByReceiver(String receiver, List<MessageType> types, List<MessageStatus> statuses, Pageable pageable) {
+        return msgDAO.listByReceiver(receiver, types, statuses, pageable);
     }
 
     @Override

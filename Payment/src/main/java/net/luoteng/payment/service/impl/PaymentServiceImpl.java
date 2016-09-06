@@ -20,6 +20,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.UnrecoverableKeyException;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -49,6 +50,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import lombok.extern.slf4j.Slf4j;
 import net.luoteng.constant.GlobalConstant;
+import net.luoteng.constant.TimeConstant;
+import net.luoteng.entity.embedded.RealmEntity;
 import net.luoteng.enums.SignType;
 import net.luoteng.payment.model.alipay.AlipayOrder;
 import net.luoteng.payment.model.enums.TradeType;
@@ -59,6 +62,7 @@ import net.luoteng.payment.properties.WechatPublicProperties;
 import net.luoteng.payment.utils.SignUtils;
 import net.luoteng.utils.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
 
 /**
  * payment service
@@ -69,7 +73,7 @@ import org.apache.commons.lang3.StringUtils;
 @Slf4j
 @Component
 @Transactional
-public class PaymentServiceImpl implements PaymentService, GlobalConstant {
+public class PaymentServiceImpl implements PaymentService, TimeConstant, GlobalConstant {
 
     @Autowired
     AlipayProperties alipayConfig;
@@ -128,7 +132,7 @@ public class PaymentServiceImpl implements PaymentService, GlobalConstant {
         RestResponse response = new RestResponse();
         switch (request.getPayType()) {
             case alipay:
-                return response.success(preAlipayOrders(request));
+                return response.success(preAlipayOrders(userId, request));
             case wechat:
                 return response.success(preWechatOrders(userId, request));
             default:
@@ -257,13 +261,21 @@ public class PaymentServiceImpl implements PaymentService, GlobalConstant {
         return mySign.equals(response.getSign());
     }
 
-    private String preAlipayOrders(OrderRequest request) {
+    private String preAlipayOrders(String userId, OrderRequest request) {
         // 订单
-        String orderInfo = getAlipayOrderInfo(buildAlipayOrder(request.getSubject(),
+        String orderInfo = getAlipayOrderInfo(
+                new AlipayOrder(
+                alipayConfig.getPartner(),
+                alipayConfig.getSellId(),
+                request.getOutTradeNo(),
+                request.getSubject(),
                 null != request.getBody() && request.getBody().length() > 150 ? request.getBody().substring(0, 150) : request.getBody(),
                 String.format("%.2f", request.getAmount() / 100.0),
-                request.getOutTradeNo(),
-                null));
+                String.format(alipayConfig.getUriNotify(), userId, request.getEntity().getRealm().name(), request.getEntity().getEntityId()),
+                "mobile.securitypay.pay",
+                "1",
+                GLOBAL_ENCODING,
+                String.format("%dm", request.getExpire() / 60000)));
 
         // 对订单做RSA 签名
         String sign = SignUtils.sign(orderInfo, alipayConfig.getPks8PrivateKey(), SignType.RSA);
@@ -290,6 +302,9 @@ public class PaymentServiceImpl implements PaymentService, GlobalConstant {
                 request.getIp(),
                 String.format(wechatConfig.getUriNotify(), userId, request.getEntity().getRealm().name(), request.getEntity().getEntityId()));
 
+        String timeExpire = new DateTime(Calendar.getInstance().getTimeInMillis() + request.getExpire()).toLocalDateTime().toString(TIME_SHORT);
+        order.setTime_expire(timeExpire);
+        
         if (request.getTradeType() == TradeType.NATIVE) {
             order.setDevice_info("WEB");
             order.setSpbill_create_ip(wechatNativeConfig.getIpaddress());
@@ -404,29 +419,13 @@ public class PaymentServiceImpl implements PaymentService, GlobalConstant {
         return prepayResponse;
     }
 
-    private AlipayOrder buildAlipayOrder(String subject, String body, String price, String outTradeNo, String notifyUrl) {
-        AlipayOrder order = new AlipayOrder(
-                alipayConfig.getPartner(),
-                alipayConfig.getSellId(),
-                outTradeNo,
-                subject,
-                body,
-                price,
-                null == notifyUrl ? alipayConfig.getUriNotify() : notifyUrl,
-                "mobile.securitypay.pay",
-                "1",
-                GLOBAL_ENCODING,
-                "30m");
-        return order;
-    }
-
     /**
      * 创建支付宝订单信息
      *
      * @param order
      * @return
      */
-    private String getAlipayOrderInfo(AlipayOrder order) {
+    private String getAlipayOrderInfo(AlipayOrder order) {// TODO
 
         // 参数编码， 固定值
         String orderInfo = "_input_charset=\"" + order.get_input_charset() + "\"";

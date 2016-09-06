@@ -23,13 +23,13 @@ public interface MessageService {
 
     /**
      * 
-     * @param userId
+     * @param receiver
      * @param types
      * @param statuses
      * @param pageable
      * @return 
      */
-    Page<Message> listByUser(String userId, List<MessageType> types, List<MessageStatus> statuses, Pageable pageable);
+    Page<Message> listByReceiver(String receiver, List<MessageType> types, List<MessageStatus> statuses, Pageable pageable);
     
     /**
      * 

@@ -18,6 +18,7 @@ import net.luoteng.order.enums.OrderType;
 import net.luoteng.order.service.OrderService;
 import net.luoteng.order.utils.OrderGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -32,6 +33,9 @@ import org.springframework.stereotype.Component;
 @Transactional
 public class OrderServiceImpl implements OrderService {
 
+    @Value("${net.luoteng.task.order.cancel.expire}")
+    long expire;
+    
     @Autowired
     OrderDAO orderDAO;
     
@@ -41,11 +45,23 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order generate(String userId, RealmEntity owner, OrderType type, PayType payType, long amount, long couponAmount, long balanceAmount) {
+    public Order generate(
+            String userId, 
+            RealmEntity owner, 
+            OrderType type, 
+            PayType payType, 
+            long _expire, 
+            long amount, 
+            long couponAmount,
+            long balanceAmount) {
         //撤销以前创建的所有预支付订单
         cancelPreOrders(userId, owner);
+        if (_expire <= 0) {
+            expire = _expire;
+        }
         
         Order order = new Order(OrderGenerator.order(), userId, type, OrderStatus.INITIALIZED, payType, owner, amount, couponAmount, balanceAmount);
+        order.setTimeExpired(new Date(System.currentTimeMillis() + expire));
         return orderDAO.save(order);
     }
     
@@ -92,7 +108,6 @@ public class OrderServiceImpl implements OrderService {
     public boolean toExpire(String id) {
         Order order = orderDAO.findOne(id);
         order.setStatus(OrderStatus.EXPIRED);
-        order.setTimeExpired(new Date());
         orderDAO.save(order);
         return true;
     }

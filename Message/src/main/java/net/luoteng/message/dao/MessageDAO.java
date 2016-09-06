@@ -27,8 +27,8 @@ import org.springframework.data.repository.query.Param;
 @Transactional
 public interface MessageDAO extends PagingAndSortingRepository<Message, String> {
 
-    @Query("select m from Message m where m.userId=:userId and m.type in :typeList and m.status in :statusList")
-    Page<Message> listByUser(@Param("userId") String userId, @Param("typeList") List<MessageType> types, @Param("statusList") List<MessageStatus> statuses, Pageable pageable);
+    @Query("select m from Message m where m.receiver=:receiver and m.type in :typeList and m.status in :statusList")
+    Page<Message> listByReceiver(@Param("receiver") String userId, @Param("typeList") List<MessageType> types, @Param("statusList") List<MessageStatus> statuses, Pageable pageable);
 
     @Query("select m from Message m where m.type in :typeList and m.status in :statusList")
     Page<Message> list(@Param("typeList") List<MessageType> typeList, @Param("statusList") List<MessageStatus> statuses, Pageable pageable);

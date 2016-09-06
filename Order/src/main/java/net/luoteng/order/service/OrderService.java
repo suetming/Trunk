@@ -70,6 +70,7 @@ public interface OrderService extends BaseService<Order> {
      * @param owner
      * @param type
      * @param payType
+     * @param expire
      * @param amount
      * @param couponAmount
      * @param balanceAmount
@@ -80,6 +81,7 @@ public interface OrderService extends BaseService<Order> {
             RealmEntity owner, 
             OrderType type, 
             PayType payType,
+            long expire,
             long amount,
             long couponAmount,
             long balanceAmount

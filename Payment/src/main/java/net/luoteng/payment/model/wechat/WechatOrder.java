@@ -175,7 +175,7 @@ public class WechatOrder extends Response {
     private String orderInfo() {
         switch (trade_type) {
             case "JSAPI":
-                return String.format("appid=%1$s&body=%2s&mch_id=%3$s&nonce_str=%4$s&notify_url=%5$s&openid=%6$s&out_trade_no=%7$s&spbill_create_ip=%8$s&total_fee=%9$s&trade_type=%10$s",
+                return String.format("appid=%1$s&body=%2s&mch_id=%3$s&nonce_str=%4$s&notify_url=%5$s&openid=%6$s&out_trade_no=%7$s&spbill_create_ip=%8$s&time_expire=%9$s&total_fee=%10$s&trade_type=%11$s",
                         appid, // 参数编码， 固定值
                         body, // 签约合作者身份ID
                         mch_id, // 商品详情
@@ -184,11 +184,12 @@ public class WechatOrder extends Response {
                         openid,
                         out_trade_no, // 商户网站唯一订单号
                         spbill_create_ip,// 支付类型， 固定值
+                        time_expire,
                         total_fee, // 商品金额
                         trade_type // 签约卖家支付宝账号
                 );
             case "NATIVE":
-                return String.format("appid=%1$s&body=%2$s&device_info=%3$s&mch_id=%4$s&nonce_str=%5$s&notify_url=%6$s&out_trade_no=%7$s&product_id=%8$s&spbill_create_ip=%9$s&total_fee=%10$s&trade_type=%11$s",
+                return String.format("appid=%1$s&body=%2$s&device_info=%3$s&mch_id=%4$s&nonce_str=%5$s&notify_url=%6$s&out_trade_no=%7$s&product_id=%8$s&spbill_create_ip=%9$s&time_expire=%10$s&total_fee=%11$s&trade_type=%12$s",
                         appid, // 参数编码， 固定值
                         body, // 签约合作者身份ID
                         device_info,
@@ -198,12 +199,13 @@ public class WechatOrder extends Response {
                         out_trade_no, // 商户网站唯一订单号
                         product_id,
                         spbill_create_ip,// 支付类型， 固定值
+                        time_expire,
                         total_fee, // 商品金额
                         trade_type // 签约卖家支付宝账号
                 );
             case "APP":
             default:
-                return String.format("appid=%1$s&body=%2s&mch_id=%3$s&nonce_str=%4$s&notify_url=%5$s&out_trade_no=%6$s&spbill_create_ip=%7$s&total_fee=%8$s&trade_type=%9$s",
+                return String.format("appid=%1$s&body=%2s&mch_id=%3$s&nonce_str=%4$s&notify_url=%5$s&out_trade_no=%6$s&spbill_create_ip=%7$s&time_expire=%8$s&total_fee=%9$s&trade_type=%10$s",
                         appid, // 参数编码， 固定值
                         body, // 签约合作者身份ID
                         mch_id, // 商品详情
@@ -211,6 +213,7 @@ public class WechatOrder extends Response {
                         notify_url, // 服务器异步通知页面路径
                         out_trade_no, // 商户网站唯一订单号
                         spbill_create_ip,// 支付类型， 固定值
+                        time_expire,
                         total_fee, // 商品金额
                         trade_type // 签约卖家支付宝账号
                 );
@@ -253,6 +256,9 @@ public class WechatOrder extends Response {
             sb.append("<product_id>").append(product_id).append("</product_id>\r\n");
         
         sb.append("<spbill_create_ip>").append(spbill_create_ip).append("</spbill_create_ip>\r\n");
+        
+        sb.append("<time_expire>").append(time_expire).append("</time_expire>\r\n");
+        
         sb.append("<total_fee>").append(total_fee).append("</total_fee>\r\n");
         sb.append("<trade_type>").append(trade_type).append("</trade_type>\r\n");
         sb.append("<sign><![CDATA[").append(sign(appKey)).append("]]></sign>\r\n");
