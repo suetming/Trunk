@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import net.luoteng.entity.embedded.RealmEntity;
 import net.luoteng.enums.PayType;
 import net.luoteng.model.AbstractObject;
 import net.luoteng.payment.model.enums.TradeType;
@@ -27,7 +28,7 @@ public class OrderRequest extends AbstractObject {
 
     @Getter
     @Setter
-    private String productId;
+    private RealmEntity entity;
     
     @Getter
     @Setter

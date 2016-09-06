@@ -288,14 +288,14 @@ public class PaymentServiceImpl implements PaymentService, GlobalConstant {
                 request.getOutTradeNo(),
                 request.getAmount(),
                 request.getIp(),
-                wechatConfig.getUriNotify());
+                String.format(wechatConfig.getUriNotify(), userId, request.getEntity().getRealm().name(), request.getEntity().getEntityId()));
 
         if (request.getTradeType() == TradeType.NATIVE) {
             order.setDevice_info("WEB");
             order.setSpbill_create_ip(wechatNativeConfig.getIpaddress());
         }
-
-        order.setProduct_id(request.getProductId());
+        
+        order.setProduct_id(request.getEntity().getEntityId().replaceAll("-", ""));
 
         try {
             String orderInfo = order.orderInfoXML(wechatAppSecret(request.getTradeType()));
