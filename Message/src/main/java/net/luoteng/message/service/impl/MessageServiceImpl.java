@@ -7,6 +7,7 @@
 package net.luoteng.message.service.impl;
 
 import java.util.List;
+import net.luoteng.entity.embedded.RealmEntity;
 import net.luoteng.message.dao.MessageDAO;
 import net.luoteng.message.entity.Message;
 import net.luoteng.message.enums.MessageStatus;
@@ -32,6 +33,11 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public Page<Message> listByReceiver(String receiver, List<MessageType> types, List<MessageStatus> statuses, Pageable pageable) {
         return msgDAO.listByReceiver(receiver, types, statuses, pageable);
+    }
+    
+    @Override
+    public Page<Message> listByOwner(RealmEntity owner, List<MessageType> types, List<MessageStatus> statuses, Pageable pageable) {
+        return msgDAO.listByOwner(owner, types, statuses, pageable);
     }
 
     @Override

@@ -8,6 +8,7 @@ package net.luoteng.message.dao;
 
 import java.util.List;
 import javax.transaction.Transactional;
+import net.luoteng.entity.embedded.RealmEntity;
 import net.luoteng.message.entity.Message;
 import net.luoteng.message.enums.MessageStatus;
 import net.luoteng.message.enums.MessageType;
@@ -33,6 +34,9 @@ public interface MessageDAO extends PagingAndSortingRepository<Message, String> 
     @Query("select m from Message m where m.type in :typeList and m.status in :statusList")
     Page<Message> list(@Param("typeList") List<MessageType> typeList, @Param("statusList") List<MessageStatus> statuses, Pageable pageable);
 
+    @Query("select m from Message m where m.owner=:owner and m.type in :typeList and m.status in :statusList")
+    Page<Message> listByOwner(@Param("owner") RealmEntity owner, @Param("typeList") List<MessageType> types, @Param("statusList") List<MessageStatus> statuses, Pageable pageable);
+    
     @Modifying
     @Query("update Message m set m.status = :status where m.id in :idList")
     void markStatus(@Param("idList") List<String> messageIds, @Param("status") MessageStatus status);

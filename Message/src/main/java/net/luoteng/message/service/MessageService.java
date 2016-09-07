@@ -7,6 +7,7 @@
 package net.luoteng.message.service;
 
 import java.util.List;
+import net.luoteng.entity.embedded.RealmEntity;
 import net.luoteng.message.entity.Message;
 import net.luoteng.message.enums.MessageStatus;
 import net.luoteng.message.enums.MessageType;
@@ -30,6 +31,16 @@ public interface MessageService {
      * @return 
      */
     Page<Message> listByReceiver(String receiver, List<MessageType> types, List<MessageStatus> statuses, Pageable pageable);
+    
+    /**
+     * 
+     * @param owner
+     * @param types
+     * @param statuses
+     * @param pageable
+     * @return 
+     */
+    Page<Message> listByOwner(RealmEntity owner, List<MessageType> types, List<MessageStatus> statuses, Pageable pageable);
     
     /**
      * 
