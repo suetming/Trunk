@@ -9,6 +9,7 @@ package net.luoteng.comment.service;
 import java.util.List;
 import net.luoteng.comment.entity.Comment;
 import net.luoteng.comment.enums.CommentStatus;
+import net.luoteng.comment.enums.CommentType;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
@@ -21,14 +22,44 @@ import org.springframework.data.domain.Page;
 public interface CommentService {
 
     /**
-     * list current comment all children
+     * list comment all children
      * 
      * @param commentId
+     * @param typeList
      * @param statusList
-     * @param withSelf
      * @param pageable
      * @return 
      */
-    public Page<Comment> listDescendant(String commentId, List<CommentStatus> statusList, boolean withSelf, Pageable pageable);
+    Page<Comment> listDescendant(String commentId, List<CommentType> typeList, List<CommentStatus> statusList, Pageable pageable);
+ 
+    /**
+     * list comment all ancestor
+     * 
+     * @param commentId
+     * @param typeList
+     * @param statusList
+     * @param pageable
+     * @return 
+     */
+    Page<Comment> listAncestor(String commentId, List<CommentType> typeList, List<CommentStatus> statusList, Pageable pageable);
+    
+    /**
+     * 
+     * 
+     * @param sender
+     * @param typeList
+     * @param statusList
+     * @return 
+     */
+    Page<Comment> listBySender(String sender, List<CommentType> typeList, List<CommentStatus> statusList);
+    
+    /**
+     * 
+     * @param receiver
+     * @param typeList
+     * @param statusList
+     * @return 
+     */
+    Page<Comment> listByReceiver(String receiver, List<CommentType> typeList, List<CommentStatus> statusList);
     
 }
