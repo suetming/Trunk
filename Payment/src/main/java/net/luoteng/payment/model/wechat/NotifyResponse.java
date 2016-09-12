@@ -6,7 +6,14 @@
 
 package net.luoteng.payment.model.wechat;
 
+import java.io.StringReader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import net.luoteng.payment.model.Response;
@@ -19,6 +26,7 @@ import org.apache.commons.lang3.StringUtils;
  * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
  */
 @NoArgsConstructor
+@XmlRootElement(name = "xml")
 public class NotifyResponse extends Response {
 
     /**
@@ -127,6 +135,13 @@ public class NotifyResponse extends Response {
     private Integer total_fee;
 
     /**
+     * 应结订单金额=订单金额-非充值代金券金额，应结订单金额<=订单金额。
+     */
+    @Getter
+    @XmlElement
+    private Integer settlement_total_fee;
+    
+    /**
      * 货币种类 默认CNY
      */
     @Getter
@@ -202,17 +217,23 @@ public class NotifyResponse extends Response {
     @Getter
     @XmlElement
     private String coupon_fee_0;
-
+    
+    /**
+     * 对当前查询订单状态的描述和下一步操作的指引
+     */
+    @Getter
+    @XmlElement
+    private String trade_state_desc;
     
     public boolean isSuccess(){
         return StringUtils.isNotBlank(return_code) && this.return_code.equals("SUCCESS") && this.result_code.equals("SUCCESS");
     }
     
-    public String successResponse(){
-        return "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
-    }
-    
-    public String failResponse(String msg){
-        return "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA["+msg+"]]></return_msg></xml>";
-    }
+//    public String successResponse(){
+//        return "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
+//    }
+//    
+//    public String failResponse(String msg){
+//        return "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA["+msg+"]]></return_msg></xml>";
+//    }
 }

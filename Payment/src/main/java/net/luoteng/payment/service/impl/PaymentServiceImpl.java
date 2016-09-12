@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -38,6 +39,7 @@ import javax.transaction.Transactional;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 import net.luoteng.model.common.RestResponse;
 import net.luoteng.payment.model.OrderRequest;
 import net.luoteng.payment.model.Response;
@@ -62,6 +64,7 @@ import net.luoteng.enums.SignType;
 import net.luoteng.model.AbstractObject;
 import net.luoteng.payment.model.alipay.AlipayOrder;
 import net.luoteng.payment.model.enums.TradeType;
+import net.luoteng.payment.model.wechat.NotifyResponse;
 import net.luoteng.payment.model.wechat.WechatOrderQueryRequest;
 import net.luoteng.payment.properties.AlipayProperties;
 import net.luoteng.payment.properties.WechatNativeProperties;
@@ -549,6 +552,19 @@ public class PaymentServiceImpl implements PaymentService, TimeConstant, GlobalC
             log.error("xml generate exception {}", ex);
         }
         
+        return null;
+    }
+    
+    private <T extends AbstractObject> T toObject(String xml, Class<T> clazz) {
+        try {
+            JAXBContext jaxbContext = JAXBContext.newInstance(clazz);
+            Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+            
+            StringReader reader = new StringReader(xml);
+            return (T) unmarshaller.unmarshal(reader);
+        } catch (JAXBException ex) {
+            log.error("xml generate exception {}", ex);
+        }
         return null;
     }
     
