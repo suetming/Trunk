@@ -18,10 +18,12 @@
 
 package net.luoteng.wechat.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -35,18 +37,24 @@ import javax.annotation.PostConstruct;
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
+import javax.xml.bind.JAXBException;
 import lombok.extern.slf4j.Slf4j;
 import net.luoteng.constant.GlobalConstant;
+import net.luoteng.enums.DataType;
+import net.luoteng.enums.ResponseCode;
+import net.luoteng.model.AbstractObject;
 import net.luoteng.model.common.RestResponse;
 import net.luoteng.utils.FormUtils;
+import net.luoteng.utils.XMLUtils;
+import net.luoteng.wechat.enums.GrantType;
+import net.luoteng.wechat.model.AccessToken;
+import net.luoteng.wechat.model.AccessTokenRequest;
 import net.luoteng.wechat.properties.WechatNativeProperties;
 import net.luoteng.wechat.properties.WechatProperties;
 import net.luoteng.wechat.properties.WechatPublicProperties;
 import net.luoteng.wechat.service.WechatService;
-import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -105,17 +113,40 @@ public class WechatServiceImpl implements WechatService, GlobalConstant {
         }
     }
     
-//    public RestResponse getAccessToken() {
-//        FormUtils.toFormUrlEncode(client);
-//        String url = String.format("%1$s?%2$s", args);
-//    }
+    public RestResponse getAccessToken() {
+        RestResponse response = new RestResponse();
+        try {
+            String form = FormUtils.toFormUrlEncode(
+                    new AccessTokenRequest(
+                            GrantType.client_credential.name(),
+                            wechatConfig.getAppId(), 
+                            wechatConfig.getAppSecret()));
+            String url = String.format("%1$s?%2$s", wechatConfig.getUriOrder(), form);
+            return response.success(get(url, DataType.JSON, AccessToken.class));
+        } catch (IOException ex) {
+            log.error("wechat access token exception {}", ex);
+            return response.error(ResponseCode.ERROR_THIRD_PLATFORM);
+        }
+    }
     
-    private String get(String url) throws IOException {
+    private <T extends AbstractObject> T get(String url, DataType dataType, Class<T> clazz) throws IOException {
         Request request = new Request.Builder().url(url).get().build();
         okhttp3.Response response = client.newCall(request).execute();
-        String result = response.body().string();
-        log.info("wechat get url {}, result {}", url, result);
-        return result;
+        String plain = response.body().string();
+        log.info("wechat get url {}, result {}", url, plain);
+        
+        if (dataType == DataType.JSON) {
+            return JSON.parseObject(plain, clazz);
+        } else if (dataType == DataType.XML) {
+            
+            try {
+                return XMLUtils.toObject(plain, clazz);
+            } catch (JAXBException ex) {
+                log.error("wechat xml to object error {}", ex);
+            }
+        }
+        
+        return null;
     }
     
 }

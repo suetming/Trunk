@@ -119,6 +119,11 @@ public class WechatProperties extends AbstractObject {
      * @return
      */
     private String uriRefund;
+    
+    /**
+     * 获取access token
+     */
+    private String uriAccessToken;
 
     /**
      * HTTPS证书的本地路径(pkcs8格式)
@@ -268,6 +273,14 @@ public class WechatProperties extends AbstractObject {
 
     public void setMchSecret(String mchSecret) {
         this.mchSecret = mchSecret;
+    }
+
+    public String getUriAccessToken() {
+        return uriAccessToken;
+    }
+
+    public void setUriAccessToken(String uriAccessToken) {
+        this.uriAccessToken = uriAccessToken;
     }
     
 }

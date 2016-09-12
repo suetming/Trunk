@@ -5,9 +5,6 @@
  */
 package net.luoteng.enums;
 
-import java.util.Arrays;
-import java.util.List;
-
 /**
  * response code
  *
@@ -19,6 +16,7 @@ public enum ResponseCode implements BaseEnum {
 
     SUCCESS("成功", 0000),
     ERROR_UNKNOW("未知错误", 100),
+    ERROR_THIRD_PLATFORM("第三方平台错误", 200),
     
     /**
      * 客户端错误

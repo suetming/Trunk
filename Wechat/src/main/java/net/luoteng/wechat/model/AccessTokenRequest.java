@@ -18,6 +18,8 @@
 
 package net.luoteng.wechat.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import net.luoteng.model.AbstractObject;
 
 /**
@@ -26,6 +28,8 @@ import net.luoteng.model.AbstractObject;
  * @author suetming <suetming.ma at gmail.com>
  * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
  */
+@Data
+@AllArgsConstructor
 public class AccessTokenRequest extends AbstractObject {
 
     /**
