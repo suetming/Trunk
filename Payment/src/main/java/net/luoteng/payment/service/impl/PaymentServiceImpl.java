@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.KeyManagementException;
@@ -27,11 +28,16 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.transaction.Transactional;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import net.luoteng.model.common.RestResponse;
 import net.luoteng.payment.model.OrderRequest;
 import net.luoteng.payment.model.Response;
@@ -53,8 +59,10 @@ import net.luoteng.constant.GlobalConstant;
 import net.luoteng.constant.TimeConstant;
 import net.luoteng.entity.embedded.RealmEntity;
 import net.luoteng.enums.SignType;
+import net.luoteng.model.AbstractObject;
 import net.luoteng.payment.model.alipay.AlipayOrder;
 import net.luoteng.payment.model.enums.TradeType;
+import net.luoteng.payment.model.wechat.WechatOrderQueryRequest;
 import net.luoteng.payment.properties.AlipayProperties;
 import net.luoteng.payment.properties.WechatNativeProperties;
 import net.luoteng.payment.properties.WechatProperties;
@@ -526,4 +534,22 @@ public class PaymentServiceImpl implements PaymentService, TimeConstant, GlobalC
         response.setMyTimestamp(String.valueOf(System.currentTimeMillis() / 1000));
         response.setMyNoncestr(nonce);
     }
+    
+    private String toXML(AbstractObject object) {
+        try {
+            JAXBContext jaxbContext = JAXBContext.newInstance(WechatOrderQueryRequest.class);
+            Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+            // output pretty printed
+            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+            StringWriter sw = new StringWriter();
+            jaxbMarshaller.marshal(object, sw);
+            return sw.toString();
+        } catch (JAXBException ex) {
+            log.error("xml generate exception {}", ex);
+        }
+        
+        return null;
+    }
+    
 }

@@ -10,6 +10,7 @@ import javax.xml.bind.annotation.XmlElement;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import net.luoteng.payment.model.Response;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * 
@@ -204,7 +205,7 @@ public class NotifyResponse extends Response {
 
     
     public boolean isSuccess(){
-        return this.return_code.equals("SUCCESS") && this.result_code.equals("SUCCESS");
+        return StringUtils.isNotBlank(return_code) && this.return_code.equals("SUCCESS") && this.result_code.equals("SUCCESS");
     }
     
     public String successResponse(){

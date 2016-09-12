@@ -24,7 +24,7 @@ public interface PaymentService {
      * @param request
      * @return 
      */
-    public RestResponse preOrders(String userId, OrderRequest request) ;
+    RestResponse preOrders(String userId, OrderRequest request) ;
  
     /**
      * 验证是否是正确的源发出的回调
@@ -32,6 +32,6 @@ public interface PaymentService {
      * @param response
      * @return 
      */
-    public boolean verifyNotify(Response response);
-    
+    boolean verifyNotify(Response response);
+ 
 }
