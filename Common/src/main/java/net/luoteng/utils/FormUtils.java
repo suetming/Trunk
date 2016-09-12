@@ -20,8 +20,13 @@ package net.luoteng.utils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 //import javax.ws.rs.core.Form;
 import net.luoteng.constant.GlobalConstant;
 import org.apache.commons.beanutils.BeanMap;
@@ -73,9 +78,23 @@ public class FormUtils implements GlobalConstant {
         return buffer.substring(1);
     }
     
-    public static String toFormUrlEncode(Object request) throws UnsupportedEncodingException {
+    public static String toFormUrlEncode(Object request, boolean sorted) throws UnsupportedEncodingException {
         StringBuilder buffer = new StringBuilder();
-        for (Object entryObj : new BeanMap(request).entrySet()) {
+        
+        List<Entry<Object, Object>> entrys = new ArrayList<>(new BeanMap(request).entrySet());
+        
+        if (sorted) {
+            Collections.sort(entrys, new Comparator<Entry<Object, Object>>(){
+                @Override
+                public int compare(Entry<Object, Object> o1, Entry<Object, Object> o2) {
+                    String key1 = o1.getKey().toString();
+                    String key2 = o2.getKey().toString();
+                    return key1.charAt(0) - key2.charAt(0);
+                }
+            });
+        }
+        
+        for (Object entryObj : entrys) {
             Map.Entry entry = (Map.Entry) entryObj;
             String key = entry.getKey().toString();
             

@@ -5,12 +5,10 @@
  */
 package net.luoteng.payment.service.impl;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.KeyManagementException;
@@ -21,14 +19,8 @@ import java.security.SecureRandom;
 import java.security.UnrecoverableKeyException;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
@@ -46,9 +38,6 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import lombok.extern.slf4j.Slf4j;
@@ -56,7 +45,6 @@ import net.luoteng.constant.GlobalConstant;
 import net.luoteng.constant.TimeConstant;
 import net.luoteng.enums.PayType;
 import net.luoteng.enums.SignType;
-import net.luoteng.model.AbstractObject;
 import net.luoteng.payment.model.alipay.AlipayOrder;
 import net.luoteng.payment.model.enums.TradeType;
 import net.luoteng.payment.model.wechat.WechatOrderQueryRequest;
@@ -336,7 +324,7 @@ public class PaymentServiceImpl implements PaymentService, TimeConstant, GlobalC
 
         try {
             String orderInfo = order.orderInfoXML(wechatAppSecret(request.getTradeType()));
-            return getResponse(orderInfo, true);
+            return getResponse(wechatConfig.getUriPrepay(), orderInfo, true);
         } catch (UnsupportedEncodingException ex) {
             log.error("unsupported encoding exception userId:{}, request:{}", userId, request);
         }
@@ -351,94 +339,29 @@ public class PaymentServiceImpl implements PaymentService, TimeConstant, GlobalC
      * @param ios
      * @return
      */
-    private PaymentResponse getResponse(String orderInfoXML, boolean ios) {
+    private PaymentResponse getResponse(String url, String orderInfoXML, boolean ios) {
         log.info("get wechat prepayid.orderInfoXML=[{}].", orderInfoXML);
         try {
-            String response = post(wechatConfig.getUriPrepay(), orderInfoXML);
-            return prepayResponse(response, ios);
-        } catch (JDOMException | IOException ex) {
+            String response = post(url, orderInfoXML);
+            PaymentResponse prepayResponse = XMLUtils.toObject(response, PaymentResponse.class);
+            adjust(prepayResponse, ios);
+            return prepayResponse;
+        } catch (IOException | JAXBException ex) {
             log.error("weixin prepayid return bad response.", ex);
             return null;
         }
     }
 
-    private String post(String url, String json) throws IOException {
-        RequestBody body = RequestBody.create(MediaType.parse("application/xml; charset=utf-8;"), json);
+    private String post(String url, String plain) throws IOException {
+        RequestBody body = RequestBody.create(MediaType.parse("application/xml; charset=utf-8;"), plain);
         Request request = new Request.Builder()
                 .url(url)
                 .post(body)
                 .build();
         okhttp3.Response response = client.newCall(request).execute();
-        return response.body().string();
-    }
-
-    private PaymentResponse prepayResponse(String strxml, boolean ios) throws JDOMException, IOException {// TODO 待优化代码
-        PaymentResponse prepayResponse = new PaymentResponse();
-        strxml = strxml.replaceFirst("encoding=\".*\"", "encoding=\"UTF-8\"");
-
-        if (null == strxml || "".equals(strxml)) {
-            return null;
-        }
-
-        Map m = new HashMap();
-
-        try (InputStream in = new ByteArrayInputStream(strxml.getBytes("UTF-8"))) {
-            SAXBuilder builder = new SAXBuilder();
-            org.jdom.Document doc = builder.build(in);
-            List list = doc.getRootElement().getChildren();
-            Iterator it = list.iterator();
-            while (it.hasNext()) {
-                Element e = (Element) it.next();
-                String k = e.getName();
-                String v = e.getTextNormalize();
-                m.put(k, v);
-
-                switch (k) {
-                    case "return_code":
-                        prepayResponse.setReturn_code(e.getTextNormalize());
-                        break;
-                    case "return_msg":
-                        prepayResponse.setReturn_msg(e.getTextNormalize());
-                        break;
-                    case "appid":
-                        prepayResponse.setAppid(e.getTextNormalize());
-                        break;
-                    case "mch_id":
-                        prepayResponse.setMch_id(e.getTextNormalize());
-                        break;
-                    case "device_info":
-                        prepayResponse.setDevice_info(e.getTextNormalize());
-                        break;
-                    case "nonce_str":
-                        prepayResponse.setNonce_str(e.getTextNormalize());
-                        break;
-                    case "sign":
-                        prepayResponse.setSign(e.getTextNormalize());
-                        break;
-                    case "result_code":
-                        prepayResponse.setResult_code(e.getTextNormalize());
-                        break;
-                    case "err_code":
-                        prepayResponse.setErr_code(e.getTextNormalize());
-                        break;
-                    case "err_code_des":
-                        prepayResponse.setErr_code_des(e.getTextNormalize());
-                        break;
-                    case "trade_type":
-                        prepayResponse.setTrade_type(e.getTextNormalize());
-                        break;
-                    case "prepay_id":
-                        prepayResponse.setPrepay_id(e.getTextNormalize());
-                        break;
-                    case "code_url":
-                        prepayResponse.setCode_url(e.getTextNormalize());
-                        break;
-                }
-            }
-            adjust(prepayResponse, ios);
-        }
-        log.debug("wechat public prepayResponse=[{}]", prepayResponse);
-        return prepayResponse;
+        String result = response.body().string();
+        log.info("post url {}, plain {} result {}", url, plain, result);
+        return result;
     }
 
     /**
@@ -530,23 +453,23 @@ public class PaymentServiceImpl implements PaymentService, TimeConstant, GlobalC
             return;
         }
 
-        String pack = ios ? "&package=Sign=WXPay" : "&package=prepay_id=" + response.getPrepay_id();
-        boolean platform = response.getTrade_type().contentEquals("JSAPI");
+        String pack = ios ? "&package=Sign=WXPay" : "&package=prepay_id=" + response.prepay_id;
+        boolean platform = response.trade_type.contentEquals("JSAPI");
 
         String nonce = String.valueOf(System.currentTimeMillis());
         String timestamp = String.valueOf(System.currentTimeMillis() / 1000);
-        String toSign = "appId=" + response.getAppid()
+        String toSign = "appId=" + response.appid
                 + "&nonceStr=" + nonce
                 + pack
-                + (platform ? "" : "&partnerid=" + response.getMch_id())
-                + (platform ? "" : "&prepayid=" + response.getPrepay_id())
+                + (platform ? "" : "&partnerid=" + response.mch_id)
+                + (platform ? "" : "&prepayid=" + response.prepay_id)
                 + (platform ? "&signType=MD5" : "")
                 + "&timeStamp=" + timestamp
-                + "&key=" + wechatAppSecret(EnumUtils.getEnumByNameOrNull(TradeType.class, response.getTrade_type()));
+                + "&key=" + wechatAppSecret(EnumUtils.getEnumByNameOrNull(TradeType.class, response.trade_type));
         String mySign = MD5Utils.MD5Encode(toSign, "UTF-8").toUpperCase();
-        response.setMySign(mySign);
-        response.setMyTimestamp(String.valueOf(System.currentTimeMillis() / 1000));
-        response.setMyNoncestr(nonce);
+        response.mySign = mySign;
+        response.myTimestamp = String.valueOf(System.currentTimeMillis() / 1000);
+        response.myNoncestr = nonce;
     }
     
     private PaymentResponse queryWechatOrder(String orderId) {
@@ -557,13 +480,13 @@ public class PaymentServiceImpl implements PaymentService, TimeConstant, GlobalC
                     String.valueOf(System.currentTimeMillis()),
                     orderId);
             
-            String form = String.format("%1$s&key=%2$s", FormUtils.toFormUrlEncode(request), wechatConfig.getAppSecret());
+            String form = String.format("%1$s&key=%2$s", FormUtils.toFormUrlEncode(request, true), wechatConfig.getAppSecret());
             
             request.setSign(MD5Utils.MD5Encode(form, "UTF-8").toUpperCase());
-            String xml = XMLUtils.toXML(request);
-            return getResponse(xml, true);
-        } catch (JAXBException | UnsupportedEncodingException ex) {
-            log.error("query wechat order error {}", orderId);
+            
+            return XMLUtils.toObject(post(wechatConfig.getUriOrder(), XMLUtils.toXML(request)), PaymentResponse.class);
+        } catch (JAXBException | IOException ex) {
+            log.error("query wechat order error {}", ex);
         }
         return null;
     }

@@ -22,7 +22,9 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import net.luoteng.model.AbstractObject;
 
 /**
@@ -32,6 +34,8 @@ import net.luoteng.model.AbstractObject;
  * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @XmlRootElement(name = "xml")
 @XmlAccessorType(XmlAccessType.NONE)
 public class WechatOrderQueryRequest extends AbstractObject {
