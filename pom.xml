@@ -26,6 +26,7 @@
         <module>Captcha</module>
         <module>Message</module>
         <module>User</module>
+        <module>Wechat</module>
     </modules>
 </project>
 

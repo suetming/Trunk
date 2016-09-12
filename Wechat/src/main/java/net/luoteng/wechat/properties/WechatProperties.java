@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.luoteng.payment.properties;
+package net.luoteng.wechat.properties;
 
 import net.luoteng.model.AbstractObject;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -14,7 +14,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author suetming <suetming.ma at gmail.com>
  * Copyright(c) @2016 Luoteng Company, Inc. All Rights Reserved.
  */
-@ConfigurationProperties(prefix = "net.luoteng.payment.wechat")
+@ConfigurationProperties(prefix = "net.luoteng.wechat")
 public class WechatProperties extends AbstractObject {
 
     /**

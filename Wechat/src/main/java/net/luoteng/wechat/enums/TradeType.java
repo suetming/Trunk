@@ -16,22 +16,39 @@
  * limitations under the License.
  */
 
-package net.luoteng.user.service;
+package net.luoteng.wechat.enums;
 
-import net.luoteng.service.CrudService;
-import net.luoteng.user.entity.SocialUser;
-import net.luoteng.user.enums.SocialType;
+import net.luoteng.enums.BaseEnum;
 
 /**
- * social user service
+ * 
  *
  * @author suetming <suetming.ma at gmail.com>
  * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
  */
-public interface SocialUserService extends CrudService<SocialUser>{
+public enum TradeType implements BaseEnum {
+    
+    /**
+     * APP支付
+     */
+    APP,
+    
+    /**
+     * 原生扫码支付
+     */
+    NATIVE,
+    
+    /**
+     * 公众号支付
+     */
+    JSAPI;
 
+    TradeType() {
+    }
     
-    SocialUser getByUser(String userId, SocialType type);
-    
+    @Override
+    public String getMsg() {
+        return "";
+    }
     
 }

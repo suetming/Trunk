@@ -16,22 +16,13 @@
  * limitations under the License.
  */
 
-package net.luoteng.user.service;
-
-import net.luoteng.service.CrudService;
-import net.luoteng.user.entity.SocialUser;
-import net.luoteng.user.enums.SocialType;
+package net.luoteng.wechat.service;
 
 /**
- * social user service
  *
  * @author suetming <suetming.ma at gmail.com>
  * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
  */
-public interface SocialUserService extends CrudService<SocialUser>{
+public interface WechatService {
 
-    
-    SocialUser getByUser(String userId, SocialType type);
-    
-    
 }

@@ -16,22 +16,22 @@
  * limitations under the License.
  */
 
-package net.luoteng.user.service;
+package net.luoteng.wechat.model;
 
-import net.luoteng.service.CrudService;
-import net.luoteng.user.entity.SocialUser;
-import net.luoteng.user.enums.SocialType;
+import lombok.Data;
+import net.luoteng.model.AbstractObject;
 
 /**
- * social user service
+ * 
  *
  * @author suetming <suetming.ma at gmail.com>
  * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
  */
-public interface SocialUserService extends CrudService<SocialUser>{
+@Data
+public class AccessToken extends AbstractObject {
 
+    private String access_token;
     
-    SocialUser getByUser(String userId, SocialType type);
-    
+    private String expires_in;
     
 }

@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package net.luoteng.payment.properties;
+package net.luoteng.wechat.properties;
 
 import net.luoteng.model.AbstractObject;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -27,7 +27,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author suetming <suetming.ma at gmail.com>
  * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
  */
-@ConfigurationProperties(prefix = "net.luoteng.payment.wechat.native")
+@ConfigurationProperties(prefix = "net.luoteng.wechat.native")
 public class WechatNativeProperties extends AbstractObject {
 
     /**

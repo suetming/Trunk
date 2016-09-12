@@ -14,7 +14,7 @@ import lombok.Setter;
 import net.luoteng.entity.embedded.RealmEntity;
 import net.luoteng.enums.PayType;
 import net.luoteng.model.AbstractObject;
-import net.luoteng.payment.model.enums.TradeType;
+import net.luoteng.wechat.enums.TradeType;
 
 /**
  *
