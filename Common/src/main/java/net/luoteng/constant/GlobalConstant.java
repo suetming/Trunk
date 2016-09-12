@@ -20,6 +20,11 @@ public interface GlobalConstant {
     String GLOBAL_APPLICATION_JSON = "application/json; charset=utf-8";
     
     /**
+     * 
+     */
+    String GLOBAL_APPLICATION_XML = "application/xml; charset=utf-8;";
+    
+    /**
      * 项目名称
      */
     String GLOBAL_NAME = "罗藤";

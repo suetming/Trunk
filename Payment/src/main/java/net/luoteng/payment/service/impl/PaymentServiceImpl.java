@@ -94,7 +94,7 @@ public class PaymentServiceImpl implements PaymentService, TimeConstant, GlobalC
 
     @PostConstruct
     public void init() {
-        log.info("payment service init {}", wechatNativeConfig);
+        log.info("payment service init");
 
         client = new OkHttpClient();
         try (FileInputStream instream = new FileInputStream(new File(wechatConfig.getPathLocalCert()))) {

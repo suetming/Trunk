@@ -18,7 +18,6 @@
 
 package net.luoteng.wechat.model;
 
-import lombok.Data;
 import net.luoteng.model.AbstractObject;
 
 /**
@@ -27,14 +26,21 @@ import net.luoteng.model.AbstractObject;
  * @author suetming <suetming.ma at gmail.com>
  * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
  */
-@Data
-public class AccessToken extends AbstractObject {
+public class AccessTokenRequest extends AbstractObject {
 
     /**
-     * 
+     * 获取access_token填写client_credential
      */
-    private String access_token;
+    private String grant_type;
     
-    private String expires_in;
+    /**
+     * 第三方用户唯一凭证
+     */
+    private String appid;
+    
+    /**
+     * 第三方用户唯一凭证密钥，即appsecret
+     */
+    private String secret;
     
 }

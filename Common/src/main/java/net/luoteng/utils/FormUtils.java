@@ -78,6 +78,10 @@ public class FormUtils implements GlobalConstant {
         return buffer.substring(1);
     }
     
+    public static String toFormUrlEncode(Object request) throws UnsupportedEncodingException {
+        return toFormUrlEncode(request, false);
+    }
+    
     public static String toFormUrlEncode(Object request, boolean sorted) throws UnsupportedEncodingException {
         StringBuilder buffer = new StringBuilder();
         
