@@ -66,4 +66,15 @@ public class WechatOrderQueryRequest extends AbstractObject {
     @XmlElement
     private String sign;
     
+    public WechatOrderQueryRequest(
+            String appid, 
+            String mchid, 
+            String nonce, 
+            String outTradeNo) {
+        this.appid = appid;
+        this.mch_id = mchid;
+        this.nonce_str = nonce;
+        this.out_trade_no = outTradeNo;
+    }
+    
 }

@@ -6,12 +6,6 @@
 
 package net.luoteng.payment.model.wechat;
 
-import java.io.StringReader;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import lombok.Getter;
@@ -229,11 +223,12 @@ public class NotifyResponse extends Response {
         return StringUtils.isNotBlank(return_code) && this.return_code.equals("SUCCESS") && this.result_code.equals("SUCCESS");
     }
     
-//    public String successResponse(){
-//        return "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
-//    }
-//    
-//    public String failResponse(String msg){
-//        return "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA["+msg+"]]></return_msg></xml>";
-//    }
+    public String successResponse(){
+        return "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
+    }
+    
+    public String failResponse(String msg){
+        return "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA["+msg+"]]></return_msg></xml>";
+    }
+    
 }

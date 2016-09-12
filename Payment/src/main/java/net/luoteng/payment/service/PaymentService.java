@@ -6,6 +6,7 @@
 
 package net.luoteng.payment.service;
 
+import net.luoteng.enums.PayType;
 import net.luoteng.payment.model.OrderRequest;
 import net.luoteng.payment.model.Response;
 import net.luoteng.model.common.RestResponse;
@@ -34,4 +35,13 @@ public interface PaymentService {
      */
     boolean verifyNotify(Response response);
  
+    /**
+     * 订单查询 （http request）
+     * 
+     * @param orderId
+     * @param payType
+     * @return 
+     */
+    RestResponse query(String orderId, PayType payType);
+    
 }

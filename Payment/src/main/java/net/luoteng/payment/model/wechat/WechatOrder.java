@@ -222,7 +222,6 @@ public class WechatOrder extends Response {
 
     private String sign(String appKey) throws UnsupportedEncodingException {
         String plain = orderInfo() + "&key=" + appKey;
-        log.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! {}", plain);
         String result = MD5Utils.MD5Encode(plain, "UTF-8").toUpperCase();
         return result;
     }

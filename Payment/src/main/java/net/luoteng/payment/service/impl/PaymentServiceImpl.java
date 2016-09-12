@@ -11,8 +11,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringReader;
-import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.KeyManagementException;
@@ -36,10 +34,7 @@ import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.transaction.Transactional;
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 import net.luoteng.model.common.RestResponse;
 import net.luoteng.payment.model.OrderRequest;
 import net.luoteng.payment.model.Response;
@@ -59,12 +54,11 @@ import org.springframework.stereotype.Component;
 import lombok.extern.slf4j.Slf4j;
 import net.luoteng.constant.GlobalConstant;
 import net.luoteng.constant.TimeConstant;
-import net.luoteng.entity.embedded.RealmEntity;
+import net.luoteng.enums.PayType;
 import net.luoteng.enums.SignType;
 import net.luoteng.model.AbstractObject;
 import net.luoteng.payment.model.alipay.AlipayOrder;
 import net.luoteng.payment.model.enums.TradeType;
-import net.luoteng.payment.model.wechat.NotifyResponse;
 import net.luoteng.payment.model.wechat.WechatOrderQueryRequest;
 import net.luoteng.payment.properties.AlipayProperties;
 import net.luoteng.payment.properties.WechatNativeProperties;
@@ -72,6 +66,8 @@ import net.luoteng.payment.properties.WechatProperties;
 import net.luoteng.payment.properties.WechatPublicProperties;
 import net.luoteng.payment.utils.SignUtils;
 import net.luoteng.utils.EnumUtils;
+import net.luoteng.utils.FormUtils;
+import net.luoteng.utils.XMLUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 
@@ -149,6 +145,21 @@ public class PaymentServiceImpl implements PaymentService, TimeConstant, GlobalC
             default:
                 throw new UnsupportedOperationException("Not supported yet.");
         }
+    }
+    
+    @Override
+    public RestResponse query(String orderId, PayType payType) {
+        RestResponse response = new RestResponse();
+        // 订单
+        switch(payType) {
+            case wechat:
+                response.success(queryWechatOrder(orderId));
+                break;
+            case alipay:
+                break;
+        }
+        
+        return response;
     }
 
     @Override
@@ -538,32 +549,21 @@ public class PaymentServiceImpl implements PaymentService, TimeConstant, GlobalC
         response.setMyNoncestr(nonce);
     }
     
-    private String toXML(AbstractObject object) {
+    private PaymentResponse queryWechatOrder(String orderId) {
         try {
-            JAXBContext jaxbContext = JAXBContext.newInstance(WechatOrderQueryRequest.class);
-            Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-            // output pretty printed
-            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-
-            StringWriter sw = new StringWriter();
-            jaxbMarshaller.marshal(object, sw);
-            return sw.toString();
-        } catch (JAXBException ex) {
-            log.error("xml generate exception {}", ex);
-        }
-        
-        return null;
-    }
-    
-    private <T extends AbstractObject> T toObject(String xml, Class<T> clazz) {
-        try {
-            JAXBContext jaxbContext = JAXBContext.newInstance(clazz);
-            Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+            WechatOrderQueryRequest request = new WechatOrderQueryRequest(
+                    wechatConfig.getAppId(),
+                    wechatConfig.getMchId(), 
+                    String.valueOf(System.currentTimeMillis()),
+                    orderId);
             
-            StringReader reader = new StringReader(xml);
-            return (T) unmarshaller.unmarshal(reader);
-        } catch (JAXBException ex) {
-            log.error("xml generate exception {}", ex);
+            String form = String.format("%1$s&key=%2$s", FormUtils.toFormUrlEncode(request), wechatConfig.getAppSecret());
+            
+            request.setSign(MD5Utils.MD5Encode(form, "UTF-8").toUpperCase());
+            String xml = XMLUtils.toXML(request);
+            return getResponse(xml, true);
+        } catch (JAXBException | UnsupportedEncodingException ex) {
+            log.error("query wechat order error {}", orderId);
         }
         return null;
     }
