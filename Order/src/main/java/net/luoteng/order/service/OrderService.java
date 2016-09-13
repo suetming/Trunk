@@ -88,6 +88,12 @@ public interface OrderService extends BaseService<Order> {
     );
     
     /**
+     * 
+     * @return 
+     */
+    String orderId();
+    
+    /**
      * 标记支付成功
      * 
      * @param id
