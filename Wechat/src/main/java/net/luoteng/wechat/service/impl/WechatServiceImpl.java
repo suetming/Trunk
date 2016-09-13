@@ -56,6 +56,7 @@ import net.luoteng.wechat.service.WechatService;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * 
@@ -64,6 +65,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
  */
 @Slf4j
+@Component
 public class WechatServiceImpl implements WechatService, GlobalConstant {
 
     /**
@@ -113,6 +115,7 @@ public class WechatServiceImpl implements WechatService, GlobalConstant {
         }
     }
     
+    @Override
     public RestResponse getAccessToken() {
         RestResponse response = new RestResponse();
         try {
@@ -121,7 +124,7 @@ public class WechatServiceImpl implements WechatService, GlobalConstant {
                             GrantType.client_credential.name(),
                             wechatConfig.getAppId(), 
                             wechatConfig.getAppSecret()));
-            String url = String.format("%1$s?%2$s", wechatConfig.getUriOrder(), form);
+            String url = String.format("%1$s?%2$s", wechatConfig.getUriAccessToken(), form);
             return response.success(get(url, DataType.JSON, AccessToken.class));
         } catch (IOException ex) {
             log.error("wechat access token exception {}", ex);
