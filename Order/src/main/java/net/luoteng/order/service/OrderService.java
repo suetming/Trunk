@@ -66,6 +66,7 @@ public interface OrderService extends BaseService<Order> {
     /**
      * 预生成订单
      * 
+     * @param orderId
      * @param userId
      * @param owner
      * @param type
@@ -77,6 +78,7 @@ public interface OrderService extends BaseService<Order> {
      * @return 
      */
     Order generate(
+            String orderId,
             String userId, 
             RealmEntity owner, 
             OrderType type, 
