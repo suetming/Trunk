@@ -40,7 +40,7 @@ import net.luoteng.order.utils.OrderGenerator;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "t_order", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"orderID", "type", "status"})
+    @UniqueConstraint(columnNames = {"orderId", "type", "status"})
 })
 public class Order extends AbstractTimeScopeEntity {
 
@@ -50,7 +50,7 @@ public class Order extends AbstractTimeScopeEntity {
      * @return
      */
     @Column(nullable = false)
-    private String orderID;
+    private String orderId;
 
     /**
      * 三方生成的订单号
