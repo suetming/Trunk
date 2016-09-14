@@ -71,6 +71,13 @@ public class AlipayOrder extends Response {
     private String notify_url;
     
     /**
+     * 服务器同步跳转页面路径
+     */
+    @Getter
+    @Setter
+    private String return_url;
+    
+    /**
      * 服务接口名称
      */
     @Getter
@@ -100,5 +107,12 @@ public class AlipayOrder extends Response {
     @Getter
     @Setter
     private String it_b_pay;
+
+    /**
+     * 扫码支付的方式，支持前置模式和跳转模式。
+     */
+    @Getter
+    @Setter
+    private String qr_pay_mode;
     
 } 

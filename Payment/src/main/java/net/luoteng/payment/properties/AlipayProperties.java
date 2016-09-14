@@ -80,6 +80,13 @@ public class AlipayProperties {
     private String uriNotify;
 
     /**
+     * 同步通知
+     * 
+     * @return
+     */
+    private String uriReturn;
+    
+    /**
      * 充值回调
      *
      * @return
@@ -211,6 +218,13 @@ public class AlipayProperties {
     public void setUriGateway(String uriGateway) {
         this.uriGateway = uriGateway;
     }
-    
+
+    public String getUriReturn() {
+        return uriReturn;
+    }
+
+    public void setUriReturn(String uriReturn) {
+        this.uriReturn = uriReturn;
+    }
     
 }

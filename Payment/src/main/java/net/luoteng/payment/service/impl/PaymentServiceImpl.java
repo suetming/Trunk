@@ -46,6 +46,7 @@ import net.luoteng.constant.TimeConstant;
 import net.luoteng.enums.PayType;
 import net.luoteng.enums.SignType;
 import net.luoteng.payment.model.alipay.AlipayOrder;
+import net.luoteng.payment.model.enums.alipay.Service;
 import net.luoteng.payment.model.wechat.WechatOrderQueryRequest;
 import net.luoteng.payment.properties.AlipayProperties;
 import net.luoteng.payment.utils.SignUtils;
@@ -270,37 +271,41 @@ public class PaymentServiceImpl implements PaymentService, TimeConstant, GlobalC
 
         verifyStr += "&key=" + wechatAppSecret(EnumUtils.getEnumByNameOrNull(TradeType.class, response.getTrade_type()));
         String mySign = MD5Utils.MD5Encode(verifyStr, "UTF-8").toUpperCase();
-        log.debug("verify WeixinNotify, mySign=[{}] sign=[{}]", mySign, response.getSign());
+        log.debug("verify WechatNotify, mySign=[{}] sign=[{}]", mySign, response.getSign());
         return mySign.equals(response.getSign());
     }
 
     private String preAlipayOrders(String userId, OrderRequest request) {
-        // 订单
-        String orderInfo = getAlipayOrderInfo(
-                new AlipayOrder(
-                alipayConfig.getPartner(),
-                alipayConfig.getSellId(),
-                request.getOutTradeNo(),
-                request.getSubject(),
-                null != request.getBody() && request.getBody().length() > 150 ? request.getBody().substring(0, 150) : request.getBody(),
-                String.format("%.2f", request.getAmount() / 100.0),
-                String.format(alipayConfig.getUriNotify(), userId, request.getEntity().getRealm().name(), request.getEntity().getEntityId()),
-                "mobile.securitypay.pay",
-                "1",
-                GLOBAL_ENCODING,
-                String.format("%dm", request.getExpire() / 60000)));
-
-        // 对订单做RSA 签名
-        String sign = SignUtils.sign(orderInfo, alipayConfig.getPks8PrivateKey(), SignType.RSA);
         try {
+            // 订单
+            String orderInfo = FormUtils.toFormUrlEncode((
+                    new AlipayOrder(
+                    alipayConfig.getPartner(),
+                    alipayConfig.getSellId(),
+                    request.getOutTradeNo(),
+                    request.getSubject(),
+                    null != request.getBody() && request.getBody().length() > 150 ? request.getBody().substring(0, 150) : request.getBody(),
+                    String.format("%.2f", request.getAmount() / 100.0),
+                    String.format(alipayConfig.getUriNotify(), userId, request.getEntity().getRealm().name(), request.getEntity().getEntityId()),
+                    alipayConfig.getUriReturn(),
+                    Service.WEB.getMsg(),
+                    "1",
+                    GLOBAL_ENCODING,
+                    String.format("%dm", request.getExpire() / 60000), null)), true);
+
+            // 对订单做RSA 签名
+            String sign = SignUtils.sign(orderInfo, alipayConfig.getPks8PrivateKey(), SignType.RSA);
+        
             sign = URLEncoder.encode(sign, "UTF-8");
+            
+            // 完整的符合支付宝参数规范的订单信息
+            return orderInfo + "&sign=\"" + sign + "\"&sign_type=\"RSA\"";
+        
         } catch (UnsupportedEncodingException ex) {
             log.error("pre alipay order error {}", ex);
         }
 
-        // 完整的符合支付宝参数规范的订单信息
-        String payInfo = orderInfo + "&sign=\"" + sign + "\"&sign_type=\"RSA\"";
-        return payInfo;
+        return null;
     }
 
     private PaymentResponse preWechatOrders(String userId, OrderRequest request) {
@@ -374,7 +379,6 @@ public class PaymentServiceImpl implements PaymentService, TimeConstant, GlobalC
      * @return
      */
     private String getAlipayOrderInfo(AlipayOrder order) {// TODO
-
         // 参数编码， 固定值
         String orderInfo = "_input_charset=\"" + order.get_input_charset() + "\"";
 
@@ -412,6 +416,11 @@ public class PaymentServiceImpl implements PaymentService, TimeConstant, GlobalC
         // 商品金额
         orderInfo += "&total_fee=" + "\"" + order.getTotal_fee() + "\"";
 
+        if (StringUtils.isNotBlank(order.getReturn_url())) {
+            // 同步回调url
+            orderInfo += "&return_url=" + "\"" + order.getReturn_url()+ "\"";
+        }
+        
         return orderInfo;
     }
 
