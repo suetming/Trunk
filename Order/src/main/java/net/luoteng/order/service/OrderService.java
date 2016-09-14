@@ -104,6 +104,13 @@ public interface OrderService extends BaseService<Order> {
     boolean toSuccess(String id);
     
     /**
+     * 
+     * @param id
+     * @return 
+     */
+    boolean toFail(String id);
+    
+    /**
      * 标记取消支付
      * 
      * @param id

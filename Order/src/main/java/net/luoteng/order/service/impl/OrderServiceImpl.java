@@ -117,6 +117,15 @@ public class OrderServiceImpl implements OrderService {
     }
     
     @Override
+    public boolean toFail(String id) {
+        Order order = orderDAO.findOne(id);
+        order.setStatus(OrderStatus.FAILED);
+        order.setTimeFailed(new Date());
+        orderDAO.save(order);
+        return true;
+    }
+    
+    @Override
     public boolean toExpire(String id) {
         Order order = orderDAO.findOne(id);
         order.setStatus(OrderStatus.EXPIRED);
