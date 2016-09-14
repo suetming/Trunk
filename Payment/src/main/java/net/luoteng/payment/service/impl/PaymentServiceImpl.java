@@ -487,12 +487,12 @@ public class PaymentServiceImpl implements PaymentService, TimeConstant, GlobalC
     private PaymentResponse queryWechatOrder(String orderId) {
         try {
             WechatOrderQueryRequest request = new WechatOrderQueryRequest(
-                    wechatConfig.getAppId(),
-                    wechatConfig.getMchId(), 
+                    wechatAppId(TradeType.NATIVE),
+                    wechatMchId(TradeType.NATIVE),
                     String.valueOf(System.currentTimeMillis()),
                     orderId);
             
-            String form = String.format("%1$s&key=%2$s", FormUtils.toFormUrlEncode(request, true), wechatConfig.getAppSecret());
+            String form = String.format("%1$s&key=%2$s", FormUtils.toFormUrlEncode(request, true), wechatAppSecret(TradeType.NATIVE));
             
             request.setSign(MD5Utils.MD5Encode(form, "UTF-8").toUpperCase());
             
