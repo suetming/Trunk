@@ -41,8 +41,8 @@ public class OrderServiceImpl implements OrderService {
     OrderDAO orderDAO;
     
     @Override
-    public Order getByUser(String userId, OrderType type, OrderStatus status, RealmEntity owner) {
-        return orderDAO.getByUser(userId, type, status, owner);
+    public Order get(String orderId, OrderType type, OrderStatus status) {
+        return orderDAO.get(orderId, type, status);
     }
     
     @Override

@@ -53,14 +53,13 @@ public interface OrderDAO extends PagingAndSortingRepository<Order, String> {
     /**
      * 获取订单
      *
-     * @param userId
+     * @param orderId
      * @param type
      * @param status
-     * @param entity
      * @return
      */
-    @Query("select o from Order o where o.userId = :userId and o.type = :type and o.status = :status and o.owner= :owner")
-    Order getByUser(@Param("userId") String userId, @Param("type") OrderType type, @Param("status") OrderStatus status, @Param("owner") RealmEntity entity);
+    @Query("select o from Order o where o.orderId = :orderId and o.type = :type and o.status = :status")
+    Order get(@Param("orderId") String orderId, @Param("type") OrderType type, @Param("status") OrderStatus status);
 
     /**
      * 根据用户查找订单

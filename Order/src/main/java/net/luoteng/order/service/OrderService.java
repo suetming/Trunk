@@ -55,13 +55,12 @@ public interface OrderService extends BaseService<Order> {
     /**
      * 获取订单
      * 
-     * @param userId
+     * @param orderId
      * @param type
      * @param status
-     * @param owner
      * @return 
      */
-    Order getByUser(String userId, OrderType type, OrderStatus status, RealmEntity owner);
+    Order get(String orderId, OrderType type, OrderStatus status);
     
     /**
      * 预生成订单
