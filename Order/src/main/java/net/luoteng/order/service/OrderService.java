@@ -91,9 +91,10 @@ public interface OrderService extends BaseService<Order> {
     
     /**
      * 
-     * @return 
+     * @param id
+     * @param payType 
      */
-    String orderId();
+    void modifyPayType(String id, PayType payType);
     
     /**
      * 标记支付成功

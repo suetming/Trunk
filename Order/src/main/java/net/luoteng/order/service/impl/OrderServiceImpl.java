@@ -41,13 +41,15 @@ public class OrderServiceImpl implements OrderService {
     OrderDAO orderDAO;
     
     @Override
-    public String orderId() {
-        return OrderGenerator.order();
+    public Order getByUser(String userId, OrderType type, OrderStatus status, RealmEntity owner) {
+        return orderDAO.getByUser(userId, type, status, owner);
     }
     
     @Override
-    public Order getByUser(String userId, OrderType type, OrderStatus status, RealmEntity owner) {
-        return orderDAO.getByUser(userId, type, status, owner);
+    public void modifyPayType(String id, PayType payType) {
+        Order order = orderDAO.findOne(id);
+        order.setPayType(payType);
+        orderDAO.save(order);
     }
 
     @Override
