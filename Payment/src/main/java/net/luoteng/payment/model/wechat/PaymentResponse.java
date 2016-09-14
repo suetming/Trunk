@@ -92,6 +92,11 @@ public class PaymentResponse extends Response {
     @XmlElement
     public String code_url;
     
+    /**
+     * 交易状态
+     */
+    @XmlElement
+    public String trade_state;
     
     /**
      * 对预支付订单信息进行再签名
