@@ -293,6 +293,7 @@ public class PaymentServiceImpl implements PaymentService, TimeConstant, GlobalC
                     GLOBAL_ENCODING,
                     String.format("%dm", 30), null), true);
 //request.getExpire() / 60000
+            log.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!! alipay:{}", alipayConfig.getPks8PrivateKey());
             // 对订单做RSA 签名
             String sign = SignUtils.sign(orderInfo, alipayConfig.getPks8PrivateKey(), SignType.RSA);
         

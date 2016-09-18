@@ -185,7 +185,7 @@ public class Order extends AbstractTimeScopeEntity {
     private String priv;
 
     public Order(
-            String outOrderId,
+            String orderId,
             String userId,
             OrderType type,
             OrderStatus status,
@@ -196,8 +196,8 @@ public class Order extends AbstractTimeScopeEntity {
             long balanceAmount) {
         
         this(
-                OrderGenerator.order(),
-                outOrderId,
+                orderId,
+                null,
                 userId,
                 type,
                 status,
