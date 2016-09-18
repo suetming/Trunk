@@ -93,6 +93,13 @@ public class FormUtils implements GlobalConstant {
                 public int compare(Entry<Object, Object> o1, Entry<Object, Object> o2) {
                     String key1 = o1.getKey().toString();
                     String key2 = o2.getKey().toString();
+                    for (byte c1 : key1.getBytes()) {
+                        for(byte c2 : key2.getBytes()) {
+                            if (Math.abs(c1 - c2) > 0)
+                                return c1 - c2;
+                        }
+                    }
+                    
                     return key1.charAt(0) - key2.charAt(0);
                 }
             });
