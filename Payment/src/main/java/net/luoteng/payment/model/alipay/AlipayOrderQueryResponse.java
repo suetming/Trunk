@@ -15,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package net.luoteng.payment.model.alipay;
 
 import lombok.Data;
@@ -23,10 +22,10 @@ import net.luoteng.model.AbstractObject;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * 
+ *
  *
  * @author suetming <suetming.ma at gmail.com>
- * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
+ * Copyright(c) @2016 Luoteng Company, Inc. All Rights Reserved.
  */
 @Data
 public class AlipayOrderQueryResponse extends AbstractObject {
@@ -35,33 +34,42 @@ public class AlipayOrderQueryResponse extends AbstractObject {
      * 网关返回码
      */
     private String code;
-    
+
     private String msg;
-    
+
     private String sign;
+
+    private String sub_code;
+
+    private String sub_msg;
+
+    private Order alipay_trade_query_response;
     
-    private String trade_no;
-    
-    private String out_trade_no;
-    
-    private String buyer_logon_id;
-    
-    private String trade_status;
-    
-    private String total_amount;
-    
-    private String receipt_amount;
-    
-    private String buyer_pay_amount;
-    
-    private String send_pay_date;
-    
-    private String buyer_user_id;
-    
-    private String discount_goods_detail;
+    @Data
+    public static class Order extends AbstractObject {
+
+        private String trade_no;
+
+        private String out_trade_no;
+
+        private String buyer_logon_id;
+
+        private String trade_status;
+
+        private String total_amount;
+
+        private String receipt_amount;
+
+        private String buyer_pay_amount;
+
+        private String send_pay_date;
+
+        private String buyer_user_id;
+
+        private String discount_goods_detail;
+    }
     
     public boolean isSuccess() {
         return StringUtils.isNoneBlank(code) && code.contentEquals("10000");
     }
-    
 }
