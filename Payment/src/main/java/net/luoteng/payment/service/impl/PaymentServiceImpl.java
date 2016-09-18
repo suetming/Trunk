@@ -278,7 +278,7 @@ public class PaymentServiceImpl implements PaymentService, TimeConstant, GlobalC
     private String preAlipayOrders(String userId, OrderRequest request) {
         try {
             // 订单
-            String orderInfo = FormUtils.toFormUrlEncode((
+            String orderInfo = FormUtils.toFormUrlEncode(
                     new AlipayOrder(
                     alipayConfig.getPartner(),
                     alipayConfig.getSellId(),
@@ -291,8 +291,8 @@ public class PaymentServiceImpl implements PaymentService, TimeConstant, GlobalC
                     Service.WEB.getMsg(),
                     "1",
                     GLOBAL_ENCODING,
-                    String.format("%dm", request.getExpire() / 60000), null)), true);
-
+                    String.format("%dm", 30), null), true);
+//request.getExpire() / 60000
             // 对订单做RSA 签名
             String sign = SignUtils.sign(orderInfo, alipayConfig.getPks8PrivateKey(), SignType.RSA);
         
