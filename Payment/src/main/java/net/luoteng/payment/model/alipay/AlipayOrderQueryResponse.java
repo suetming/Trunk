@@ -30,23 +30,23 @@ import org.apache.commons.lang3.StringUtils;
 @Data
 public class AlipayOrderQueryResponse extends AbstractObject {
 
-    /**
-     * 网关返回码
-     */
-    private String code;
-
-    private String msg;
-
     private String sign;
 
-    private String sub_code;
-
-    private String sub_msg;
-
     private Order alipay_trade_query_response;
-    
+
     @Data
     public static class Order extends AbstractObject {
+
+        /**
+         * 网关返回码
+         */
+        private String code;
+
+        private String msg;
+
+        private String sub_code;
+
+        private String sub_msg;
 
         private String trade_no;
 
@@ -67,9 +67,10 @@ public class AlipayOrderQueryResponse extends AbstractObject {
         private String buyer_user_id;
 
         private String discount_goods_detail;
+
+        public boolean isSuccess() {
+            return StringUtils.isNoneBlank(code) && code.contentEquals("10000");
+        }
     }
-    
-    public boolean isSuccess() {
-        return StringUtils.isNoneBlank(code) && code.contentEquals("10000");
-    }
+
 }
