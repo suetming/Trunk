@@ -292,7 +292,7 @@ public class PaymentServiceImpl implements PaymentService, TimeConstant, GlobalC
                     Service.CREATE_DIRECT_PAY_BY_USER.getMsg(),
                     "1",
                     GLOBAL_ENCODING,
-                    String.format("%dm", 30), null, request.getEntity().getEntityId(), null, null);
+                    String.format("%dm", request.getExpire() / 60000), null, request.getEntity().getEntityId(), null, null);
             // 订单
             String form = FormUtils.toForm(order, true);
 
