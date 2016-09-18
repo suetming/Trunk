@@ -13,6 +13,7 @@ public enum SignType {
 
     MD5,
     DSA,
-    RSA;
+    RSA,
+    SHA1_WITH_RSA;
     
 }

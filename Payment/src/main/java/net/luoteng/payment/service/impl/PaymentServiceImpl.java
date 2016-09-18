@@ -277,11 +277,9 @@ public class PaymentServiceImpl implements PaymentService, TimeConstant, GlobalC
 
     private String preAlipayOrders(String userId, OrderRequest request) {
         try {
-            // 订单
-            String orderInfo = FormUtils.toFormUrlEncode(
-                    new AlipayOrder(
+            AlipayOrder order = new AlipayOrder(
                     alipayConfig.getPartner(),
-                    alipayConfig.getSellId(),
+                    alipayConfig.getPartner(),
                     request.getOutTradeNo(),
                     request.getSubject(),
                     null != request.getBody() && request.getBody().length() > 150 ? request.getBody().substring(0, 150) : request.getBody(),
@@ -291,16 +289,16 @@ public class PaymentServiceImpl implements PaymentService, TimeConstant, GlobalC
                     Service.WEB.getMsg(),
                     "1",
                     GLOBAL_ENCODING,
-                    String.format("%dm", 30), null), true);
-//request.getExpire() / 60000
-            log.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!! alipay:{}", alipayConfig.getPks8PrivateKey());
+                    String.format("%dm", 30), null, null, null);
+            // 订单
+            String form = FormUtils.toForm(order, true);
+           
             // 对订单做RSA 签名
-            String sign = SignUtils.sign(orderInfo, alipayConfig.getPks8PrivateKey(), SignType.RSA);
-        
-            sign = URLEncoder.encode(sign, "UTF-8");
+            order.setSign(SignUtils.sign(form, alipayConfig.getPks8PrivateKey(), SignType.SHA1_WITH_RSA));
+            order.setSign_type("RSA");
             
             // 完整的符合支付宝参数规范的订单信息
-            return orderInfo + "&sign=" + sign + "&sign_type=RSA";
+            return FormUtils.toFormUrlEncode(order);
         
         } catch (UnsupportedEncodingException ex) {
             log.error("pre alipay order error {}", ex);
@@ -371,58 +369,6 @@ public class PaymentServiceImpl implements PaymentService, TimeConstant, GlobalC
         String result = response.body().string();
         log.info("post url {}, plain {} result {}", url, plain, result);
         return result;
-    }
-
-    /**
-     * 创建支付宝订单信息
-     *
-     * @param order
-     * @return
-     */
-    private String getAlipayOrderInfo(AlipayOrder order) {// TODO
-        // 参数编码， 固定值
-        String orderInfo = "_input_charset=\"" + order.get_input_charset() + "\"";
-
-        // 商品详情
-        orderInfo += "&body=" + "\"" + order.getBody() + "\"";
-
-        // 设置未付款交易的超时时间
-        // 默认30分钟，一旦超时，该笔交易就会自动被关闭。
-        // 取值范围：1m～15d。
-        // m-分钟，h-小时，d-天，1c-当天（无论交易何时创建，都在0点关闭）。
-        // 该参数数值不接受小数点，如1.5h，可转换为90m。
-        orderInfo += "&it_b_pay=\"" + order.getIt_b_pay() + "\"";
-
-        // 服务器异步通知页面路径
-        orderInfo += "&notify_url=" + "\"" + order.getNotify_url() + "\"";
-
-        // 商户网站唯一订单号
-        orderInfo += "&out_trade_no=" + "\"" + order.getOut_trade_no() + "\"";
-
-        // 签约合作者身份ID
-        orderInfo += "&partner=" + "\"" + order.getPartner() + "\"";
-
-        // 支付类型， 固定值
-        orderInfo += "&payment_type=\"" + order.getPayment_type() + "\"";
-
-        // 签约卖家支付宝账号
-        orderInfo += "&seller_id=" + "\"" + order.getSeller_id() + "\"";
-
-        // 服务接口名称， 固定值
-        orderInfo += "&service=\"" + order.getService() + "\"";
-
-        // 商品名称
-        orderInfo += "&subject=" + "\"" + order.getSubject() + "\"";
-
-        // 商品金额
-        orderInfo += "&total_fee=" + "\"" + order.getTotal_fee() + "\"";
-
-        if (StringUtils.isNotBlank(order.getReturn_url())) {
-            // 同步回调url
-            orderInfo += "&return_url=" + "\"" + order.getReturn_url()+ "\"";
-        }
-        
-        return orderInfo;
     }
 
     private String wechatAppSecret(TradeType type) {

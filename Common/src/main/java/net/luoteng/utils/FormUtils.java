@@ -88,6 +88,50 @@ public class FormUtils implements GlobalConstant {
         }
         return buffer.substring(1);
     }
+    
+    public static String toForm(Object request, boolean sorted) throws UnsupportedEncodingException {
+        StringBuilder buffer = new StringBuilder();
+
+        List<Entry<Object, Object>> entrys = new ArrayList<>(new BeanMap(request).entrySet());
+
+        if (sorted) {
+            Collections.sort(entrys, new Comparator<Entry<Object, Object>>() {
+                @Override
+                public int compare(Entry<Object, Object> o1, Entry<Object, Object> o2) {
+                    String key1 = o1.getKey().toString();
+                    String key2 = o2.getKey().toString();
+                    for(int i = 0; i < Math.min(key1.length(), key2.length()); i ++) {
+                        byte[] b1 = key1.getBytes();
+                        byte[] b2 = key2.getBytes();
+                        
+                        if (Math.abs(b1[i] - b2[i]) > 0) {
+                            System.err.println(key1 + "-" + (char)(b1[i]) + ":" + key2 + "-" + (char)b2[i]);
+                            return b1[i] - b2[i];
+                        }
+                    }
+                    return key1.charAt(0) - key2.charAt(0);
+                }
+            });
+        }
+
+        for (Object entryObj : entrys) {
+            Map.Entry entry = (Map.Entry) entryObj;
+            String key = entry.getKey().toString();
+
+            if (entry.getValue() == null) {
+                continue;
+            }
+
+            String value = entry.getValue().toString();
+            if (key.equalsIgnoreCase("class")) {
+                continue;
+            }
+
+            String newKey = key.substring(0, 1).concat(key.substring(1));
+            buffer.append("&").append(newKey).append("=").append(value);
+        }
+        return buffer.substring(1);
+    }
 
     public static String toFormUrlEncode(Object request) throws UnsupportedEncodingException {
         return toFormUrlEncode(request, false);
