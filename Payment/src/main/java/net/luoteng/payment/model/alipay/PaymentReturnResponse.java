@@ -18,6 +18,7 @@
 
 package net.luoteng.payment.model.alipay;
 
+import lombok.Data;
 import net.luoteng.model.AbstractObject;
 
 /**
@@ -26,6 +27,7 @@ import net.luoteng.model.AbstractObject;
  * @author suetming <suetming.ma at gmail.com>
  * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
  */
+@Data
 public class PaymentReturnResponse extends AbstractObject {
 
     private String is_success;
@@ -51,6 +53,10 @@ public class PaymentReturnResponse extends AbstractObject {
     private String notify_time;
     
     private String notify_type;
+    
+    private String body;
+    
+    private String total_fee;
     
     private String extra_common_param;
     

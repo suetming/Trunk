@@ -321,9 +321,8 @@ public class PaymentServiceImpl implements PaymentService, TimeConstant, GlobalC
                 request.getAmount(),
                 request.getIp(),
                 String.format(wechatConfig.getUriNotify(), userId, request.getEntity().getRealm().name(), request.getEntity().getEntityId()));
-
-        String timeExpire = new DateTime(Calendar.getInstance().getTimeInMillis() + request.getExpire()).toLocalDateTime().toString(TIME_SHORT);
-        order.setTime_expire(timeExpire);
+        order.setAttach(request.getEntity().getEntityId());
+        order.setTime_expire(new DateTime(Calendar.getInstance().getTimeInMillis() + request.getExpire()).toLocalDateTime().toString(TIME_SHORT));
 
         if (request.getTradeType() == TradeType.NATIVE) {
             order.setDevice_info("WEB");
