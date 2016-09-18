@@ -25,8 +25,14 @@ import net.luoteng.enums.BaseEnum;
  */
 public enum Service implements BaseEnum {
 
-    MOBILE("mobile.securitypay.pay"),
-    WEB("create_direct_pay_by_user");
+    /******** mobile **********/
+    MOBILE_SECURITYPAY_PAY("mobile.securitypay.pay"),
+    
+    /********* web ************/
+    CREATE_DIRECT_PAY_BY_USER("create_direct_pay_by_user"),
+    
+    /********* https://openapi.alipay.com/gateway.do **************/
+    TRADE_QUERY("alipay.trade.query"),;
 
     private final String msg;
     

@@ -103,4 +103,10 @@ public class OrderRequest extends AbstractObject {
     @Setter
     private String ip;
     
+    /**
+     * 回调地址
+     */
+    @Getter
+    @Setter
+    private String returnUrl;
 }

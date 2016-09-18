@@ -285,8 +285,8 @@ public class PaymentServiceImpl implements PaymentService, TimeConstant, GlobalC
                     null != request.getBody() && request.getBody().length() > 150 ? request.getBody().substring(0, 150) : request.getBody(),
                     String.format("%.2f", request.getAmount() / 100.0),
                     String.format(alipayConfig.getUriNotify(), userId, request.getEntity().getRealm().name(), request.getEntity().getEntityId()),
-                    alipayConfig.getUriReturn(),
-                    Service.WEB.getMsg(),
+                    StringUtils.isBlank(request.getReturnUrl()) ? alipayConfig.getUriReturn() : request.getReturnUrl(),
+                    Service.CREATE_DIRECT_PAY_BY_USER.getMsg(),
                     "1",
                     GLOBAL_ENCODING,
                     String.format("%dm", 30), null, null, null);
