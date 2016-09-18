@@ -113,6 +113,13 @@ public class AlipayOrder extends Response {
     @Setter
     private String qr_pay_mode;
 
+    /**
+     * 如果用户请求时传递了该参数，则返回给商户时会回传该参数。
+     */
+    @Getter
+    @Setter
+    private String extra_common_param;
+    
     @Getter
     @Setter
     private String sign;
@@ -120,7 +127,7 @@ public class AlipayOrder extends Response {
     @Getter
     @Setter
     private String sign_type;
-
+    
     public AlipayOrder(String orderId) {
         this.out_trade_no = orderId;
     }
