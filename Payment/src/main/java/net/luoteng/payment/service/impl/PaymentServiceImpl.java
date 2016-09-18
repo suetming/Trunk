@@ -299,7 +299,7 @@ public class PaymentServiceImpl implements PaymentService, TimeConstant, GlobalC
             sign = URLEncoder.encode(sign, "UTF-8");
             
             // 完整的符合支付宝参数规范的订单信息
-            return orderInfo + "&sign=\"" + sign + "\"&sign_type=\"RSA\"";
+            return orderInfo + "&sign=" + sign + "&sign_type=RSA";
         
         } catch (UnsupportedEncodingException ex) {
             log.error("pre alipay order error {}", ex);

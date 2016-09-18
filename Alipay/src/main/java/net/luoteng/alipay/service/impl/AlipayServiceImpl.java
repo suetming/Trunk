@@ -16,10 +16,10 @@
  * limitations under the License.
  */
 
-package net.luoteng.wechat.model;
+package net.luoteng.alipay.service.impl;
 
-import lombok.Data;
-import net.luoteng.model.AbstractObject;
+import javax.annotation.PostConstruct;
+import net.luoteng.alipay.service.AlipayService;
 
 /**
  * 
@@ -27,14 +27,11 @@ import net.luoteng.model.AbstractObject;
  * @author suetming <suetming.ma at gmail.com>
  * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
  */
-@Data
-public class AccessToken extends AbstractObject {
+public class AlipayServiceImpl implements AlipayService {
 
-    /**
-     * 
-     */
-    private String access_token;
-    
-    private String expires_in;
+    @PostConstruct
+    void init() {
+        
+    }
     
 }

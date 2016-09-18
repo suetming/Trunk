@@ -16,21 +16,15 @@
  * limitations under the License.
  */
 
-package net.luoteng.wechat.service;
-
-import net.luoteng.model.common.RestResponse;
+package net.luoteng.alipay.service;
 
 /**
+ * alipay service
  *
  * @author suetming <suetming.ma at gmail.com>
  * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
  */
-public interface WechatService {
+public interface AlipayService {
 
-    /**
-     * 获取 access token
-     * @return 
-     */
-    RestResponse getAccessToken();
     
 }
