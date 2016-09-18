@@ -31,6 +31,11 @@ public class AlipayProperties {
     private String sellId;
 
     /**
+     * 应用ID
+     */
+    private String appId;
+    
+    /**
      * 合作身份者ID， 以2088开头由16位纯数字组成的字符串
      *
      * @return
@@ -114,6 +119,10 @@ public class AlipayProperties {
      */
     private String uriGateway;
 
+    /**
+     * 第三方平台网关
+     */
+    private String uriApiGateway;
     
     public String getAccountName() {
         return accountName;
@@ -225,6 +234,22 @@ public class AlipayProperties {
 
     public void setUriReturn(String uriReturn) {
         this.uriReturn = uriReturn;
+    }
+
+    public String getAppId() {
+        return appId;
+    }
+
+    public void setAppId(String appId) {
+        this.appId = appId;
+    }
+
+    public String getUriApiGateway() {
+        return uriApiGateway;
+    }
+
+    public void setUriApiGateway(String uriApiGateway) {
+        this.uriApiGateway = uriApiGateway;
     }
     
 }

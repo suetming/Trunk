@@ -5,12 +5,12 @@
  */
 package net.luoteng.payment.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -46,6 +46,8 @@ import net.luoteng.constant.TimeConstant;
 import net.luoteng.enums.PayType;
 import net.luoteng.enums.SignType;
 import net.luoteng.payment.model.alipay.AlipayOrder;
+import net.luoteng.payment.model.alipay.AlipayOrderQueryRequest;
+import net.luoteng.payment.model.alipay.AlipayOrderQueryResponse;
 import net.luoteng.payment.model.enums.alipay.Service;
 import net.luoteng.payment.model.wechat.WechatOrderQueryRequest;
 import net.luoteng.payment.properties.AlipayProperties;
@@ -138,19 +140,20 @@ public class PaymentServiceImpl implements PaymentService, TimeConstant, GlobalC
                 throw new UnsupportedOperationException("Not supported yet.");
         }
     }
-    
+
     @Override
     public RestResponse query(String orderId, PayType payType) {
         RestResponse response = new RestResponse();
         // 订单
-        switch(payType) {
+        switch (payType) {
             case wechat:
                 response.success(queryWechatOrder(orderId));
                 break;
             case alipay:
+                response.success(queryAlipayOrder(orderId));
                 break;
         }
-        
+
         return response;
     }
 
@@ -292,14 +295,14 @@ public class PaymentServiceImpl implements PaymentService, TimeConstant, GlobalC
                     String.format("%dm", 30), null, null, null);
             // 订单
             String form = FormUtils.toForm(order, true);
-           
+
             // 对订单做RSA 签名
             order.setSign(SignUtils.sign(form, alipayConfig.getPks8PrivateKey(), SignType.SHA1_WITH_RSA));
             order.setSign_type("RSA");
-            
+
             // 完整的符合支付宝参数规范的订单信息
             return FormUtils.toFormUrlEncode(order);
-        
+
         } catch (UnsupportedEncodingException ex) {
             log.error("pre alipay order error {}", ex);
         }
@@ -321,12 +324,12 @@ public class PaymentServiceImpl implements PaymentService, TimeConstant, GlobalC
 
         String timeExpire = new DateTime(Calendar.getInstance().getTimeInMillis() + request.getExpire()).toLocalDateTime().toString(TIME_SHORT);
         order.setTime_expire(timeExpire);
-        
+
         if (request.getTradeType() == TradeType.NATIVE) {
             order.setDevice_info("WEB");
             order.setSpbill_create_ip(wechatNativeConfig.getIpaddress());
         }
-        
+
         order.setProduct_id(request.getEntity().getEntityId().replaceAll("-", ""));
 
         try {
@@ -368,6 +371,17 @@ public class PaymentServiceImpl implements PaymentService, TimeConstant, GlobalC
         okhttp3.Response response = client.newCall(request).execute();
         String result = response.body().string();
         log.info("post url {}, plain {} result {}", url, plain, result);
+        return result;
+    }
+
+    private String get(String url) throws IOException {
+        Request request = new Request.Builder()
+                .url(url)
+                .get()
+                .build();
+        okhttp3.Response response = client.newCall(request).execute();
+        String result = response.body().string();
+        log.info("get url {}, plain {} result {}", url, result);
         return result;
     }
 
@@ -430,7 +444,7 @@ public class PaymentServiceImpl implements PaymentService, TimeConstant, GlobalC
         response.myTimestamp = String.valueOf(System.currentTimeMillis() / 1000);
         response.myNoncestr = nonce;
     }
-    
+
     private PaymentResponse queryWechatOrder(String orderId) {
         try {
             WechatOrderQueryRequest request = new WechatOrderQueryRequest(
@@ -438,16 +452,30 @@ public class PaymentServiceImpl implements PaymentService, TimeConstant, GlobalC
                     wechatMchId(TradeType.NATIVE),
                     String.valueOf(System.currentTimeMillis()),
                     orderId);
-            
+
             String form = String.format("%1$s&key=%2$s", FormUtils.toFormUrlEncode(request, true), wechatAppSecret(TradeType.NATIVE));
-            
+
             request.setSign(MD5Utils.MD5Encode(form, "UTF-8").toUpperCase());
-            
+
             return XMLUtils.toObject(post(wechatConfig.getUriOrder(), XMLUtils.toXML(request)), PaymentResponse.class);
         } catch (JAXBException | IOException ex) {
             log.error("query wechat order error {}", ex);
         }
         return null;
     }
-    
+
+    private AlipayOrderQueryResponse queryAlipayOrder(String orderId) {
+        try {
+            AlipayOrderQueryRequest request = new AlipayOrderQueryRequest(alipayConfig.getAppId(), orderId);
+            String form = FormUtils.toForm(request,true);
+            request.setSign(SignUtils.sign(form, alipayConfig.getPks8PrivateKey(), SignType.SHA1_WITH_RSA));
+            
+            String result = get(String.format("%1$s?%2$s", alipayConfig.getUriApiGateway(), FormUtils.toFormUrlEncode(request)));
+            return JSON.parseObject(result, AlipayOrderQueryResponse.class);
+        } catch (IOException ex) {
+            log.error("query alipay order error {}", ex);
+        }
+        return null;
+    }
+
 }

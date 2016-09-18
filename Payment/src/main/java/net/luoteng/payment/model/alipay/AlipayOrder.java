@@ -121,4 +121,7 @@ public class AlipayOrder extends Response {
     @Setter
     private String sign_type;
 
+    public AlipayOrder(String orderId) {
+        this.out_trade_no = orderId;
+    }
 }
