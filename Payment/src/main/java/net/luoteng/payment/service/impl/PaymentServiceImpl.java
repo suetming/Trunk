@@ -161,7 +161,7 @@ public class PaymentServiceImpl implements PaymentService, TimeConstant, GlobalC
     public boolean verifyNotify(Response response) {
         log.debug("verify WeixinNotify response=[{}]", response);
 
-        if (response instanceof net.luoteng.payment.model.alipay.NotifyResponse) {
+        if (response instanceof net.luoteng.payment.model.alipay.PaymentNotifyResponse) {
 
         } else if (response instanceof net.luoteng.payment.model.wechat.NotifyResponse) {
             return verifyWechatNotify((net.luoteng.payment.model.wechat.NotifyResponse) response);

@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
-public class NotifyResponse extends BaseResponse {
+public class PaymentNotifyResponse extends BaseResponse {
 
     /**
      * 商户网站唯一订单号(64位，对应商户网站的订单系统中的唯一订单号,非支付宝交易号。需保证在商户网站中的唯一性。是请求时对应的参数,原样返回。)
@@ -118,4 +118,9 @@ public class NotifyResponse extends BaseResponse {
      * 卖家退款的时间,退款通知时会发送。格式为 yyyy-MM-dd HH:mm:ss。
      */
     private String gmt_refund;
+    
+    /**
+     * 用于商户回传参数，该值不能包含“=”、“&”等特殊字符。如果用户请求时传递了该参数，则返回给商户时会回传该参数。
+     */
+    private String extra_common_param;
 }
