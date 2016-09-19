@@ -57,7 +57,14 @@ public class MessageServiceImpl implements MessageService {
     
     @Override
     public void archive(List<String> messageIds) {
-        msgDAO.markStatus(messageIds, MessageStatus.ARCHIVED);
+        for (String msgId : messageIds) {
+            Message msg = msgDAO.findOne(msgId);
+            if (msg != null) {
+                msg.setStatus(MessageStatus.ARCHIVED);
+                msgDAO.save(msg);
+            }
+        }
+//        msgDAO.markStatus(messageIds, MessageStatus.ARCHIVED);
     }
     
     @Override
