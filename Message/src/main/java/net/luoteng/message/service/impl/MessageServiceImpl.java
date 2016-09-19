@@ -31,6 +31,11 @@ public class MessageServiceImpl implements MessageService {
     MessageDAO msgDAO;
     
     @Override
+    public int countByReceiver(String receiver, List<MessageType> types, List<MessageStatus> statuses) {
+        return msgDAO.countByReceiver(receiver, types, statuses);
+    }
+    
+    @Override
     public Page<Message> listByReceiver(String receiver, List<MessageType> types, List<MessageStatus> statuses, Pageable pageable) {
         return msgDAO.listByReceiver(receiver, types, statuses, pageable);
     }

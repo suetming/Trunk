@@ -33,6 +33,16 @@ public interface MessageService {
     Page<Message> listByReceiver(String receiver, List<MessageType> types, List<MessageStatus> statuses, Pageable pageable);
     
     /**
+     * count 
+     * 
+     * @param receiver
+     * @param types
+     * @param statuses
+     * @return 
+     */
+    int countByReceiver(String receiver, List<MessageType> types, List<MessageStatus> statuses);
+    
+    /**
      * 
      * @param owner
      * @param types
