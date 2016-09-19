@@ -8,6 +8,7 @@ package net.luoteng.message.service;
 
 import java.util.List;
 import net.luoteng.entity.embedded.RealmEntity;
+import net.luoteng.enums.Realm;
 import net.luoteng.message.entity.Message;
 import net.luoteng.message.enums.MessageStatus;
 import net.luoteng.message.enums.MessageType;
@@ -74,6 +75,13 @@ public interface MessageService {
      * @param messageIds 
      */
     void archive(List<String> messageIds);
+    
+    /**
+     * 根据Owner归档
+     * 
+     * @param owner 
+     */
+    void archiveByOwner(RealmEntity owner);
     
     /**
      * 创建消息

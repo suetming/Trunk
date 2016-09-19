@@ -31,6 +31,11 @@ public class MessageServiceImpl implements MessageService {
     MessageDAO msgDAO;
     
     @Override
+    public void archiveByOwner(RealmEntity owner) {
+        msgDAO.markStatusByOwner(owner, MessageStatus.ARCHIVED);
+    }
+    
+    @Override
     public int countByReceiver(String receiver, List<MessageType> types, List<MessageStatus> statuses) {
         return msgDAO.countByReceiver(receiver, types, statuses);
     }
@@ -57,14 +62,14 @@ public class MessageServiceImpl implements MessageService {
     
     @Override
     public void archive(List<String> messageIds) {
-        for (String msgId : messageIds) {
-            Message msg = msgDAO.findOne(msgId);
-            if (msg != null) {
-                msg.setStatus(MessageStatus.ARCHIVED);
-                msgDAO.save(msg);
-            }
-        }
-//        msgDAO.markStatus(messageIds, MessageStatus.ARCHIVED);
+//        for (String msgId : messageIds) {
+//            Message msg = msgDAO.findOne(msgId);
+//            if (msg != null) {
+//                msg.setStatus(MessageStatus.ARCHIVED);
+//                msgDAO.save(msg);
+//            }
+//        }
+        msgDAO.markStatus(messageIds, MessageStatus.ARCHIVED);
     }
     
     @Override

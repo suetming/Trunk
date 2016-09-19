@@ -44,4 +44,8 @@ public interface MessageDAO extends PagingAndSortingRepository<Message, String> 
     @Query("update Message m set m.status = :status where m.id in :idList")
     void markStatus(@Param("idList") List<String> messageIds, @Param("status") MessageStatus status);
 
+    @Modifying
+    @Query("update Message m set m.status = :status where m.owner = :owner")
+    void markStatusByOwner(@Param("owner") RealmEntity owner, @Param("status") MessageStatus status);
+
 }
