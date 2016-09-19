@@ -263,7 +263,8 @@ public class WechatOrder extends Response {
         sb.append("<sign><![CDATA[").append(sign(appKey)).append("]]></sign>\r\n");
         sb.append("</xml>");
         
-        return new String(sb.toString().getBytes(), "ISO8859-1");
+//        return new String(sb.toString().getBytes(), "ISO8859-1");
+        return sb.toString();
     }
 
 }
