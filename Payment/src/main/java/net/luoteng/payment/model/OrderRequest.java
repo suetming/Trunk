@@ -109,4 +109,8 @@ public class OrderRequest extends AbstractObject {
     @Getter
     @Setter
     private String returnUrl;
+    
+    @Getter
+    @Setter
+    private String priv;
 }
