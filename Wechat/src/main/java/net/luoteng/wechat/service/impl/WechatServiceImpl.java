@@ -53,9 +53,11 @@ import net.luoteng.wechat.model.UserInfoRequest;
 import net.luoteng.wechat.properties.WechatNativeProperties;
 import net.luoteng.wechat.properties.WechatProperties;
 import net.luoteng.wechat.properties.WechatPublicProperties;
+import net.luoteng.wechat.properties.WechatWebProperties;
 import net.luoteng.wechat.service.WechatService;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -82,6 +84,9 @@ public class WechatServiceImpl implements WechatService, GlobalConstant {
 
     @Autowired
     WechatNativeProperties wechatNativeConfig;
+    
+    @Autowired
+    WechatWebProperties webConfig;
     
     @PostConstruct
     public void init() {
@@ -122,10 +127,10 @@ public class WechatServiceImpl implements WechatService, GlobalConstant {
         try {
             String form = FormUtils.toFormUrlEncode(
                     new AccessTokenRequest(
-                            GrantType.client_credential.name(),
-                            wechatConfig.getAppId(), 
-                            wechatConfig.getAppSecret(), code));
-            String url = String.format("%1$s?%2$s", wechatConfig.getUriAccessToken(), form);
+                            StringUtils.isBlank(code) ? GrantType.client_credential.name() : GrantType.authorization_code.name(),
+                            StringUtils.isBlank(code) ? wechatConfig.getAppId() : webConfig.getAppId(), 
+                            StringUtils.isBlank(code) ? wechatConfig.getAppSecret() : webConfig.getAppSecret(), code));
+            String url = String.format("%1$s?%2$s", StringUtils.isBlank(code) ? wechatConfig.getUriAccessToken() : webConfig.getUriAccessToken(), form);
             return response.success(get(url, DataType.JSON, AccessToken.class));
         } catch (IOException ex) {
             log.error("wechat access token exception {}", ex);

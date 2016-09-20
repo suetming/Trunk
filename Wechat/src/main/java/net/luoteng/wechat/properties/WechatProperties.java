@@ -282,5 +282,5 @@ public class WechatProperties extends AbstractObject {
     public void setUriAccessToken(String uriAccessToken) {
         this.uriAccessToken = uriAccessToken;
     }
-    
+
 }

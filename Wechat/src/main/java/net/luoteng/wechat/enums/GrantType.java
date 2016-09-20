@@ -24,5 +24,6 @@ package net.luoteng.wechat.enums;
 public enum GrantType {
     
     client_credential,
+    authorization_code,
     
 }
