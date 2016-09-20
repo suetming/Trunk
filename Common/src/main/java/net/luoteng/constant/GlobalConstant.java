@@ -51,6 +51,11 @@ public interface GlobalConstant {
     String GLOBAL_PASSWORD = "Luoteng2016";
     
     /**
+     * 
+     */
+    String GLOBAL_LOCAL = "zh_CN";
+    
+    /**
      * 过期时间
      */
     long GLOBAL_TIME_EXPIRED = 1000 * 60 * 60 * 72;

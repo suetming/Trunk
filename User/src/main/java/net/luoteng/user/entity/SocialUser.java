@@ -29,6 +29,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.luoteng.entity.AbstractTimeScopeEntity;
+import net.luoteng.enums.Gender;
 import net.luoteng.user.enums.SocialType;
 
 /**
@@ -57,7 +58,7 @@ public class SocialUser extends AbstractTimeScopeEntity {
      * 社交ID（应用）
      */
     @NotNull
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String clientId;
 
     /**
@@ -86,8 +87,12 @@ public class SocialUser extends AbstractTimeScopeEntity {
     private String name;
     
     /**
-     * 头像
+     * 第三方头像
      */
     private String avatar;
     
+    /**
+     * 性別
+     */
+    private Gender gender;
 }

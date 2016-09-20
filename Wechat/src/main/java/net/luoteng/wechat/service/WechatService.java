@@ -19,6 +19,7 @@
 package net.luoteng.wechat.service;
 
 import net.luoteng.model.common.RestResponse;
+import net.luoteng.wechat.model.AccessToken;
 
 /**
  *
@@ -29,8 +30,17 @@ public interface WechatService {
 
     /**
      * 获取 access token
+     * 
+     * @param code
      * @return 
      */
-    RestResponse getAccessToken();
+    RestResponse getAccessToken(String code);
     
+    /**
+     * 获取用户信息
+     * 
+     * @param token
+     * @return 
+     */
+    RestResponse getUserInfo(AccessToken token);
 }

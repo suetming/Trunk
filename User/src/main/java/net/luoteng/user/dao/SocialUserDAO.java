@@ -37,4 +37,7 @@ public interface SocialUserDAO extends PagingAndSortingRepository<SocialUser, St
     @Query("select u from SocialUser u where u.userId=:userId and u.type=:type")
     SocialUser getByUser(@Param("userId") String userId, @Param("type") SocialType type);
 
+    @Query("select u from SocialUser u where u.clientId=:clientId and u.type=:type")
+    SocialUser getBySocial(@Param("clientId") String clientId, @Param("type") SocialType type);
+
 }

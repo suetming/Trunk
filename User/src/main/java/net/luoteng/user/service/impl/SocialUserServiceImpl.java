@@ -55,8 +55,12 @@ public class SocialUserServiceImpl implements SocialUserService {
 
     @Override
     public SocialUser getByUser(String userId, SocialType type) {
-        if (StringUtils.isBlank(userId)) return null;
         return socialUserDAO.getByUser(userId, type);
     }
 
+    @Override
+    public SocialUser getBySocial(String clientId, SocialType type) {
+        return socialUserDAO.getBySocial(clientId, type);
+    }
+    
 }

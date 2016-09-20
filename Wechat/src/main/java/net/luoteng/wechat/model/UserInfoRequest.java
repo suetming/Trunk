@@ -18,8 +18,8 @@
 
 package net.luoteng.wechat.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import net.luoteng.constant.GlobalConstant;
 import net.luoteng.model.AbstractObject;
 
 /**
@@ -29,26 +29,18 @@ import net.luoteng.model.AbstractObject;
  * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
  */
 @Data
-@AllArgsConstructor
-public class AccessTokenRequest extends AbstractObject {
+public class UserInfoRequest extends AbstractObject {
 
-    /**
-     * 获取access_token填写client_credential
-     */
-    private String grant_type;
+    private String access_token;
     
-    /**
-     * 第三方用户唯一凭证
-     */
-    private String appid;
+    private String openid;
     
-    /**
-     * 第三方用户唯一凭证密钥，即appsecret
-     */
-    private String secret;
+    private String lang;
+
+    public UserInfoRequest(String access_token, String openid) {
+        this.access_token = access_token;
+        this.openid = openid;
+        this.lang = GlobalConstant.GLOBAL_LOCAL;
+    }
     
-    /**
-     * 填写第一步获取的code参数
-     */
-    private String code;
 }

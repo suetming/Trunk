@@ -33,5 +33,6 @@ public interface SocialUserService extends CrudService<SocialUser>{
     
     SocialUser getByUser(String userId, SocialType type);
     
+    SocialUser getBySocial(String clientId, SocialType type);
     
 }

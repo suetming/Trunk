@@ -36,5 +36,13 @@ public class AccessToken extends AbstractObject {
     private String access_token;
     
     private String expires_in;
+ 
+    private String refresh_token;
+    
+    private String scope;
+    
+    private String openid;
+    
+    private String unionid;
     
 }

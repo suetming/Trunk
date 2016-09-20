@@ -23,7 +23,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -49,6 +48,8 @@ import net.luoteng.utils.XMLUtils;
 import net.luoteng.wechat.enums.GrantType;
 import net.luoteng.wechat.model.AccessToken;
 import net.luoteng.wechat.model.AccessTokenRequest;
+import net.luoteng.wechat.model.UserInfo;
+import net.luoteng.wechat.model.UserInfoRequest;
 import net.luoteng.wechat.properties.WechatNativeProperties;
 import net.luoteng.wechat.properties.WechatProperties;
 import net.luoteng.wechat.properties.WechatPublicProperties;
@@ -116,18 +117,34 @@ public class WechatServiceImpl implements WechatService, GlobalConstant {
     }
     
     @Override
-    public RestResponse getAccessToken() {
+    public RestResponse getAccessToken(String code) {
         RestResponse response = new RestResponse();
         try {
             String form = FormUtils.toFormUrlEncode(
                     new AccessTokenRequest(
                             GrantType.client_credential.name(),
                             wechatConfig.getAppId(), 
-                            wechatConfig.getAppSecret()));
+                            wechatConfig.getAppSecret(), code));
             String url = String.format("%1$s?%2$s", wechatConfig.getUriAccessToken(), form);
             return response.success(get(url, DataType.JSON, AccessToken.class));
         } catch (IOException ex) {
             log.error("wechat access token exception {}", ex);
+            return response.error(ResponseCode.ERROR_THIRD_PLATFORM);
+        }
+    }
+    
+    @Override
+    public RestResponse getUserInfo(AccessToken token) {
+        RestResponse response = new RestResponse();
+        try {
+            String form = FormUtils.toFormUrlEncode(
+                    new UserInfoRequest(
+                            token.getAccess_token(),
+                            token.getOpenid()));
+            String url = String.format("%1$s?%2$s", wechatConfig.getUriUserInfo(), form);
+            return response.success(get(url, DataType.JSON, UserInfo.class));
+        } catch (IOException ex) {
+            log.error("wechat get user info exception {}", ex);
             return response.error(ResponseCode.ERROR_THIRD_PLATFORM);
         }
     }
