@@ -94,5 +94,6 @@ public class SocialUser extends AbstractTimeScopeEntity {
     /**
      * 性別
      */
+    @Enumerated(EnumType.STRING)
     private Gender gender;
 }
