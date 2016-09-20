@@ -26,16 +26,18 @@ import javax.persistence.Enumerated;
 import javax.persistence.Lob;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import lombok.Data;
 import net.luoteng.coupon.enums.CouponStatus;
 import net.luoteng.entity.AbstractTimeScopeEntity;
 import net.luoteng.entity.embedded.RealmEntity;
 
 /**
- * 
+ * coupon
  *
  * @author suetming <suetming.ma at gmail.com>
  * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
  */
+@Data
 public class Coupon extends AbstractTimeScopeEntity {
 
     /**
