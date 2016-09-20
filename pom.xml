@@ -27,6 +27,7 @@
         <module>Message</module>
         <module>User</module>
         <module>Wechat</module>
+        <module>Sina</module>
     </modules>
 </project>
 
