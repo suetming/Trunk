@@ -16,10 +16,7 @@
  * limitations under the License.
  */
 
-package net.luoteng.sina.service;
-
-import net.luoteng.model.common.RestResponse;
-import net.luoteng.sina.model.AccessToken;
+package net.luoteng.sina.enums;
 
 /**
  * 
@@ -27,22 +24,10 @@ import net.luoteng.sina.model.AccessToken;
  * @author suetming <suetming.ma at gmail.com>
  * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
  */
-public interface SinaService {
-
-    /**
-     * 获取 access token
-     * 
-     * @param code
-     * @return 
-     */
-    RestResponse getAccessToken(String code);
+public enum GrantType {
     
-    /**
-     * 获取用户信息
-     * 
-     * @param token
-     * @return 
-     */
-    RestResponse getUserInfo(AccessToken token);
+    client_credential,
+    authorization_code,
     
 }
+

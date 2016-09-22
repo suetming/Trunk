@@ -18,7 +18,27 @@
 
 package net.luoteng.sina.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import java.io.IOException;
+import javax.annotation.PostConstruct;
+import javax.xml.bind.JAXBException;
+import lombok.extern.slf4j.Slf4j;
+import net.luoteng.enums.DataType;
+import net.luoteng.enums.ResponseCode;
+import net.luoteng.model.AbstractObject;
+import net.luoteng.model.common.RestResponse;
+import net.luoteng.sina.enums.GrantType;
+import net.luoteng.sina.model.AccessToken;
+import net.luoteng.sina.model.AccessTokenRequest;
+import net.luoteng.sina.model.UserInfo;
+import net.luoteng.sina.model.UserInfoRequest;
+import net.luoteng.sina.properties.SinaProperties;
 import net.luoteng.sina.service.SinaService;
+import net.luoteng.utils.FormUtils;
+import net.luoteng.utils.XMLUtils;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -27,7 +47,78 @@ import org.springframework.stereotype.Component;
  * @author suetming <suetming.ma at gmail.com>
  * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
  */
+@Slf4j
 @Component
 public class SinaServiceImpl implements SinaService {
 
+    /**
+     * 微信企业向用户转账，需加载证书
+     */
+    OkHttpClient client;
+    
+    @Autowired
+    SinaProperties config;
+    
+    
+    @PostConstruct
+    public void init() {
+        log.info("wechat service init");
+
+        client = new OkHttpClient();
+    }
+    
+    @Override
+    public RestResponse getAccessToken(String code) {
+        RestResponse response = new RestResponse();
+        try {
+            String form = FormUtils.toFormUrlEncode(
+                    new AccessTokenRequest(
+                            GrantType.authorization_code.name(),
+                            config.getAppId(), 
+                            config.getAppSecret(), code, config.getUriRedirect()));
+            String url = String.format("%1$s?%2$s", config.getUriAccessToken(), form);
+            return response.success(get(url, DataType.JSON, AccessToken.class));
+        } catch (IOException ex) {
+            log.error("wechat access token exception {}", ex);
+            return response.error(ResponseCode.ERROR_THIRD_PLATFORM);
+        }
+    }
+
+    @Override
+    public RestResponse getUserInfo(AccessToken token) {
+        RestResponse response = new RestResponse();
+        try {
+            String form = FormUtils.toFormUrlEncode(
+                    new UserInfoRequest(
+                            token.getAccess_token(),
+                            token.getUid()));
+            String url = String.format("%1$s?%2$s", config.getUriUserInfo(), form);
+            return response.success(get(url, DataType.JSON, UserInfo.class));
+        } catch (IOException ex) {
+            log.error("wechat get user info exception {}", ex);
+            return response.error(ResponseCode.ERROR_THIRD_PLATFORM);
+        }
+    }
+
+    private <T extends AbstractObject> T get(String url, DataType dataType, Class<T> clazz) throws IOException {
+        Request request = new Request.Builder().url(url).get().build();
+        okhttp3.Response response = client.newCall(request).execute();
+        String plain = response.body().string();
+        log.info("wechat get url {}, result {}", url, plain);
+        
+        if (dataType == DataType.JSON) {
+            return JSON.parseObject(plain, clazz);
+        } else if (dataType == DataType.XML) {
+            
+            try {
+                return XMLUtils.toObject(plain, clazz);
+            } catch (JAXBException ex) {
+                log.error("wechat xml to object error {}", ex);
+            }
+        }
+        
+        return null;
+    }
+    
+    
 }

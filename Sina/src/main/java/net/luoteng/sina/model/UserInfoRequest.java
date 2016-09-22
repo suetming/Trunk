@@ -16,10 +16,11 @@
  * limitations under the License.
  */
 
-package net.luoteng.sina.service;
+package net.luoteng.sina.model;
 
-import net.luoteng.model.common.RestResponse;
-import net.luoteng.sina.model.AccessToken;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import net.luoteng.model.AbstractObject;
 
 /**
  * 
@@ -27,22 +28,18 @@ import net.luoteng.sina.model.AccessToken;
  * @author suetming <suetming.ma at gmail.com>
  * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
  */
-public interface SinaService {
+@Data
+@AllArgsConstructor
+public class UserInfoRequest extends AbstractObject {
 
     /**
-     * 获取 access token
      * 
-     * @param code
-     * @return 
      */
-    RestResponse getAccessToken(String code);
+    private String access_token;
     
     /**
-     * 获取用户信息
      * 
-     * @param token
-     * @return 
      */
-    RestResponse getUserInfo(AccessToken token);
+    private String uid;
     
 }

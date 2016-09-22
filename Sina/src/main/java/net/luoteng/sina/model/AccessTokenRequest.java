@@ -33,6 +33,11 @@ import net.luoteng.model.AbstractObject;
 public class AccessTokenRequest extends AbstractObject {
 
     /**
+     * 请求的类型，填写authorization_code
+     */
+    private String grant_type;
+    
+    /**
      * 申请应用时分配的AppKey。
      */
     private String client_id;
@@ -42,11 +47,6 @@ public class AccessTokenRequest extends AbstractObject {
      */
     private String client_secret;
     
-    /**
-     * 请求的类型，填写authorization_code
-     */
-    private String grant_type;
- 
     /**
      * 调用authorize获得的code值。
      */
