@@ -109,9 +109,9 @@ public class SinaServiceImpl implements SinaService {
         if (dataType == DataType.JSON) {
             AbstractObject obj = JSON.parseObject(plain, clazz);
             if (obj == null) {
-                return new RestResponse().success(obj);
-            } else {
                 return new RestResponse().success(plain);
+            } else {
+                return new RestResponse().success(obj);
             }
         } else if (dataType == DataType.XML) {
 
@@ -140,9 +140,9 @@ public class SinaServiceImpl implements SinaService {
                 case JSON: {
                     AbstractObject obj = JSON.parseObject(result, clazz);
                     if (obj == null) {
-                        return new RestResponse().success(obj);
-                    } else {
                         return new RestResponse().success(result);
+                    } else {
+                        return new RestResponse().success(obj);
                     }
                 }
                 case XML: {
