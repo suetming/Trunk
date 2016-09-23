@@ -93,7 +93,7 @@ public class SinaServiceImpl implements SinaService {
                             token.getAccess_token(),
                             token.getUid()));
             String uri = String.format("%1$s?%2$s", config.getUriUserInfo(), form);
-            return response.success(post(uri, "", DataType.JSON, UserInfo.class));
+            return response.success(get(uri, DataType.JSON, UserInfo.class));
         } catch (IOException ex) {
             log.error("sina get user info exception {}", ex);
             return response.error(ResponseCode.ERROR_THIRD_PLATFORM);
@@ -128,14 +128,15 @@ public class SinaServiceImpl implements SinaService {
                     .post(body)
                     .build();
             okhttp3.Response response = client.newCall(request).execute();
-            log.info("sina post url {}, {} result {}", url, data, response.body().string());
+            String result = response.body().string();
+            log.info("sina post url {}, {} result {}", url, data, result);
 
             switch (dataType) {
                 case JSON: {
-                    return JSON.parseObject(response.body().string(), clazz);
+                    return JSON.parseObject(result, clazz);
                 }
                 case XML: {
-                    return XMLUtils.toObject(response.body().string(), clazz);
+                    return XMLUtils.toObject(result, clazz);
                 }
             }
         } catch (JAXBException | IOException ex) {

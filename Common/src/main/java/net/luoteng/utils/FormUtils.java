@@ -71,7 +71,7 @@ public class FormUtils implements GlobalConstant {
             }
 
             String value = entry.getValue().toString();
-            if (key.equalsIgnoreCase("class") && StringUtils.isBlank(value)) {
+            if (key.equalsIgnoreCase("class") || StringUtils.isBlank(value)) {
                 continue;
             }
 
@@ -115,7 +115,7 @@ public class FormUtils implements GlobalConstant {
             }
 
             String value = entry.getValue().toString();
-            if (key.equalsIgnoreCase("class") && StringUtils.isBlank(value)) {
+            if (key.equalsIgnoreCase("class") || StringUtils.isBlank(value)) {
                 continue;
             }
 
@@ -162,7 +162,7 @@ public class FormUtils implements GlobalConstant {
             }
 
             String value = entry.getValue().toString();
-            if (key.equalsIgnoreCase("class") && StringUtils.isBlank(value)) {
+            if (key.equalsIgnoreCase("class") || StringUtils.isBlank(value)) {
                 continue;
             }
 

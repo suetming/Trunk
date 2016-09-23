@@ -18,7 +18,9 @@
 package net.luoteng.sina.model;
 
 import java.util.Date;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import net.luoteng.model.AbstractObject;
 
 /**
@@ -28,9 +30,11 @@ import net.luoteng.model.AbstractObject;
  * Copyright(c) @2016 Luoteng Company, Inc. All Rights Reserved.
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserInfo extends AbstractObject {
 
-    private String uid;
+    private String id;
 
     private String screen_name;
 
@@ -63,7 +67,7 @@ public class UserInfo extends AbstractObject {
 
     private int favourites_count;
 
-    private Date created_at;
+    private String created_at;
 
     private boolean following;
 

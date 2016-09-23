@@ -18,7 +18,9 @@
 
 package net.luoteng.sina.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import net.luoteng.model.AbstractObject;
 
 /**
@@ -28,6 +30,8 @@ import net.luoteng.model.AbstractObject;
  * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class AccessToken extends AbstractObject {
 
     /**
@@ -42,7 +46,7 @@ public class AccessToken extends AbstractObject {
     /**
      * access_token的生命周期，单位是秒数。
      */
-    private long expires_in;
+    private String expires_in;
     
     /**
      * access_token的生命周期（该参数即将废弃，开发者请使用expires_in）。
