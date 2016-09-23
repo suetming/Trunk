@@ -50,6 +50,9 @@ public class UserInfo extends AbstractObject {
 
     private String domain;
 
+    /**
+     * 性别，m：男、f：女、n：未知
+     */
     private String gender;
 
     private int followers_count;
