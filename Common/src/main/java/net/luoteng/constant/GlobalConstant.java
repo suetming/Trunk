@@ -22,6 +22,11 @@ public interface GlobalConstant {
     /**
      * 
      */
+    String GLOBAL_APPLICAIONT_X_WWW_FORM_URLENCODED = "application/x-www-form-urlencoded; charset=utf-8";
+    
+    /**
+     * 
+     */
     String GLOBAL_APPLICATION_XML = "application/xml; charset=utf-8;";
     
     /**

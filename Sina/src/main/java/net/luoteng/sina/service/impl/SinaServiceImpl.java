@@ -15,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package net.luoteng.sina.service.impl;
 
 import com.alibaba.fastjson.JSON;
@@ -36,16 +35,18 @@ import net.luoteng.sina.properties.SinaProperties;
 import net.luoteng.sina.service.SinaService;
 import net.luoteng.utils.FormUtils;
 import net.luoteng.utils.XMLUtils;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * 
+ *
  *
  * @author suetming <suetming.ma at gmail.com>
- * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
+ * Copyright(c) @2016 Luoteng Company, Inc. All Rights Reserved.
  */
 @Slf4j
 @Component
@@ -55,18 +56,17 @@ public class SinaServiceImpl implements SinaService {
      * 微信企业向用户转账，需加载证书
      */
     OkHttpClient client;
-    
+
     @Autowired
     SinaProperties config;
-    
-    
+
     @PostConstruct
     public void init() {
-        log.info("wechat service init");
+        log.info("sina service init");
 
         client = new OkHttpClient();
     }
-    
+
     @Override
     public RestResponse getAccessToken(String code) {
         RestResponse response = new RestResponse();
@@ -74,12 +74,12 @@ public class SinaServiceImpl implements SinaService {
             String form = FormUtils.toFormUrlEncode(
                     new AccessTokenRequest(
                             GrantType.authorization_code.name(),
-                            config.getAppId(), 
+                            config.getAppId(),
                             config.getAppSecret(), code, config.getUriRedirect()));
-            String url = String.format("%1$s?%2$s", config.getUriAccessToken(), form);
-            return response.success(get(url, DataType.JSON, AccessToken.class));
+        String uri = String.format("%1$s?%2$s", config.getUriAccessToken(), form);
+            return response.success(post(uri, "", DataType.JSON, AccessToken.class));
         } catch (IOException ex) {
-            log.error("wechat access token exception {}", ex);
+            log.error("sina access token exception {}", ex);
             return response.error(ResponseCode.ERROR_THIRD_PLATFORM);
         }
     }
@@ -92,10 +92,10 @@ public class SinaServiceImpl implements SinaService {
                     new UserInfoRequest(
                             token.getAccess_token(),
                             token.getUid()));
-            String url = String.format("%1$s?%2$s", config.getUriUserInfo(), form);
-            return response.success(get(url, DataType.JSON, UserInfo.class));
+            String uri = String.format("%1$s?%2$s", config.getUriUserInfo(), form);
+            return response.success(post(uri, "", DataType.JSON, UserInfo.class));
         } catch (IOException ex) {
-            log.error("wechat get user info exception {}", ex);
+            log.error("sina get user info exception {}", ex);
             return response.error(ResponseCode.ERROR_THIRD_PLATFORM);
         }
     }
@@ -104,21 +104,46 @@ public class SinaServiceImpl implements SinaService {
         Request request = new Request.Builder().url(url).get().build();
         okhttp3.Response response = client.newCall(request).execute();
         String plain = response.body().string();
-        log.info("wechat get url {}, result {}", url, plain);
-        
+        log.info("sina get url {}, result {}", url, plain);
+
         if (dataType == DataType.JSON) {
             return JSON.parseObject(plain, clazz);
         } else if (dataType == DataType.XML) {
-            
+
             try {
                 return XMLUtils.toObject(plain, clazz);
             } catch (JAXBException ex) {
-                log.error("wechat xml to object error {}", ex);
+                log.error("sina xml to object error {}", ex);
             }
         }
-        
+
+        return null;
+    }
+
+    private <T extends AbstractObject> T post(String url, String data, DataType dataType, Class<T> clazz) {
+        try {
+            RequestBody body = RequestBody.create(MediaType.parse(GLOBAL_APPLICAIONT_X_WWW_FORM_URLENCODED), data);
+            Request request = new Request.Builder()
+                    .url(url)
+                    .post(body)
+                    .build();
+            okhttp3.Response response = client.newCall(request).execute();
+            log.info("sina post url {}, {} result {}", url, data, response.body().string());
+
+            switch (dataType) {
+                case JSON: {
+                    return JSON.parseObject(response.body().string(), clazz);
+                }
+                case XML: {
+                    return XMLUtils.toObject(response.body().string(), clazz);
+                }
+            }
+        } catch (JAXBException | IOException ex) {
+            log.error("sina error {}", ex);
+        }
+
         return null;
     }
     
-    
+
 }

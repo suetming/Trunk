@@ -42,12 +42,12 @@ public class AccessToken extends AbstractObject {
     /**
      * access_token的生命周期，单位是秒数。
      */
-    private String expires_in;
+    private long expires_in;
     
     /**
      * access_token的生命周期（该参数即将废弃，开发者请使用expires_in）。
      */
-    private String remind_in;
+    private long remind_in;
     
     /**
      * 授权用户的UID，本字段只是为了方便开发者，

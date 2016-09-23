@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import net.luoteng.constant.GlobalConstant;
 import org.apache.commons.beanutils.BeanMap;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -70,7 +71,7 @@ public class FormUtils implements GlobalConstant {
             }
 
             String value = entry.getValue().toString();
-            if (key.equalsIgnoreCase("class")) {
+            if (key.equalsIgnoreCase("class") && StringUtils.isBlank(value)) {
                 continue;
             }
 
@@ -114,7 +115,7 @@ public class FormUtils implements GlobalConstant {
             }
 
             String value = entry.getValue().toString();
-            if (key.equalsIgnoreCase("class")) {
+            if (key.equalsIgnoreCase("class") && StringUtils.isBlank(value)) {
                 continue;
             }
 
@@ -161,7 +162,7 @@ public class FormUtils implements GlobalConstant {
             }
 
             String value = entry.getValue().toString();
-            if (key.equalsIgnoreCase("class")) {
+            if (key.equalsIgnoreCase("class") && StringUtils.isBlank(value)) {
                 continue;
             }
 

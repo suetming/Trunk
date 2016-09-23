@@ -18,6 +18,7 @@
 
 package net.luoteng.sina.service;
 
+import net.luoteng.constant.GlobalConstant;
 import net.luoteng.model.common.RestResponse;
 import net.luoteng.sina.model.AccessToken;
 
@@ -27,7 +28,7 @@ import net.luoteng.sina.model.AccessToken;
  * @author suetming <suetming.ma at gmail.com>
  * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
  */
-public interface SinaService {
+public interface SinaService extends GlobalConstant {
 
     /**
      * 获取 access token
