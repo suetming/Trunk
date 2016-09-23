@@ -76,8 +76,8 @@ public class SinaServiceImpl implements SinaService {
                             GrantType.authorization_code.name(),
                             config.getAppId(),
                             config.getAppSecret(), code, config.getUriRedirect()));
-        String uri = String.format("%1$s?%2$s", config.getUriAccessToken(), form);
-            return response.success(post(uri, "", DataType.JSON, AccessToken.class));
+            String uri = String.format("%1$s?%2$s", config.getUriAccessToken(), form);
+            return post(uri, "", DataType.JSON, AccessToken.class);
         } catch (IOException ex) {
             log.error("sina access token exception {}", ex);
             return response.error(ResponseCode.ERROR_THIRD_PLATFORM);
@@ -93,25 +93,30 @@ public class SinaServiceImpl implements SinaService {
                             token.getAccess_token(),
                             token.getUid()));
             String uri = String.format("%1$s?%2$s", config.getUriUserInfo(), form);
-            return response.success(get(uri, DataType.JSON, UserInfo.class));
+            return get(uri, DataType.JSON, UserInfo.class);
         } catch (IOException ex) {
             log.error("sina get user info exception {}", ex);
             return response.error(ResponseCode.ERROR_THIRD_PLATFORM);
         }
     }
 
-    private <T extends AbstractObject> T get(String url, DataType dataType, Class<T> clazz) throws IOException {
+    private RestResponse get(String url, DataType dataType, Class<? extends AbstractObject> clazz) throws IOException {
         Request request = new Request.Builder().url(url).get().build();
         okhttp3.Response response = client.newCall(request).execute();
         String plain = response.body().string();
         log.info("sina get url {}, result {}", url, plain);
 
         if (dataType == DataType.JSON) {
-            return JSON.parseObject(plain, clazz);
+            AbstractObject obj = JSON.parseObject(plain, clazz);
+            if (obj == null) {
+                return new RestResponse().success(obj);
+            } else {
+                return new RestResponse().success(plain);
+            }
         } else if (dataType == DataType.XML) {
 
             try {
-                return XMLUtils.toObject(plain, clazz);
+                return new RestResponse().success(XMLUtils.toObject(plain, clazz));
             } catch (JAXBException ex) {
                 log.error("sina xml to object error {}", ex);
             }
@@ -120,7 +125,7 @@ public class SinaServiceImpl implements SinaService {
         return null;
     }
 
-    private <T extends AbstractObject> T post(String url, String data, DataType dataType, Class<T> clazz) {
+    private RestResponse post(String url, String data, DataType dataType, Class<? extends AbstractObject> clazz) {
         try {
             RequestBody body = RequestBody.create(MediaType.parse(GLOBAL_APPLICAIONT_X_WWW_FORM_URLENCODED), data);
             Request request = new Request.Builder()
@@ -133,10 +138,15 @@ public class SinaServiceImpl implements SinaService {
 
             switch (dataType) {
                 case JSON: {
-                    return JSON.parseObject(result, clazz);
+                    AbstractObject obj = JSON.parseObject(result, clazz);
+                    if (obj == null) {
+                        return new RestResponse().success(obj);
+                    } else {
+                        return new RestResponse().success(result);
+                    }
                 }
                 case XML: {
-                    return XMLUtils.toObject(result, clazz);
+                    return new RestResponse().success(XMLUtils.toObject(result, clazz));
                 }
             }
         } catch (JAXBException | IOException ex) {
@@ -145,6 +155,5 @@ public class SinaServiceImpl implements SinaService {
 
         return null;
     }
-    
 
 }
