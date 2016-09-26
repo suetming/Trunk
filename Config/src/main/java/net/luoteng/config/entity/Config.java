@@ -45,5 +45,4 @@ public class Config extends AbstractTimeScopeEntity {
     @Lob
     private String priv;
     
-    
 }

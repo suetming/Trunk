@@ -16,22 +16,16 @@
  * limitations under the License.
  */
 
-package net.luoteng.config.service.impl;
+package net.luoteng.config.model;
 
-import net.luoteng.config.service.ConfigService;
 import net.luoteng.model.AbstractObject;
 
 /**
- * 
+ * abstract config
  *
  * @author suetming <suetming.ma at gmail.com>
  * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
  */
-public class ConfigServiceImpl implements ConfigService {
-
-    @Override
-    public <T extends AbstractObject> T getByClassName(Class<T> clazz) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+public abstract class AbstractConfig extends AbstractObject {
 
 }

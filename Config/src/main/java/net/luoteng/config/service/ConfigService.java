@@ -18,6 +18,8 @@
 
 package net.luoteng.config.service;
 
+import net.luoteng.model.AbstractObject;
+
 /**
  * 
  *
@@ -26,4 +28,13 @@ package net.luoteng.config.service;
  */
 public interface ConfigService {
 
+    /**
+     * 根据 class name 获取配置对象
+     * 
+     * @param <T>
+     * @param clazz
+     * @return 
+     */
+    <T extends AbstractObject> T getByClassName(Class<T> clazz);
+    
 }
