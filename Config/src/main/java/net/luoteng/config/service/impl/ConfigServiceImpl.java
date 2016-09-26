@@ -18,8 +18,8 @@
 
 package net.luoteng.config.service.impl;
 
+import net.luoteng.config.model.AbstractConfig;
 import net.luoteng.config.service.ConfigService;
-import net.luoteng.model.AbstractObject;
 
 /**
  * 
@@ -30,14 +30,13 @@ import net.luoteng.model.AbstractObject;
 public class ConfigServiceImpl implements ConfigService {
 
     @Override
-    public <T extends AbstractObject> T load(Class<T> clazz) {
+    public <T extends AbstractConfig> T load(Class<T> clazz) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public <T extends AbstractObject> T save(T entity) {
+    public <T extends AbstractConfig> T save(T entity) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
-   
+    
 }
