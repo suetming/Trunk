@@ -30,8 +30,14 @@ import net.luoteng.model.AbstractObject;
 public class ConfigServiceImpl implements ConfigService {
 
     @Override
-    public <T extends AbstractObject> T getByClassName(Class<T> clazz) {
+    public <T extends AbstractObject> T get(Class<T> clazz) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public <T extends AbstractObject> T save(T entity) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+   
 }

@@ -35,6 +35,7 @@ public interface ConfigService {
      * @param clazz
      * @return 
      */
-    <T extends AbstractObject> T getByClassName(Class<T> clazz);
+    <T extends AbstractObject> T get(Class<T> clazz);
     
+    <T extends AbstractObject> T save(T entity);
 }
