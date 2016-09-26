@@ -29,6 +29,7 @@
         <module>Wechat</module>
         <module>Sina</module>
         <module>Coupon</module>
+        <module>Config</module>
     </modules>
 </project>
 
