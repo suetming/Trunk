@@ -18,7 +18,13 @@
 
 package net.luoteng.config.entity;
 
+import javax.persistence.Entity;
 import javax.persistence.Lob;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import net.luoteng.entity.AbstractTimeScopeEntity;
 
 /**
@@ -27,6 +33,13 @@ import net.luoteng.entity.AbstractTimeScopeEntity;
  * @author suetming <suetming.ma at gmail.com>
  * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
  */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "t_config", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"classSimpleName", "packageName"})
+})
 public class Config extends AbstractTimeScopeEntity {
 
     /**

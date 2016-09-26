@@ -16,12 +16,10 @@
  * limitations under the License.
  */
 
-package net.luoteng.config.service.impl;
+package net.luoteng.config.dao;
 
-import net.luoteng.config.dao.ConfigDAO;
-import net.luoteng.config.model.AbstractConfig;
-import net.luoteng.config.service.ConfigService;
-import org.springframework.beans.factory.annotation.Autowired;
+import net.luoteng.config.entity.Config;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Component;
 
 /**
@@ -31,19 +29,7 @@ import org.springframework.stereotype.Component;
  * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
  */
 @Component
-public class ConfigServiceImpl implements ConfigService {
-
-    @Autowired
-    ConfigDAO configDAO;
+public interface ConfigDAO extends CrudRepository<Config, String> {
     
-    @Override
-    public <T extends AbstractConfig> T load(Class<T> clazz) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public <T extends AbstractConfig> T save(T entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
     
 }
