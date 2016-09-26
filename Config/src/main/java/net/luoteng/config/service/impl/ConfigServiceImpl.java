@@ -18,7 +18,10 @@
 
 package net.luoteng.config.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.parser.ParserConfig;
 import net.luoteng.config.dao.ConfigDAO;
+import net.luoteng.config.entity.Config;
 import net.luoteng.config.model.AbstractConfig;
 import net.luoteng.config.service.ConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,12 +41,28 @@ public class ConfigServiceImpl implements ConfigService {
     
     @Override
     public <T extends AbstractConfig> T load(Class<T> clazz) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Config entity = configDAO.get(clazz.getSimpleName(), clazz.getPackage().getName());
+        if (entity == null) return null;
+
+        return JSON.parseObject(entity.getPriv(), clazz);
     }
 
     @Override
     public <T extends AbstractConfig> T save(T entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        Config config = configDAO.get(entity.getClass().getSimpleName(), entity.getClass().getPackage().getName());
+        if (config == null) {
+            config = new Config(
+                entity.getClass().getSimpleName(), 
+                entity.getClass().getPackage().getName(), 
+                JSON.toJSONString(entity));
+            configDAO.save(config);
+        } else {
+            config.setPriv(JSON.toJSONString(entity));
+            configDAO.save(config);
+        }
+        
+        return entity;
     }
     
 }

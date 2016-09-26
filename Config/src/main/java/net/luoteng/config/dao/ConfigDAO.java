@@ -21,6 +21,8 @@ package net.luoteng.config.dao;
 import net.luoteng.config.entity.Config;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Component;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 /**
  * 
@@ -31,5 +33,14 @@ import org.springframework.stereotype.Component;
 @Component
 public interface ConfigDAO extends CrudRepository<Config, String> {
     
+    /**
+     * 根据评论对应实体获取列表
+     * 
+     * @param classSimpleName
+     * @param packageName
+     * @return 
+     */
+    @Query("select c from Config c where c.classSimpleName = :classSimpleName and c.packageName = :packageName")
+    Config get(@Param("classSimpleName") String classSimpleName, @Param("packageName") String packageName);
     
 }
