@@ -18,7 +18,7 @@
 
 package net.luoteng.config.service;
 
-import net.luoteng.model.AbstractObject;
+import net.luoteng.config.model.AbstractConfig;
 
 /**
  * 
@@ -29,13 +29,21 @@ import net.luoteng.model.AbstractObject;
 public interface ConfigService {
 
     /**
-     * 根据 class name 获取配置对象
+     * 根据 class 获取配置
      * 
      * @param <T>
      * @param clazz
      * @return 
      */
-    <T extends AbstractObject> T get(Class<T> clazz);
+    <T extends AbstractConfig> T load(Class<T> clazz);
     
-    <T extends AbstractObject> T save(T entity);
+    /**
+     * 新增或保存配置
+     * 
+     * @param <T>
+     * @param entity
+     * @return 
+     */
+    <T extends AbstractConfig> T save(T entity);
+    
 }
