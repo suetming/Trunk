@@ -19,7 +19,6 @@
 package net.luoteng.config.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.parser.ParserConfig;
 import net.luoteng.config.dao.ConfigDAO;
 import net.luoteng.config.entity.Config;
 import net.luoteng.config.model.AbstractConfig;
