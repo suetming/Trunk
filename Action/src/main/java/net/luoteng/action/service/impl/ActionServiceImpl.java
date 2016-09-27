@@ -22,19 +22,33 @@ import java.awt.print.Pageable;
 import java.util.Set;
 import net.luoteng.action.enums.ActionType;
 import net.luoteng.action.service.ActionService;
+import net.luoteng.constant.GlobalConstant;
 import net.luoteng.entity.embedded.RealmEntity;
+import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
+import org.springframework.stereotype.Component;
 
 /**
- * 
+ * action service
  *
  * @author suetming <suetming.ma at gmail.com>
  * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
  */
-public class ActionServiceImpl implements ActionService {
+@Component
+public class ActionServiceImpl implements ActionService, GlobalConstant  {
 
+    @Value("${net.luoteng.client}")
+    String client;
+    
+    @Autowired 
+    StringRedisTemplate redis;
+    
     @Override
     public long redo(RealmEntity entity, String userId, ActionType type) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        zadd(key(entity, type), DateTime.now().toDate().getTime(), userId);
     }
 
     @Override
@@ -57,4 +71,21 @@ public class ActionServiceImpl implements ActionService {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    
+    private ZSetOperations opsForZSet() {
+        return redis.opsForZSet();
+    }
+ 
+    private void zadd(String key, long score, String member) {  
+        opsForZSet().add(key, member, score);  
+    } 
+    
+    private boolean exist(RealmEntity entity, ActionType type) {
+        return redis.hasKey(key(entity, type));
+    }
+    
+    private String key(RealmEntity entity, ActionType type) {
+        return String.format("1$s:%2$s:%3$s_%4$s:%5$s:", GLOBAL_NAMESPACE, client, entity.getRealm().name(), entity.getEntityId(), type.name());
+    }
+    
 }
