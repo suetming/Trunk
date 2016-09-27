@@ -21,11 +21,10 @@ package net.luoteng.action.service;
 import java.awt.print.Pageable;
 import java.util.Set;
 import net.luoteng.action.enums.ActionType;
-import net.luoteng.constant.GlobalConstant;
 import net.luoteng.entity.embedded.RealmEntity;
 
 /**
- * like unlike  
+ * action service  
  *
  * @author suetming <suetming.ma at gmail.com>
  * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
@@ -33,7 +32,7 @@ import net.luoteng.entity.embedded.RealmEntity;
 public interface ActionService {
 
     /**
-     * 
+     * 触发行为
      * 
      * @param entity
      * @param userId
@@ -43,7 +42,7 @@ public interface ActionService {
     public long redo(RealmEntity entity, String userId, ActionType type);
     
     /**
-     * 取消点赞
+     * 取消触发
      * 
      * @param entity
      * @param userId

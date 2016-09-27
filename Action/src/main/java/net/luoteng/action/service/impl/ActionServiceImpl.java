@@ -40,6 +40,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class ActionServiceImpl implements ActionService, GlobalConstant  {
 
+    private final static String PATTERN_KEY = "1$s:%2$s:%3$s_%4$s:%5$s";
+    
     @Value("${net.luoteng.client}")
     String client;
     
@@ -48,44 +50,48 @@ public class ActionServiceImpl implements ActionService, GlobalConstant  {
     
     @Override
     public long redo(RealmEntity entity, String userId, ActionType type) {
-        zadd(key(entity, type), DateTime.now().toDate().getTime(), userId);
+        opsForZSet().add(key(entity, type), userId, DateTime.now().toDate().getTime());
+        return count(entity, type);
     }
 
     @Override
     public long undo(RealmEntity entity, String userId, ActionType type) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        opsForZSet().remove(key(entity, type), userId);
+        return count(entity, type);
     }
 
     @Override
     public boolean exist(RealmEntity entity, String userId, ActionType type) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String key = key(entity, type);
+        
+        if (!redis.hasKey(key)) {
+            return false;
+        }
+        
+        return opsForZSet().score(key, userId) > 0;
     }
 
     @Override
     public Set<String> list(RealmEntity entity, ActionType type, Pageable pageable) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return opsForZSet().reverseRangeByScore(
+                key(entity, type), 
+                DateTime.now().toDate().getTime(), 0.0, 0, count(entity, type));
     }
 
     @Override
     public long count(RealmEntity entity, ActionType type) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return opsForZSet().zCard(key(entity, type));
     }
 
-    
     private ZSetOperations opsForZSet() {
         return redis.opsForZSet();
     }
  
-    private void zadd(String key, long score, String member) {  
-        opsForZSet().add(key, member, score);  
-    } 
-    
-    private boolean exist(RealmEntity entity, ActionType type) {
-        return redis.hasKey(key(entity, type));
-    }
-    
     private String key(RealmEntity entity, ActionType type) {
-        return String.format("1$s:%2$s:%3$s_%4$s:%5$s:", GLOBAL_NAMESPACE, client, entity.getRealm().name(), entity.getEntityId(), type.name());
+        return String.format(PATTERN_KEY, 
+                GLOBAL_NAMESPACE, client, 
+                entity.getRealm().name(), entity.getEntityId(), 
+                type.name());
     }
     
 }
