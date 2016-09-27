@@ -37,6 +37,11 @@ public enum PayType implements BaseEnum {
     sina("新浪支付"),
     
     /**
+     * 银联
+     */
+    unionpay("银联支付"),
+    
+    /**
      * 仅使用红包支付
      */
     coupon("红包"),
