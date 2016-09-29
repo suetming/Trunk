@@ -62,4 +62,5 @@ public interface CommentService {
      */
     Page<Comment> listByReceiver(String receiver, List<CommentType> typeList, List<CommentStatus> statusList);
     
+    
 }
