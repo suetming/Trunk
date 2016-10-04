@@ -18,6 +18,12 @@
 
 package net.luoteng.coupon.service;
 
+import java.awt.print.Pageable;
+import java.util.List;
+import net.luoteng.coupon.entity.CouponPackage;
+import net.luoteng.coupon.enums.CouponType;
+import org.springframework.data.domain.Page;
+
 /**
  * coupon service
  *
@@ -25,5 +31,7 @@ package net.luoteng.coupon.service;
  * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
  */
 public interface CouponService {
+    
+    Page<CouponPackage> listPackage(List<CouponType> typeList, Pageable pageable);
 
 }

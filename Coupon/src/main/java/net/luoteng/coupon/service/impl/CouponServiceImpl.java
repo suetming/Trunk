@@ -18,7 +18,12 @@
 
 package net.luoteng.coupon.service.impl;
 
+import java.awt.print.Pageable;
+import java.util.List;
+import net.luoteng.coupon.entity.CouponPackage;
+import net.luoteng.coupon.enums.CouponType;
 import net.luoteng.coupon.service.CouponService;
+import org.springframework.data.domain.Page;
 
 /**
  * 
@@ -27,5 +32,10 @@ import net.luoteng.coupon.service.CouponService;
  * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
  */
 public class CouponServiceImpl implements CouponService {
+
+    @Override
+    public Page<CouponPackage> listPackage(List<CouponType> typeList, Pageable pageable) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
 }
