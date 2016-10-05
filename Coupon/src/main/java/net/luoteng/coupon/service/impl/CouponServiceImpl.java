@@ -38,4 +38,9 @@ public class CouponServiceImpl implements CouponService {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public CouponPackage savePackage(CouponPackage couponPackage) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

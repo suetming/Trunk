@@ -32,6 +32,20 @@ import org.springframework.data.domain.Page;
  */
 public interface CouponService {
     
+    /**
+     * 列出所有package
+     * 
+     * @param typeList
+     * @param pageable
+     * @return 
+     */
     Page<CouponPackage> listPackage(List<CouponType> typeList, Pageable pageable);
 
+    /**
+     * 新增或者更新奖券包
+     *
+     * @param couponPackage
+     * @return 
+     */
+    CouponPackage savePackage(CouponPackage couponPackage);
 }
