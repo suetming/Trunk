@@ -19,25 +19,16 @@
 package net.luoteng.user.dao;
 
 import javax.transaction.Transactional;
-import net.luoteng.user.entity.SocialUser;
-import net.luoteng.user.enums.SocialType;
-import org.springframework.data.jpa.repository.Query;
+import net.luoteng.user.entity.UserFund;
 import org.springframework.data.repository.PagingAndSortingRepository;
-import org.springframework.data.repository.query.Param;
 
 /**
- * social user
+ * TODO
  *
  * @author suetming <suetming.ma at gmail.com>
  * Copyright(c) @2016 Luoteng Company, Inc.  All Rights Reserved.
  */
 @Transactional
-public interface SocialUserDAO extends PagingAndSortingRepository<SocialUser, String> {
-
-    @Query("select u from SocialUser u where u.userId=:userId and u.type=:type")
-    SocialUser getByUser(@Param("userId") String userId, @Param("type") SocialType type);
-
-    @Query("select u from SocialUser u where u.clientId=:clientId and u.type=:type")
-    SocialUser getBySocial(@Param("clientId") String clientId, @Param("type") SocialType type);
+public interface UserFundDAO extends PagingAndSortingRepository<UserFund, String> {
 
 }
