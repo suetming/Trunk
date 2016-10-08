@@ -5,8 +5,6 @@
  */
 package net.luoteng.comment.enums;
 
-import java.util.Arrays;
-import java.util.List;
 import net.luoteng.enums.BaseEnum;
 
 /**
