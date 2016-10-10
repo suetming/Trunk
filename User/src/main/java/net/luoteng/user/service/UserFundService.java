@@ -18,6 +18,8 @@
 
 package net.luoteng.user.service;
 
+import java.math.BigDecimal;
+
 /**
  * TODO
  *
@@ -26,4 +28,21 @@ package net.luoteng.user.service;
  */
 public interface UserFundService {
 
+    /**
+     * 用户成功支付
+     * 1、balanceAmount为通过指点钱包余额支付的部分
+     * 2、partyAmount为三方实际支付（微信、支付宝）金额
+     * 3、couponAmount为红包抵扣金额
+     * 
+     * （用户）可用-部分：availableAmount-balanceAmount
+     * （用户）已支出+部分：outAmount+(balanceAmount+partyAmount)
+     * （点师）待收+：dueInAmount+balancePayAmount+partyPayAmount+couponAmount
+     * 
+     * @param sender 支付方
+     * @param receiver 收款方
+     * @param balanceAmount 用户通过“钱包”余额所支付金额，可能为0
+     * @return
+     */
+    boolean pay(String sender, String receiver, BigDecimal balanceAmount);
+    
 }
